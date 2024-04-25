@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { QueryProvider } from './providers/QueryProvider';
+import { UIProvider } from './providers/UIProvider';
 import { Inter } from 'next/font/google';
 import './globals.css';
 
@@ -16,10 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <QueryProvider>
-      <html lang='es'>
-        <body className={inter.className}>{children}</body>
-      </html>
-    </QueryProvider>
+    <html lang='es'>
+      <body className={inter.className}>
+        <QueryProvider>
+          <UIProvider>{children} </UIProvider>
+        </QueryProvider>
+      </body>
+    </html>
   );
 }
