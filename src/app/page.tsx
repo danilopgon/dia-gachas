@@ -23,7 +23,8 @@ export default function Home() {
   }, []);
 
   const handleProvinceChange = (value: string) => {
-    if (value) {
+    if (value && value !== selectedProvince) {
+      setSelectedTown('');
       const provinceName = value as string;
       const newSelectedProvince =
         provinces.find((province) => province.label === provinceName)?.code ||
