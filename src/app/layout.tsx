@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { QueryProvider } from './providers/QueryProvider';
+
 import { UIProvider } from './providers/UIProvider';
 import { Inter } from 'next/font/google';
 import './globals.css';
@@ -19,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang='es'>
       <body className={inter.className}>
-        <QueryProvider>
-          <UIProvider>{children} </UIProvider>
-        </QueryProvider>
+        <UIProvider>{children} </UIProvider>
       </body>
     </html>
   );
