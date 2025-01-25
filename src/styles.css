@@ -1,26 +1,16 @@
-@import "primeng/resources/themes/lara-light-blue/theme.css";
-@import "primeng/resources/primeng.css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
-/* Preflight withouth activating plugin to avoid conflicts */
-blockquote,
-dl,
-dd,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-hr,
-figure,
-p,
-pre {
-    margin: 0;
+@font-face {
+    font-family: 'PPWoodland';
+    src: url('/assets/fonts/PPWoodland-Bold.otf')
 }
 
+@font-face {
+    font-family: 'Alegreya';
+    src: url('/assets/fonts/AlegreyaSans-Regular.ttf')
+}
 
 h1,
 h2,
@@ -28,39 +18,10 @@ h3,
 h4,
 h5,
 h6 {
-    font-size: inherit;
-    font-weight: inherit;
+    font-family: 'PPWoodland', serif;
 }
 
-ol,
-ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-img,
-svg,
-video,
-canvas,
-audio,
-iframe,
-embed,
-object {
-    display: block;
-    vertical-align: middle;
-}
-
-img,
-video {
-    max-width: 100%;
-    height: auto;
-}
-
-*,
-::before,
-::after {
-    border-width: 0;
-    border-style: solid;
-    border-color: theme('borderColor.DEFAULT', currentColor);
+body {
+    font-family: 'Alegreya', sans-serif;
+    letter-spacing: 0.0625em;
 }
