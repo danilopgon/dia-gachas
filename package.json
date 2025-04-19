@@ -1,0 +1,29 @@
+{
+  "name": "dia-gachas",
+  "private": true,
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently -n BACKEND,FRONTEND -c green,blue \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:api": "npm run start:dev --prefix backend",
+    "dev:web": "npm run start --prefix frontend",
+    "build:api": "npm run build --prefix backend",
+    "build:web": "npm run build:ssr --prefix frontend",
+    "build:frontend:client": "npm run build --prefix frontend",
+    "build:frontend:server": "npm run build:server --prefix frontend",
+    "build": "npm run build:api && npm run build:web",
+    "start:api": "npm run start:prod --prefix backend",
+    "start:web": "npm run serve:ssr --prefix frontend",
+    "clean": "rimraf backend/dist frontend/dist",
+    "lint:api": "npm run lint --prefix backend",
+    "lint:web": "npm run lint --prefix frontend",
+    "test:api": "npm run test --prefix backend",
+    "test:web": "npm run test --prefix frontend",
+    "build:prod": "npm run build:api && npm run build:web",
+    "start:all": "concurrently -n BACKEND,FRONTEND -c green,blue \"npm run start:api\" \"npm run start:web\"",
+    "serve:coolify": "npm run build:prod && npm run start:all"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0",
+    "rimraf": "^5.0.0"
+  }
+}
