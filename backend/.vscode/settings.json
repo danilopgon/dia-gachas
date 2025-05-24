@@ -1,0 +1,5 @@
+{
+  "jest.rootPath": ".",
+  "jest.jestCommandLine": "npm run test",
+  "jest.runMode": "watch"
+}
