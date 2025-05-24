@@ -10,7 +10,7 @@ Una aplicación que conecta con la API de la AEMET para determinar si el tiempo 
 ## 🧠 ¿Qué es esto?
 
 Día de Gachas es una app ligera que consulta datos meteorológicos en tiempo real y los interpreta con una lógica sencilla pero emocional:  
-**¿Hace gachas o no? La única medida necesaria en la vida**
+**¿Hace gachas o no? La única medida necesaria en la vida.**
 
 El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal para consultarlo cada mañana o antes de ir a por harina de almortas.
 
@@ -18,44 +18,54 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 ## 🛠 Stack técnico
 
-- **Frontend**: Angular
+- **Frontend**: Angular (con SSR y PWA)
 - **Backend**: NestJS + Prisma
 - **Datos meteorológicos**: API oficial de AEMET
+- **Monorepo**: Workspaces npm
 
 ---
 
 ## 🚀 Cómo levantar el proyecto
 
 1. **Clona el repo**
+
    ```bash
    git clone https://github.com/tu-usuario/dia-de-gachas.git
    cd dia-de-gachas
    ```
 
-2. **Instala las dependencias**
+2. **Instala las dependencias de todos los paquetes**
+
    ```bash
-   npm install
+   npm run install:all
    ```
 
-3. **Crea el archivo `.env` en el backend con tu clave AEMET**
+3. **Configura la clave de AEMET**
+   Crea un archivo `.env` en la carpeta `backend/`:
+
    ```
    AEMET_API_KEY=tu_clave
    ```
 
-4. **Levanta el monorepo**
+4. **Levanta el entorno en desarrollo**
+
    ```bash
-   nx serve api
-   nx serve web
+   npm run dev
    ```
+
+   Esto ejecutará tanto el backend (`NestJS`) como el frontend (`Angular`) en paralelo.
 
 ---
 
-## 📦 Estructura del monorepo
+## 📦 Estructura del proyecto
 
 ```
-apps/
-  api/     → Backend NestJS
-  web/     → Frontend Angular
+dia-de-gachas/
+│
+├── frontend/     → Aplicación Angular
+├── backend/      → API en NestJS + Prisma
+├── package.json  → Scripts y workspaces raíz
+└── README.md
 ```
 
 ---
