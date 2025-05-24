@@ -1,5 +1,6 @@
 import Lara from '@primeng/themes/lara';
 import { definePreset } from '@primeng/themes';
+import { PrimeNGConfigType } from 'primeng/config';
 
 const theme = definePreset(Lara, {
   semantic: {
@@ -24,7 +25,7 @@ const theme = definePreset(Lara, {
   },
 });
 
-export const primeNGThemeSettings = {
+export const primeNGThemeSettings: PrimeNGConfigType = {
   theme: {
     preset: theme,
     options: {
