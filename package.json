@@ -25,5 +25,9 @@
   "devDependencies": {
     "concurrently": "^8.2.0",
     "rimraf": "^5.0.0"
-  }
+  },
+  "workspaces": {
+  "packages": ["frontend", "backend"],
+  "nohoist": ["**/deps", "**/deps_ssr"]
+}
 }
