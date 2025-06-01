@@ -1,3 +1,5 @@
+import { GachasLevel } from '../enums/gachas-level.enum';
+
 export interface SimplifiedData {
   town: string;
   province: string;
@@ -5,5 +7,5 @@ export interface SimplifiedData {
   launchTemperature: number;
   launchTimeRainProbability: number;
   skyStatus: string;
-  isGachasDay?: boolean;
+  gachasLevel: GachasLevel;
 }

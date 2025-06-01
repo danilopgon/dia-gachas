@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { AemetData, Dato, Dia } from '../models/aemet-data';
 import { SimplifiedData } from '../models/simplified-data';
+import { GachasLevel } from '../enums/gachas-level.enum';
 
 @Injectable()
 export class AemetService {
@@ -29,8 +30,7 @@ export class AemetService {
     const simplifiedData: SimplifiedData[] = this.simplifyData(
       weatherData.data,
     );
-    const gachasDays: SimplifiedData[] =
-      this.determineGachasDay(simplifiedData);
+    const gachasDays: SimplifiedData[] = this.assignGachasLevel(simplifiedData);
 
     return gachasDays;
   }
@@ -66,18 +66,50 @@ export class AemetService {
     });
   }
 
-  determineGachasDay(simplifiedData: SimplifiedData[]): SimplifiedData[] {
-    return simplifiedData.map((day) => {
-      const isDayForGachas =
-        day.launchTemperature < 20 &&
-        day.launchTimeRainProbability > 30 &&
-        /(nuboso|nubosos|nublados|lluvia|lluvias|tormenta|tormentas)/i.test(
-          day.skyStatus,
-        );
+  assignGachasLevel(data: SimplifiedData[]): SimplifiedData[] {
+    return data.map((day) => {
+      const temp = day.launchTemperature;
+      const rain = day.launchTimeRainProbability;
+      const sky = day.skyStatus.toLowerCase();
+
+      let score = 0;
+
+      if (temp <= 12) score += 2;
+      else if (temp <= 17) score += 1;
+      else if (temp >= 22) score -= 2;
+      else if (temp >= 19) score -= 1;
+
+      if (rain >= 60) score += 2;
+      else if (rain >= 40) score += 1;
+
+      if (
+        sky.includes('nub') ||
+        sky.includes('lluv') ||
+        sky.includes('torment') ||
+        sky.includes('niebla') ||
+        sky.includes('cubierto') ||
+        sky.includes('chubasc')
+      ) {
+        score += 2;
+      } else if (sky.includes('despejado') || sky.includes('soleado')) {
+        score -= 1;
+      }
+
+      let level: GachasLevel;
+
+      if (score >= 5) {
+        level = GachasLevel.HIGH;
+      } else if (score >= 3) {
+        level = GachasLevel.MEDIUM;
+      } else if (score >= 1) {
+        level = GachasLevel.LOW;
+      } else {
+        level = GachasLevel.NONE;
+      }
 
       return {
         ...day,
-        isDayForGachas: isDayForGachas,
+        gachasLevel: level,
       };
     });
   }
