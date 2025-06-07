@@ -1,8 +1,9 @@
 {
-  "locale": "es-ES",
+  "locale": "es",
   "translations": {
     "home.title": " ¿Hace día de gachas? ",
     "home.subtitle": " ¡Busca tu pueblo y descúbrelo! ",
-    "home.search": "Busca tu pueblo"
+    "home.search": "Busca tu pueblo",
+    "home.button": "Consulta al oráculo de las gachas"
   }
 }

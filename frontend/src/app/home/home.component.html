@@ -1,0 +1,45 @@
+<main
+  class="flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-main.webp')] bg-cover bg-center p-6 pt-36 text-left"
+  role="main"
+>
+  <header class="flex flex-col gap-6">
+    <h1 class="text-surface-50 text-5xl text-balance uppercase" i18n="@@home.title" id="main-title">
+      ¿Hace día de gachas?
+    </h1>
+    <h2 class="text-surface-50 text-2xl text-pretty" i18n="@@home.subtitle">
+      ¡Busca tu pueblo y descúbrelo!
+    </h2>
+  </header>
+
+  <p-floatlabel variant="in" class="w-full">
+    <p-autocomplete
+      inputId="pueblo-autocomplete"
+      [(ngModel)]="value"
+      [suggestions]="cities()"
+      (completeMethod)="search($event)"
+      [field]="'name'"
+      styleClass="flex w-full"
+      inputStyleClass="flex w-full"
+      [maxlength]="30"
+      autocomplete="off"
+      ariaLabelledBy="autocomplete-label"
+      aria-required="true"
+    ></p-autocomplete>
+    <label for="pueblo-autocomplete" class="w-full" id="autocomplete-label" i18n="@@home.search">
+      Busca tu pueblo
+    </label>
+  </p-floatlabel>
+
+  <div class="card flex h-16 w-full justify-center">
+    <p-button
+      class="h-full w-full"
+      styleClass="w-full h-full"
+      [disabled]="!value()"
+      (onClick)="goToResult()"
+      label="Consulta al oráculo de las gachas"
+      i18n-label="@@home.button"
+      aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
+      [attr.aria-disabled]="!value() ? true : null"
+    />
+  </div>
+</main>
