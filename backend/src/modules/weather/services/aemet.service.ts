@@ -72,45 +72,50 @@ export class AemetService {
       const rain = day.launchTimeRainProbability;
       const sky = day.skyStatus.toLowerCase();
 
-      let score = 0;
-
-      if (temp <= 12) score += 2;
-      else if (temp <= 17) score += 1;
-      else if (temp >= 22) score -= 2;
-      else if (temp >= 19) score -= 1;
-
-      if (rain >= 60) score += 2;
-      else if (rain >= 40) score += 1;
-
-      if (
-        sky.includes('nub') ||
-        sky.includes('lluv') ||
-        sky.includes('torment') ||
-        sky.includes('niebla') ||
-        sky.includes('cubierto') ||
-        sky.includes('chubasc')
-      ) {
-        score += 2;
-      } else if (sky.includes('despejado') || sky.includes('soleado')) {
-        score -= 1;
-      }
-
-      let level: GachasLevel;
-
-      if (score >= 5) {
-        level = GachasLevel.HIGH;
-      } else if (score >= 3) {
-        level = GachasLevel.MEDIUM;
-      } else if (score >= 1) {
-        level = GachasLevel.LOW;
-      } else {
-        level = GachasLevel.NONE;
-      }
+      const score =
+        this.scoreTemperature(temp) + this.scoreRain(rain) + this.scoreSky(sky);
 
       return {
         ...day,
-        gachasLevel: level,
+        gachasLevel: this.getLevelFromScore(score),
       };
     });
+  }
+
+  private scoreTemperature(temp: number): number {
+    if (temp <= 12) return 2;
+    if (temp <= 17) return 1;
+    if (temp >= 22) return -2;
+    if (temp >= 19) return -1;
+    return 0;
+  }
+
+  private scoreRain(rain: number): number {
+    if (rain >= 60) return 2;
+    if (rain >= 40) return 1;
+    return 0;
+  }
+
+  private scoreSky(sky: string): number {
+    const cloudyKeywords = [
+      'nub',
+      'lluv',
+      'torment',
+      'niebla',
+      'cubierto',
+      'chubasc',
+    ];
+    const sunnyKeywords = ['despejado', 'soleado'];
+
+    if (cloudyKeywords.some((keyword) => sky.includes(keyword))) return 2;
+    if (sunnyKeywords.some((keyword) => sky.includes(keyword))) return -1;
+    return 0;
+  }
+
+  private getLevelFromScore(score: number): GachasLevel {
+    if (score >= 5) return GachasLevel.HIGH;
+    if (score >= 3) return GachasLevel.MEDIUM;
+    if (score >= 1) return GachasLevel.LOW;
+    return GachasLevel.NONE;
   }
 }
