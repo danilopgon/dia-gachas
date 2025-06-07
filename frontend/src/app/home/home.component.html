@@ -1,17 +1,55 @@
+<div
+  class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
+  id="gachas-bg-anim"
+  aria-hidden="true"
+>
+  <img
+    src="/assets/images/fondo-cielo.webp"
+    id="fondo-cielo"
+    class="absolute top-0 left-0 h-full w-full object-cover"
+    alt=""
+  />
+  <img
+    src="/assets/images/fondo-colinas.webp"
+    id="fondo-colinas"
+    class="absolute bottom-0 left-0 h-full w-full object-cover"
+    alt=""
+  />
+  <img
+    src="/assets/images/fondo-arbol.webp"
+    id="fondo-arbol"
+    class="absolute bottom-0 left-0 h-full w-full object-cover"
+    alt=""
+  />
+  <img
+    src="/assets/images/fondo-sol.webp"
+    id="fondo-sol"
+    class="absolute left-0 w-[1300px] object-cover"
+    alt=""
+  />
+</div>
+
 <main
-  class="flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-main.webp')] bg-cover bg-center p-6 pt-36 text-left"
+  class="relative z-20 flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-main.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
   role="main"
 >
-  <header class="flex flex-col gap-6">
-    <h1 class="text-surface-50 text-5xl text-balance uppercase" i18n="@@home.title" id="main-title">
+  <header class="flex w-full max-w-2xl flex-col gap-6 lg:max-w-none">
+    <h1
+      class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl lg:text-balance xl:text-9xl"
+      i18n="@@home.title"
+      id="main-title"
+    >
       ¿Hace día de gachas?
     </h1>
-    <h2 class="text-surface-50 text-2xl text-pretty" i18n="@@home.subtitle">
+    <h2
+      class="text-surface-50 text-2xl text-pretty lg:pb-36 lg:text-4xl xl:text-6xl"
+      i18n="@@home.subtitle"
+    >
       ¡Busca tu pueblo y descúbrelo!
     </h2>
   </header>
 
-  <p-floatlabel variant="in" class="w-full">
+  <p-floatlabel variant="in" class="w-full max-w-2xl">
     <p-autocomplete
       inputId="pueblo-autocomplete"
       [(ngModel)]="value"
@@ -25,15 +63,20 @@
       ariaLabelledBy="autocomplete-label"
       aria-required="true"
     ></p-autocomplete>
-    <label for="pueblo-autocomplete" class="w-full" id="autocomplete-label" i18n="@@home.search">
+    <label
+      for="pueblo-autocomplete"
+      class="w-full max-w-2xl"
+      id="autocomplete-label"
+      i18n="@@home.search"
+    >
       Busca tu pueblo
     </label>
   </p-floatlabel>
 
-  <div class="card flex h-16 w-full justify-center">
+  <div class="card flex h-16 w-full max-w-2xl justify-center">
     <p-button
-      class="h-full w-full"
-      styleClass="w-full h-full"
+      class="h-full w-full max-w-2xl"
+      styleClass="h-full w-full max-w-2xl"
       [disabled]="!value()"
       (onClick)="goToResult()"
       label="Consulta al oráculo de las gachas"

@@ -1,16 +1,20 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
+  AfterViewInit,
   Component,
   computed,
   effect,
+  Inject,
   inject,
   model,
   ModelSignal,
+  PLATFORM_ID,
   signal,
   WritableSignal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import gsap from 'gsap';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -23,7 +27,7 @@ import { CitiesResource } from './resources/cities.resource';
   imports: [ButtonModule, AutoCompleteModule, FloatLabelModule, FormsModule, RouterModule],
   templateUrl: './home.component.html',
 })
-export class HomeComponent {
+export class HomeComponent implements AfterViewInit {
   private readonly citiesResource = inject(CitiesResource);
   private readonly router = inject(Router);
 
@@ -34,7 +38,7 @@ export class HomeComponent {
   cities = computed(() => this.lastCities());
   private lastCities: WritableSignal<ICity[]> = signal([]);
 
-  constructor() {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     effect(() => {
       const value = this.citiesRef.value();
       if (value && value.length) {
@@ -43,11 +47,46 @@ export class HomeComponent {
     });
   }
 
-  search(event: AutoCompleteCompleteEvent) {
+  ngAfterViewInit() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (window.innerWidth < 1024) return;
+    this.configureGsapAnimations();
+  }
+
+  private configureGsapAnimations(): void {
+    gsap.fromTo(
+      '#fondo-sol',
+      { scale: 1.2, y: -60 },
+      { scale: 1, y: 0, duration: 1.3, ease: 'power2.out' },
+    );
+
+    gsap.to('#fondo-sol', {
+      y: '+=30',
+      repeat: -1,
+      yoyo: true,
+      duration: 2.5,
+      ease: 'sine.inOut',
+      delay: 1.3,
+    });
+
+    gsap.fromTo(
+      '#fondo-colinas',
+      { scale: 1.2, y: 40 },
+      { scale: 1, y: 150, duration: 1.4, ease: 'power2.out' },
+    );
+
+    gsap.fromTo(
+      '#fondo-arbol',
+      { scale: 1.2, y: 80 },
+      { scale: 1, y: 0, duration: 1.5, ease: 'power2.out' },
+    );
+  }
+
+  search(event: AutoCompleteCompleteEvent): void {
     this.searchTerm.set(event.query);
   }
 
-  goToResult() {
+  goToResult(): void {
     const city = this.value();
     if (city) {
       this.router.navigate(['/result', city.id]);
