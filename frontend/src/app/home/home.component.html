@@ -55,14 +55,20 @@
       [(ngModel)]="value"
       [suggestions]="cities()"
       (completeMethod)="search($event)"
-      [field]="'name'"
+      [optionLabel]="displayName"
       styleClass="flex w-full"
       inputStyleClass="flex w-full"
       [maxlength]="30"
       autocomplete="off"
       ariaLabelledBy="autocomplete-label"
       aria-required="true"
-    ></p-autocomplete>
+    >
+      <!-- Lista de resultados -->
+      <ng-template let-city pTemplate="item">
+        {{ displayName(city) }}
+      </ng-template>
+    </p-autocomplete>
+
     <label
       for="pueblo-autocomplete"
       class="w-full max-w-2xl"
@@ -77,12 +83,12 @@
     <p-button
       class="h-full w-full max-w-2xl drop-shadow-2xl"
       styleClass="h-full w-full max-w-2xl"
-      [disabled]="!value()"
+      [disabled]="!value()?.id"
       (onClick)="goToResult()"
       label="Consulta al oráculo de las gachas"
       i18n-label="@@home.button"
       aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
-      [attr.aria-disabled]="!value() ? true : null"
+      [attr.aria-disabled]="!value()?.id ? true : null"
     />
   </div>
 </main>

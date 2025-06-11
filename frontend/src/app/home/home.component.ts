@@ -92,4 +92,8 @@ export class HomeComponent implements AfterViewInit {
       this.router.navigate(['/result', city.id]);
     }
   }
+
+  displayName(city: ICity): string {
+    return `${city.name} (${city.province.name})`;
+  }
 }

@@ -12,6 +12,9 @@ export class CitiesService {
           contains: name,
         },
       },
+      include: {
+        province: true,
+      },
     });
   }
 
