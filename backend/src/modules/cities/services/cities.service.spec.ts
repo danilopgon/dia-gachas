@@ -47,6 +47,7 @@ describe('CitiesService', () => {
     const result = await service.getCityByName('Mad');
     expect(result).toEqual(mockCities);
     expect(prisma.city.findMany).toHaveBeenCalledWith({
+      include: { province: true },
       where: { name: { contains: 'Mad' } },
     });
   });
