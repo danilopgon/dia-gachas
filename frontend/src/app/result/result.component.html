@@ -1,1 +1,26 @@
-<p>result works!</p>
+<main
+  class="relative z-20 flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-tiempo.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
+  role="main"
+>
+  <header class="flex w-full max-w-2xl flex-col gap-6 lg:max-w-none">
+    <h1
+      class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl lg:text-balance xl:text-9xl"
+      i18n="@@home.title"
+      id="main-title"
+    >
+      ¿Hace día de gachas?
+    </h1>
+  </header>
+
+  <ng-container *ngIf="weather() as data">
+    <h1>{{ data[0].town }} ({{ data[0].province }})</h1>
+    <p>Temperatura: {{ data[0].launchTemperature }} °C</p>
+    <p>Probabilidad de lluvia: {{ data[0].launchTimeRainProbability }} %</p>
+    <p>Cielo: {{ data[0].skyStatus }}</p>
+    <p>Nivel de gachismo: {{ data[0].gachasLevel }}</p>
+  </ng-container>
+
+  <ng-container *ngIf="!weather()">
+    <p>Cargando datos meteorológicos...</p>
+  </ng-container>
+</main>
