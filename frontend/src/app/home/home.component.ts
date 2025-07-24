@@ -41,10 +41,14 @@ export class HomeComponent implements AfterViewInit {
   constructor(@Inject(PLATFORM_ID) private platformId: object) {
     effect(() => {
       const value = this.citiesRef.value();
-      if (value && value.length) {
-        this.lastCities.set(value);
-      }
+      this.setLastCities(value);
     });
+  }
+
+  private setLastCities(value: ICity[] | undefined) {
+    if (value && value.length) {
+      this.lastCities.set(value);
+    }
   }
 
   ngAfterViewInit() {

@@ -12,15 +12,19 @@
     </h1>
   </header>
 
-  <ng-container *ngIf="weather() as data">
-    <h1>{{ data[0].town }} ({{ data[0].province }})</h1>
-    <p>Temperatura: {{ data[0].launchTemperature }} °C</p>
-    <p>Probabilidad de lluvia: {{ data[0].launchTimeRainProbability }} %</p>
-    <p>Cielo: {{ data[0].skyStatus }}</p>
-    <p>Nivel de gachismo: {{ data[0].gachasLevel }}</p>
-  </ng-container>
-
-  <ng-container *ngIf="!weather()">
-    <p>Cargando datos meteorológicos...</p>
-  </ng-container>
+  @defer (when weather()) {
+    <ng-container *ngIf="weather() as data">
+      <section class="text-surface-50 space-y-2 text-center text-xl">
+        <h2>{{ data[0].town }} ({{ data[0].province }})</h2>
+        <p>Temperatura: {{ data[0].launchTemperature }} °C</p>
+        <p>Probabilidad de lluvia: {{ data[0].launchTimeRainProbability }} %</p>
+        <p>Cielo: {{ data[0].skyStatus }}</p>
+        <p>Nivel de gachismo: {{ data[0].gachasLevel }}</p>
+      </section>
+    </ng-container>
+  } @placeholder {
+    <p class="text-surface-50 text-xl">Cargando datos meteorológicos...</p>
+  } @error {
+    <p class="text-surface-50 text-xl">No se pudo obtener la predicción meteorológica.</p>
+  }
 </main>
