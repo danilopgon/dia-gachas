@@ -1,19 +1,19 @@
 <p-toast />
 <div
-  class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
   aria-hidden="true"
+  class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
 >
   <img
-    src="/assets/images/fondo-cielo.webp"
-    id="fondo-cielo"
+    alt="Fondo cielo"
     class="absolute top-0 left-0 h-full w-full object-cover"
-    alt=""
+    id="fondo-cielo"
+    src="/assets/images/fondo-cielo.webp"
   />
   <img
-    src="/assets/images/fondo-colinas.webp"
-    id="fondo-colinas"
+    alt="Colinas sobre el fondo del cielo"
     class="absolute bottom-0 left-0 h-full w-full object-cover"
-    alt=""
+    id="fondo-colinas"
+    src="/assets/images/fondo-colinas.webp"
   />
 </div>
 <main
@@ -23,7 +23,19 @@
 
   @defer (when weather()) {
     <ng-container *ngIf="weather() as data">
-      <header class="text-surface-50 space-y-2 text-left text-xl">
+      <header class="text-surface-50 space-y-2 text-left text-xl flex flex-col items-start">
+        <div class="card flex h-16 w-full max-w-48 justify-center mb-8 self-end">
+          <p-button
+            class="h-full w-full max-w-2xl drop-shadow-2xl"
+            styleClass="h-full w-full max-w-2xl"
+            (onClick)="shareResults()"
+            label="Compartir"
+            i18n-label="@@results.share"
+            aria-label="Compartir resultados"
+            icon="pi pi-share-alt"
+          >
+          </p-button>
+        </div>
         <h1
           class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl lg:text-balance xl:text-9xl">{{ data[0].town }}
           ({{ data[0].province }})
@@ -57,16 +69,6 @@
             {{ data[0].skyStatus }}
           </h3>
         </section>
-        <div class="card flex h-16 w-full max-w-2xl justify-center">
-          <p-button
-            class="h-full w-full max-w-2xl drop-shadow-2xl"
-            styleClass="h-full w-full max-w-2xl"
-            (onClick)="shareResults()"
-            label="Compartir"
-            i18n-label="@@results.share"
-            aria-label="Compartir resultados"
-          />
-        </div>
       </main>
     </ng-container>
   } @placeholder {
@@ -85,5 +87,4 @@
       </p>
     </div>
   }
-
 </main>
