@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { resource } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { IWeatherData } from '../../core/models/weather-data.interface';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WeatherResource {
@@ -34,9 +34,12 @@ export class WeatherResource {
         if (!request) return null;
 
         const res = await firstValueFrom(
-          this.http.get<{ status: string; data: IWeatherData[] }>(
-            `${environment.BACK_URL}/weather/${request}`,
-          ),
+          this.http
+            .get<{
+              status: string;
+              data: IWeatherData[];
+            }>(`${environment.BACK_URL}/weather/${request}`)
+            .pipe(timeout(10000)),
         );
 
         return res.data;

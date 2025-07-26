@@ -1,30 +1,89 @@
+<p-toast />
+<div
+  class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
+  aria-hidden="true"
+>
+  <img
+    src="/assets/images/fondo-cielo.webp"
+    id="fondo-cielo"
+    class="absolute top-0 left-0 h-full w-full object-cover"
+    alt=""
+  />
+  <img
+    src="/assets/images/fondo-colinas.webp"
+    id="fondo-colinas"
+    class="absolute bottom-0 left-0 h-full w-full object-cover"
+    alt=""
+  />
+</div>
 <main
-  class="relative z-20 flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-tiempo.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
+  class="relative z-20 flex h-dvh flex-col items-left gap-6 bg-[url('/assets/images/fondo-tiempo.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
   role="main"
 >
-  <header class="flex w-full max-w-2xl flex-col gap-6 lg:max-w-none">
-    <h1
-      class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl lg:text-balance xl:text-9xl"
-      i18n="@@home.title"
-      id="main-title"
-    >
-      ¿Hace día de gachas?
-    </h1>
-  </header>
 
   @defer (when weather()) {
     <ng-container *ngIf="weather() as data">
-      <section class="text-surface-50 space-y-2 text-center text-xl">
-        <h2>{{ data[0].town }} ({{ data[0].province }})</h2>
-        <p>Temperatura: {{ data[0].launchTemperature }} °C</p>
-        <p>Probabilidad de lluvia: {{ data[0].launchTimeRainProbability }} %</p>
-        <p>Cielo: {{ data[0].skyStatus }}</p>
-        <p>Nivel de gachismo: {{ data[0].gachasLevel }}</p>
-      </section>
+      <header class="text-surface-50 space-y-2 text-left text-xl">
+        <h1
+          class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl lg:text-balance xl:text-9xl">{{ data[0].town }}
+          ({{ data[0].province }})
+        </h1>
+        <h2 class="text-surface-50 text-2xl">
+          {{ gachasLevel }}
+        </h2>
+      </header>
+
+      <main class="flex flex-col gap-8 text-surface-50 pt-12">
+        <section class="flex flex-col gap-2">
+          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.temperature">
+            Temperatura a la hora de comer:
+          </h4>
+          <h3 class="text-3xl lg:text-4xl xl:text:5xl">
+            {{ data[0].launchTemperature }} °C</h3>
+        </section>
+        <section class="flex flex-col gap-2">
+          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.rainProbability">
+            Probabilidad de lluvia:
+          </h4>
+          <h3 class="text-3xl lg:text-4xl xl:text:5xl">
+            {{ data[0].launchTimeRainProbability }}%
+          </h3>
+        </section>
+        <section class="flex flex-col gap-2">
+          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.skyStatus">
+            Estado del cielo:
+          </h4>
+          <h3 class="text-3xl lg:text-4xl xl:text:5xl">
+            {{ data[0].skyStatus }}
+          </h3>
+        </section>
+        <div class="card flex h-16 w-full max-w-2xl justify-center">
+          <p-button
+            class="h-full w-full max-w-2xl drop-shadow-2xl"
+            styleClass="h-full w-full max-w-2xl"
+            (onClick)="shareResults()"
+            label="Compartir"
+            i18n-label="@@results.share"
+            aria-label="Compartir resultados"
+          />
+        </div>
+      </main>
     </ng-container>
   } @placeholder {
-    <p class="text-surface-50 text-xl">Cargando datos meteorológicos...</p>
+    <div class="flex flex-col items-start gap-4 animate-pulse text-surface-50">
+      <p class="text-2xl lg:text-3xl" i18n="@@results.loading">Mirando al cielo...</p>
+      <p class="text-xl opacity-70" i18n="@@results.consulting">Consultando si es buen día de gachas.</p>
+      <div class="h-2 w-1/2 bg-surface-50/20 rounded animate-pulse"></div>
+    </div>
   } @error {
-    <p class="text-surface-50 text-xl">No se pudo obtener la predicción meteorológica.</p>
+    <div class="flex flex-col items-start gap-4 text-surface-50">
+      <p class="text-2xl lg:text-3xl" i18n="@@results.error">
+        No se pudo obtener la predicción meteorológica.
+      </p>
+      <p class="text-xl opacity-70" i18n="@@results.siesta">
+        Puede que la AEMET esté echando la siesta. Intenta de nuevo más tarde.
+      </p>
+    </div>
   }
+
 </main>

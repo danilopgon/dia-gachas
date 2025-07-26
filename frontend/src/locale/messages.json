@@ -4,6 +4,14 @@
     "home.title": " ¿Hace día de gachas? ",
     "home.subtitle": " ¡Busca tu pueblo y descúbrelo! ",
     "home.search": "Busca tu pueblo",
-    "home.button": "Consulta al oráculo de las gachas"
+    "home.button": "Consulta al oráculo de las gachas",
+    "results.loading": "Cargando datos meteorológicos...",
+    "results.consulting": "Consultando si es buen día de gachas.",
+    "results.error": "No se pudo obtener la predicción meteorológica.",
+    "results.temperature": "Temperatura a la hora de comer:",
+    "results.rainProbability": "Probabilidad de lluvia:",
+    "results.skyStatus": "Estado del cielo:",
+    "results.siesta": "Puede que la AEMET esté echando la siesta. Intenta de nuevo más tarde.",
+    "results.share": "Compartir"
   }
 }
