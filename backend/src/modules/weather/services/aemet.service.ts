@@ -46,9 +46,10 @@ export class AemetService {
         (temperature: Dato) => temperature.hora === 18,
       );
 
-      const launchTemperature =
-        (noonTemperature.value + afternoonTemperature.value) / 2;
-
+      const launchTemperature = Math.round(
+        (noonTemperature.value + afternoonTemperature.value) / 2,
+      );
+        
       const launchTimeRainProbability = day.probPrecipitacion.find(
         (p) => p.periodo === '12-18',
       ).value;
