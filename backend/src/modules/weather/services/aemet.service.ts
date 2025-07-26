@@ -23,16 +23,18 @@ export class AemetService {
       ),
     );
 
-    const weatherData = await firstValueFrom(
-      this.httpService.get(response.data.datos),
+    const rawResponse = await firstValueFrom(
+      this.httpService.get(response.data.datos, {
+        responseType: 'arraybuffer',
+      }),
     );
 
-    const simplifiedData: SimplifiedData[] = this.simplifyData(
-      weatherData.data,
-    );
-    const gachasDays: SimplifiedData[] = this.assignGachasLevel(simplifiedData);
+    const decoded = Buffer.from(rawResponse.data).toString('latin1');
+    const weatherData: AemetData = JSON.parse(decoded);
 
-    return gachasDays;
+    const simplifiedData: SimplifiedData[] = this.simplifyData(weatherData);
+
+    return this.assignGachasLevel(simplifiedData);
   }
 
   private simplifyData(weatherData: AemetData): SimplifiedData[] {

@@ -101,28 +101,30 @@ describe('AemetService', () => {
         config: { headers: {} as AxiosRequestHeaders },
       };
 
-      const mockWeatherData: AxiosResponse = {
-        data: [
-          {
-            nombre: 'Toledo',
-            provincia: 'Toledo',
-            prediccion: {
-              dia: [
-                {
-                  fecha: '2025-06-08',
-                  temperatura: {
-                    dato: [
-                      { hora: 12, value: 14 },
-                      { hora: 18, value: 16 },
-                    ],
-                  },
-                  probPrecipitacion: [{ periodo: '12-18', value: 60 }],
-                  estadoCielo: [{ descripcion: 'Cubierto' }],
+      const mockWeatherJson = JSON.stringify([
+        {
+          nombre: 'Toledo',
+          provincia: 'Toledo',
+          prediccion: {
+            dia: [
+              {
+                fecha: '2025-06-08',
+                temperatura: {
+                  dato: [
+                    { hora: 12, value: 14 },
+                    { hora: 18, value: 16 },
+                  ],
                 },
-              ],
-            },
+                probPrecipitacion: [{ periodo: '12-18', value: 60 }],
+                estadoCielo: [{ descripcion: 'Cubierto' }],
+              },
+            ],
           },
-        ],
+        },
+      ]);
+
+      const mockWeatherData: AxiosResponse = {
+        data: Buffer.from(mockWeatherJson, 'latin1'),
         status: 200,
         statusText: 'OK',
         headers: {},
