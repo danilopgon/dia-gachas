@@ -80,9 +80,9 @@ export class HomeComponent implements AfterViewInit {
     );
 
     gsap.fromTo(
-      '#fondo-arbol',
-      { scale: 1.2, y: 80 },
-      { scale: 1, y: 0, duration: 1.5, ease: 'power2.out' },
+      '#fondo-colinas-frente',
+      { scale: 1.2, y: -40 },
+      { scale: 1, y: 130, duration: 1.5, ease: 'power2.out' },
     );
   }
 

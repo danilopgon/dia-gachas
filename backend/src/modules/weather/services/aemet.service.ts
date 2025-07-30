@@ -10,31 +10,36 @@ export class AemetService {
   constructor(private readonly httpService: HttpService) {}
 
   async getWeather(townCode: string, provinceCode: string) {
-    const headerParams = {
-      api_key: process.env.AEMET_API_KEY,
-    };
+    try {
+      const headerParams = {
+        api_key: process.env.AEMET_API_KEY,
+      };
 
-    const response = await firstValueFrom(
-      this.httpService.get(
-        `https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/${provinceCode}${townCode}`,
-        {
-          headers: headerParams,
-        },
-      ),
-    );
+      const response = await firstValueFrom(
+        this.httpService.get(
+          `https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/${provinceCode}${townCode}`,
+          {
+            headers: headerParams,
+          },
+        ),
+      );
 
-    const rawResponse = await firstValueFrom(
-      this.httpService.get(response.data.datos, {
-        responseType: 'arraybuffer',
-      }),
-    );
+      const rawResponse = await firstValueFrom(
+        this.httpService.get(response.data.datos, {
+          responseType: 'arraybuffer',
+        }),
+      );
 
-    const decoded = Buffer.from(rawResponse.data).toString('latin1');
-    const weatherData: AemetData = JSON.parse(decoded);
+      const decoded = Buffer.from(rawResponse.data).toString('latin1');
+      const weatherData: AemetData = JSON.parse(decoded);
 
-    const simplifiedData: SimplifiedData[] = this.simplifyData(weatherData);
+      const simplifiedData: SimplifiedData[] = this.simplifyData(weatherData);
 
-    return this.assignGachasLevel(simplifiedData);
+      return this.assignGachasLevel(simplifiedData);
+    } catch (error) {
+      console.error(error);
+      throw new Error(error.message);
+    }
   }
 
   private simplifyData(weatherData: AemetData): SimplifiedData[] {
@@ -49,7 +54,7 @@ export class AemetService {
       const launchTemperature = Math.round(
         (noonTemperature.value + afternoonTemperature.value) / 2,
       );
-        
+
       const launchTimeRainProbability = day.probPrecipitacion.find(
         (p) => p.periodo === '12-18',
       ).value;

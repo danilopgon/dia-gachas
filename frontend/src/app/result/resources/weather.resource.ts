@@ -1,9 +1,8 @@
-import { Injectable, Signal, effect, inject, signal } from '@angular/core';
+import { effect, inject, Injectable, resource, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { resource } from '@angular/core';
 import { environment } from '../../../environments/environment.development';
 import { IWeatherData } from '../../core/models/weather-data.interface';
-import { firstValueFrom, timeout } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class WeatherResource {
@@ -33,16 +32,23 @@ export class WeatherResource {
       loader: async ({ request }) => {
         if (!request) return null;
 
-        const res = await firstValueFrom(
-          this.http
-            .get<{
-              status: string;
-              data: IWeatherData[];
-            }>(`${environment.BACK_URL}/weather/${request}`)
-            .pipe(timeout(10000)),
-        );
+        try {
+          const res = await firstValueFrom(
+            this.http.get<{ status: string; data: IWeatherData[] }>(
+              `${environment.BACK_URL}/weather/${request}`,
+            ),
+          );
 
-        return res.data;
+          if (res.status !== 'ok') {
+            throw new Error('Respuesta incorrecta del servidor');
+          }
+
+          return res.data;
+        } catch (err) {
+          // Aquí puedes loguear si quieres
+          console.error('Error cargando el clima:', err);
+          throw new Error('No se pudo cargar el clima'); // Esto lanza el error al resource
+        }
       },
     });
   }
