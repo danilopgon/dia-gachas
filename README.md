@@ -21,7 +21,6 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 - **Frontend**: Angular (con SSR y PWA)
 - **Backend**: NestJS + Prisma
 - **Datos meteorológicos**: API oficial de AEMET
-- **Monorepo**: Workspaces npm
 
 ---
 
