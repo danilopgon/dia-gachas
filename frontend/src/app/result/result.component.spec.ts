@@ -11,6 +11,9 @@ jest.mock('./resources/weather.resource', () => ({
   WeatherResource: jest.fn().mockImplementation(() => ({
     createWeatherResource: () => ({
       value: () => mockWeatherValue,
+      isLoading: () => false, // o true si quieres probar el loading
+      hasValue: () => !!mockWeatherValue?.length,
+      error: () => false,
     }),
   })),
 }));
