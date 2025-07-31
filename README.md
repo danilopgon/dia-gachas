@@ -66,17 +66,6 @@ dia-de-gachas/
 ├── package.json  → Scripts y workspaces raíz
 └── README.md
 ```
-
----
-
-## ✅ Estado actual
-
-- [x] Backend funcional con lógica meteorológica
-- [x] Prototipo de interfaz diseñado
-- [ ] Desarrollo frontend en curso
-- [ ] Animaciones y estados visuales
-- [ ] Versión demo pública
-
 ---
 
 ## 🤔 ¿Por qué esto?
