@@ -3,7 +3,7 @@ import { ResultComponent } from './result.component';
 import { WeatherResource } from './resources/weather.resource';
 import { MessageService } from 'primeng/api';
 import { GachasLevel } from '../core/enums/gachas-level.enum';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 let mockWeatherValue: any[] = [];
 
@@ -11,7 +11,7 @@ jest.mock('./resources/weather.resource', () => ({
   WeatherResource: jest.fn().mockImplementation(() => ({
     createWeatherResource: () => ({
       value: () => mockWeatherValue,
-      isLoading: () => false, // o true si quieres probar el loading
+      isLoading: () => false,
       hasValue: () => !!mockWeatherValue?.length,
       error: () => false,
     }),
@@ -25,9 +25,13 @@ const mockMessageService = {
 const mockActivatedRoute = {
   snapshot: {
     paramMap: {
-      get: jest.fn().mockReturnValue('0078'),
+      get: jest.fn().mockReturnValue('16002'),
     },
   },
+};
+
+const mockRouter = {
+  navigate: jest.fn(),
 };
 
 describe('ResultComponent', () => {
@@ -40,6 +44,7 @@ describe('ResultComponent', () => {
         { provide: WeatherResource, useValue: new WeatherResource() },
         { provide: MessageService, useValue: mockMessageService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
+        { provide: Router, useValue: mockRouter },
       ],
     });
 
@@ -49,6 +54,37 @@ describe('ResultComponent', () => {
 
   it('debería crear el componente', () => {
     expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('debería navegar al home si el id del route es incorrecto o null', async () => {
+    const invalidIds = [null, '123', '1234567'];
+
+    for (const id of invalidIds) {
+      const mockActivatedRouteInvalid = {
+        snapshot: {
+          paramMap: {
+            get: jest.fn().mockReturnValue(id),
+          },
+        },
+      };
+
+      const mockRouterNavigate = jest.fn();
+
+      TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [ResultComponent],
+        providers: [
+          { provide: WeatherResource, useValue: new WeatherResource() },
+          { provide: MessageService, useValue: mockMessageService },
+          { provide: ActivatedRoute, useValue: mockActivatedRouteInvalid },
+          { provide: Router, useValue: { navigate: mockRouterNavigate } },
+        ],
+      }).compileComponents();
+
+      TestBed.createComponent(ResultComponent);
+
+      expect(mockRouterNavigate).toHaveBeenCalledWith(['/']);
+    }
   });
 
   it('debería devolver una cadena vacía si no hay datos', () => {

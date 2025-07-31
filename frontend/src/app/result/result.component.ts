@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherResource } from './resources/weather.resource';
 import { getRandomGachasMessage } from '../core/utils/get-random-gachas-message.util';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +17,8 @@ import { MessageService } from 'primeng/api';
 export class ResultComponent {
   private route = inject(ActivatedRoute);
   private weatherResource = inject(WeatherResource);
+  private router = inject(Router);
+
   private id = signal('');
   private randomMessage = signal('');
 
@@ -29,7 +31,7 @@ export class ResultComponent {
 
   constructor(private readonly messageService: MessageService) {
     const idFromRoute = this.route.snapshot.paramMap.get('id');
-    if (idFromRoute) this.id.set(idFromRoute);
+    this.initializeId(idFromRoute);
 
     effect(() => {
       const data = this.weather();
@@ -37,6 +39,14 @@ export class ResultComponent {
         this.randomMessage.set(getRandomGachasMessage(data[0].gachasLevel));
       }
     });
+  }
+
+  private initializeId(idFromRoute: string | null): void {
+    if (!idFromRoute || idFromRoute.length !== 5) {
+      this.router.navigate(['/']);
+    } else {
+      this.id.set(idFromRoute);
+    }
   }
 
   private getRandomGachasLevelPhrase(): string {
