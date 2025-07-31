@@ -40,14 +40,12 @@ export class WeatherResource {
           );
 
           if (res.status !== 'ok') {
-            throw new Error('Respuesta incorrecta del servidor');
+            throw new Error();
           }
 
           return res.data;
         } catch (err) {
-          // Aquí puedes loguear si quieres
-          console.error('Error cargando el clima:', err);
-          throw new Error('No se pudo cargar el clima'); // Esto lanza el error al resource
+          throw new Error();
         }
       },
     });

@@ -18,19 +18,19 @@
 
   @if (weatherRef.isLoading()) {
     <div class="flex flex-col items-start gap-4 animate-pulse text-surface-50">
-      <p class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl xl:text-9xl" i18n="@@results.loading">
-        Mirando al cielo...</p>
-      <p class="text-surface-50 text-2xl" i18n="@@results.consulting">Consultando si es buen día de gachas.</p>
+      <h4 class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl xl:text-9xl" i18n="@@results.loading">
+        Mirando al cielo...</h4>
+      <h4 class="text-surface-50 text-2xl" i18n="@@results.consulting">Consultando si es buen día de gachas.</h4>
       <div class="h-2 w-1/2 bg-surface-50/20 rounded animate-pulse"></div>
     </div>
   } @else if (weatherRef.error()) {
     <div class="flex flex-col items-start gap-4 text-surface-50">
-      <p class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl xl:text-9xl" i18n="@@results.error">
+      <h4 class="text-surface-50 text-3xl text-balance uppercase lg:text-5xl xl:text-7xl" i18n="@@results.error">
         No se pudo obtener la predicción meteorológica.
-      </p>
-      <p class="text-surface-50 text-2xl" i18n="@@results.siesta">
+      </h4>
+      <h4 class="text-surface-50 text-2xl" i18n="@@results.siesta">
         Puede que la AEMET esté echando la siesta. Intenta de nuevo más tarde.
-      </p>
+      </h4>
     </div>
   } @else if (weatherRef.hasValue()) {
     <ng-container *ngIf="weather() as data">
