@@ -6,6 +6,7 @@ import { getRandomGachasMessage } from '../core/utils/get-random-gachas-message.
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { getWeatherIcon, iconMap } from '../core/utils/weather-icon.util';
 
 @Component({
   standalone: true,
@@ -24,6 +25,11 @@ export class ResultComponent {
 
   weatherRef = this.weatherResource.createWeatherResource(this.id);
   weather = computed(() => this.weatherRef.value());
+  icon = computed(() => {
+    const data = this.weatherRef.value();
+    const description = data?.[0]?.skyStatus ?? '';
+    return iconMap[getWeatherIcon(description)];
+  });
 
   get gachasLevel(): string {
     return this.randomMessage();

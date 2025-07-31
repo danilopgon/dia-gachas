@@ -12,7 +12,7 @@
 </div>
 
 <main
-  class="relative z-20 flex h-dvh flex-col items-left gap-6 bg-[url('/assets/images/fondo-tiempo.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
+  class="relative z-20 flex h-dvh flex-col items-left gap-6 bg-[url('/assets/images/fondo-tiempo.webp')] bg-cover bg-center p-6 pt-6 text-left lg:bg-none lg:px-16 lg:pt-12"
   role="main"
 >
 
@@ -46,13 +46,15 @@
             icon="pi pi-share-alt"
           ></p-button>
         </div>
-        <h1 class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl xl:text-9xl">
+        <h1 class="text-surface-50 text-3xl text-balance uppercase lg:text-5xl xl:text-7xl">
           {{ data[0].town }} ({{ data[0].province }})
         </h1>
         <h2 class="text-surface-50 text-2xl">{{ gachasLevel }}</h2>
       </header>
 
-      <main class="flex flex-col gap-8 text-surface-50 pt-12">
+      <img *ngIf="icon()" [src]="'assets/icons/' + icon()" alt="Icono del tiempo" class="w-48" />
+
+      <main class="flex flex-col gap-8 text-surface-50">
         <section class="flex flex-col gap-2">
           <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.temperature">
             Temperatura a la hora de comer:
