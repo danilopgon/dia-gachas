@@ -21,7 +21,6 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 - **Frontend**: Angular (con SSR y PWA)
 - **Backend**: NestJS + Prisma
 - **Datos meteorológicos**: API oficial de AEMET
-- **Monorepo**: Workspaces npm
 
 ---
 
@@ -67,17 +66,6 @@ dia-de-gachas/
 ├── package.json  → Scripts y workspaces raíz
 └── README.md
 ```
-
----
-
-## ✅ Estado actual
-
-- [x] Backend funcional con lógica meteorológica
-- [x] Prototipo de interfaz diseñado
-- [ ] Desarrollo frontend en curso
-- [ ] Animaciones y estados visuales
-- [ ] Versión demo pública
-
 ---
 
 ## 🤔 ¿Por qué esto?
