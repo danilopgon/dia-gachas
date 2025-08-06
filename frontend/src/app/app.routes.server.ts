@@ -5,4 +5,8 @@ export const serverRoutes: ServerRoute[] = [
     path: '**',
     renderMode: RenderMode.Prerender,
   },
+  {
+    path: 'result/:id',
+    renderMode: RenderMode.Server,
+  }
 ];

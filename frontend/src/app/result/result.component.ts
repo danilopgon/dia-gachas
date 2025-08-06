@@ -63,6 +63,8 @@ export class ResultComponent {
   }
 
   async shareResults() {
+    if (typeof navigator === 'undefined') return;
+
     const data = this.weather();
     const town = data?.[0]?.town ?? 'mi pueblo';
     const level = this.getRandomGachasLevelPhrase();
@@ -72,7 +74,7 @@ export class ResultComponent {
       await navigator.share({
         title: 'Día de Gachas',
         text: message,
-        url: window.location.href,
+        url: typeof window !== 'undefined' ? window.location.href : '',
       });
     } else {
       await this.copyFallback(message);
@@ -80,7 +82,12 @@ export class ResultComponent {
   }
 
   async copyFallback(message: string) {
-    await navigator.clipboard.writeText(`${message} ${window.location.href}`);
+    if (typeof navigator === 'undefined' || !navigator.clipboard) return;
+
+    await navigator.clipboard.writeText(
+      `${message} ${typeof window !== 'undefined' ? window.location.href : ''}`,
+    );
+
     this.messageService.add({
       severity: 'success',
       summary: 'Copiado',
