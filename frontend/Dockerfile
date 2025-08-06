@@ -1,16 +1,19 @@
-# Dockerfile (Angular SSR)
+# Etapa de build
 FROM node:20-alpine AS builder
 WORKDIR /app
+
 COPY . .
+
 RUN npm install
 RUN npm run build:ssr
 
+# Etapa de producción
 FROM node:20-alpine AS runner
 WORKDIR /app
+
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
 
-ENV NODE_ENV=production
-
-CMD ["node", "dist/server/main.js"]
+# Ajusta esto según el nombre real de tu proyecto Angular
+CMD ["node", "dist/dia-gachas/server.mjs"]
