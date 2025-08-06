@@ -15,5 +15,4 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 
-# Ajusta esto según el nombre real de tu proyecto Angular
 CMD ["node", "dist/dia-gachas/server.mjs"]
