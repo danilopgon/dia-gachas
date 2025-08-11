@@ -1,7 +1,7 @@
 import { Injectable, Signal, effect, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { resource } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { ICity } from '../../core/models/city.interface';
 import { firstValueFrom } from 'rxjs';
 
