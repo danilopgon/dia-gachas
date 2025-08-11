@@ -5,6 +5,9 @@ Una aplicación que conecta con la API de la AEMET para determinar si el tiempo 
 
 > Si hace frío, viento o llueve... la respuesta está clara: ¡Hoy es día de gachas!
 
+<img width="1920" height="1080" alt="Landing de Día de Gachas" src="https://github.com/user-attachments/assets/9cbe0a6e-560b-462a-b36c-2f2449e4f7a2" />
+
+
 ---
 
 ## 🧠 ¿Qué es esto?
@@ -72,12 +75,6 @@ dia-de-gachas/
 
 Porque en Castilla-La Mancha no necesitamos una app del tiempo.  
 Necesitamos saber si toca mojar pan.
-
----
-
-## 📸 Screenshots (próximamente)
-
-_(En cuanto esté lista la interfaz definitiva y la demo visual)_
 
 ---
 
