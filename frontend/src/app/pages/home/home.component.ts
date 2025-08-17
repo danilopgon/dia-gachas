@@ -18,7 +18,7 @@ import gsap from 'gsap';
 import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { FloatLabelModule } from 'primeng/floatlabel';
-import { ICity } from '../core/models/city.interface';
+import { ICity } from '../../core/models/city.interface';
 import { CitiesResource } from './resources/cities.resource';
 
 @Component({

@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherResource } from './resources/weather.resource';
-import { getRandomGachasMessage } from '../core/utils/get-random-gachas-message.util';
+import { getRandomGachasMessage } from '../../core/utils/get-random-gachas-message.util';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { getWeatherIcon, iconMap } from '../core/utils/weather-icon.util';
+import { getWeatherIcon, iconMap } from '../../core/utils/weather-icon.util';
 
 @Component({
   standalone: true,

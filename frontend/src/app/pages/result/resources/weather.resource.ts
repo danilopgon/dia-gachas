@@ -1,7 +1,7 @@
 import { effect, inject, Injectable, resource, signal, Signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { IWeatherData } from '../../core/models/weather-data.interface';
+import { environment } from '../../../../environments/environment';
+import { IWeatherData } from '../../../core/models/weather-data.interface';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
