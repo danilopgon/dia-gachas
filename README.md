@@ -66,8 +66,6 @@ dia-de-gachas/
 │
 ├── frontend/     → Aplicación Angular
 ├── backend/      → API en NestJS + Prisma
-├── package.json  → Scripts y workspaces raíz
-└── README.md
 ```
 ---
 
