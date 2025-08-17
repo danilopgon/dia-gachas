@@ -5,6 +5,6 @@ import { CitiesService } from './services/cities.service';
 
 @Module({
   controllers: [CitiesController],
-  providers: [CitiesService, PrismaService]
+  providers: [CitiesService, PrismaService],
 })
 export class CitiesModule {}

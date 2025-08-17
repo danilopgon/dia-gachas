@@ -143,6 +143,60 @@ describe('AemetService', () => {
       expect(result[0].gachasLevel).toBe(GachasLevel.HIGH);
     });
 
+    it('debería manejar diferencias entre las temperaturas de noon y afternoon', async () => {
+      const mockUrlResponse: AxiosResponse = {
+        data: {
+          datos: 'https://datos.fake-url.com/prediccion.json',
+        },
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: {} as AxiosRequestHeaders },
+      };
+
+      const mockWeatherJson = JSON.stringify([
+        {
+          nombre: 'Toledo',
+          provincia: 'Toledo',
+          prediccion: {
+            dia: [
+              {
+                fecha: '2025-06-08',
+                temperatura: {
+                  dato: [
+                    { hora: 12, value: 0 },
+                    { hora: 18, value: 16 },
+                  ],
+                },
+                probPrecipitacion: [{ periodo: '12-18', value: 60 }],
+                estadoCielo: [{ descripcion: 'Cubierto' }],
+              },
+            ],
+          },
+        },
+      ]);
+
+      const mockWeatherData: AxiosResponse = {
+        data: Buffer.from(mockWeatherJson, 'latin1'),
+        status: 200,
+        statusText: 'OK',
+        headers: {},
+        config: { headers: {} as AxiosRequestHeaders },
+      };
+
+      jest
+        .spyOn(httpService, 'get')
+        .mockReturnValueOnce(of(mockUrlResponse))
+        .mockReturnValueOnce(of(mockWeatherData));
+
+      const result = await service.getWeather('0078', '16');
+
+      expect(result).toHaveLength(1);
+      expect(result[0].town).toBe('Toledo');
+      expect(result[0].gachasLevel).toBe(GachasLevel.HIGH);
+      expect(result[0].launchTemperature).toBe(16);
+    });
+
     it('debería lanzar error si AEMET devuelve datos sin estructura válida', async () => {
       const mockUrlResponse: AxiosResponse = {
         data: {

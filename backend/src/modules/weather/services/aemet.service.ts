@@ -51,8 +51,9 @@ export class AemetService {
         (temperature: Dato) => temperature.hora === 18,
       );
 
-      const launchTemperature = Math.round(
-        (noonTemperature.value + afternoonTemperature.value) / 2,
+      const launchTemperature = this.correctedMean(
+        noonTemperature.value,
+        afternoonTemperature.value,
       );
 
       const launchTimeRainProbability = day.probPrecipitacion.find(
@@ -72,6 +73,23 @@ export class AemetService {
         skyStatus: estadoCielo.descripcion,
       };
     });
+  }
+
+  private correctedMean(a?: number, b?: number, zeroGap = 10): number {
+    const isNum = (x: any) => typeof x === 'number' && !Number.isNaN(x);
+
+    if (isNum(a) && !isNum(b)) return Math.round(a as number);
+    if (!isNum(a) && isNum(b)) return Math.round(b as number);
+
+    if (!isNum(a) && !isNum(b)) return 0;
+
+    const A = a as number;
+    const B = b as number;
+
+    if (A === 0 && Math.abs(B - A) > zeroGap) return Math.round(B);
+    if (B === 0 && Math.abs(A - B) > zeroGap) return Math.round(A);
+
+    return Math.round((A + B) / 2);
   }
 
   assignGachasLevel(data: SimplifiedData[]): SimplifiedData[] {
