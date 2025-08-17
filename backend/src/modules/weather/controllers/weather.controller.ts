@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { WeatherRequest } from '../models/weather-request';
 import { AemetService } from '../services/aemet.service';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('weather')
+@UseInterceptors(CacheInterceptor)
 export class WeatherController {
   constructor(private readonly aemetService: AemetService) {}
 
@@ -21,6 +30,7 @@ export class WeatherController {
   }
 
   @Get(':code')
+  @CacheTTL(3600)
   async getByWeatherDataParams(@Param() params: { code: string }) {
     try {
       const { code } = params;
