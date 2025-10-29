@@ -11,76 +11,101 @@ export class AemetService {
 
   async getWeather(townCode: string, provinceCode: string) {
     try {
-      const headerParams = {
-        api_key: process.env.AEMET_API_KEY,
-      };
-
       const response = await firstValueFrom(
         this.httpService.get(
           `https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/${provinceCode}${townCode}`,
           {
-            headers: headerParams,
+            headers: {
+              api_key: process.env.AEMET_API_KEY ?? '',
+              Accept: 'application/json',
+              timeout: 10000,
+              maxRedirects: 5,
+            },
           },
         ),
       );
 
+      const datosUrl: string = response?.data?.datos;
+      if (!datosUrl) throw new Error('Respuesta AEMET sin URL de datos');
+
       const rawResponse = await firstValueFrom(
-        this.httpService.get(response.data.datos, {
+        this.httpService.get(datosUrl, {
           responseType: 'arraybuffer',
+          timeout: 10000,
+          maxRedirects: 5,
         }),
       );
 
       const decoded = Buffer.from(rawResponse.data).toString('latin1');
       const weatherData: AemetData = JSON.parse(decoded);
-
       const simplifiedData: SimplifiedData[] = this.simplifyData(weatherData);
-
       return this.assignGachasLevel(simplifiedData);
-    } catch (error) {
-      console.error(error);
-      throw new Error(error.message);
+    } catch (error: any) {
+      const msg =
+        error?.response?.data?.descripcion ||
+        error?.response?.data ||
+        error?.message ||
+        'Error desconocido';
+      throw new Error(`AEMET request failed: ${msg}`);
     }
   }
 
   private simplifyData(weatherData: AemetData): SimplifiedData[] {
-    return weatherData[0].prediccion.dia.splice(0, 2).map((day: Dia) => {
-      const noonTemperature = day.temperatura.dato.find(
-        (temperatura: Dato) => temperatura.hora === 12,
-      );
-      const afternoonTemperature = day.temperatura.dato.find(
-        (temperature: Dato) => temperature.hora === 18,
-      );
+    const dias: Dia[] = weatherData?.[0]?.prediccion?.dia?.slice(0, 2) ?? [];
+
+    return dias.map((day: Dia) => {
+      const t12 = day?.temperatura?.dato?.find(
+        (d: Dato) => d.hora === 12,
+      )?.value;
+      const t18 = day?.temperatura?.dato?.find(
+        (d: Dato) => d.hora === 18,
+      )?.value;
 
       const launchTemperature = this.correctedMean(
-        noonTemperature.value,
-        afternoonTemperature.value,
+        this.toNumber(t12),
+        this.toNumber(t18),
       );
 
-      const launchTimeRainProbability = day.probPrecipitacion.find(
-        (p) => p.periodo === '12-18',
-      ).value;
+      const rainSlot =
+        day?.probPrecipitacion?.find((p) => p.periodo === '12-18') ??
+        day?.probPrecipitacion?.find((p) => p.periodo === '12-24') ??
+        day?.probPrecipitacion?.find((p) => p.periodo === '10-16') ??
+        day?.probPrecipitacion?.find((p) => !p.periodo || p.periodo === '');
 
-      const estadoCielo = day.estadoCielo.find((e) => e.descripcion) || {
-        descripcion: 'Unknown',
-      };
+      const launchTimeRainProbability = this.toNumber(rainSlot?.value) ?? 0;
+
+      const skyDesc =
+        day?.estadoCielo
+          ?.map((e) => e.descripcion)
+          .filter(Boolean)
+          .pop() ?? 'desconocido';
 
       return {
-        town: weatherData[0].nombre,
-        province: weatherData[0].provincia,
-        date: day.fecha,
-        launchTemperature: launchTemperature,
-        launchTimeRainProbability: launchTimeRainProbability,
-        skyStatus: estadoCielo.descripcion,
+        town: weatherData?.[0]?.nombre ?? 'N/D',
+        province: weatherData?.[0]?.provincia ?? 'N/D',
+        date: this.toISODate(day.fecha),
+        launchTemperature,
+        launchTimeRainProbability,
+        skyStatus: skyDesc,
       };
     });
   }
 
-  private correctedMean(a?: number, b?: number, zeroGap = 10): number {
-    const isNum = (x: any) => typeof x === 'number' && !Number.isNaN(x);
+  private toNumber(v: any): number | undefined {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : undefined;
+  }
 
+  private toISODate(v: any): string {
+    if (typeof v === 'string') return v;
+    const d = new Date(v);
+    return Number.isFinite(d.getTime()) ? d.toISOString().split('T')[0] : '';
+  }
+
+  private correctedMean(a?: number, b?: number, zeroGap = 10): number {
+    const isNum = (x: any) => typeof x === 'number' && Number.isFinite(x);
     if (isNum(a) && !isNum(b)) return Math.round(a as number);
     if (!isNum(a) && isNum(b)) return Math.round(b as number);
-
     if (!isNum(a) && !isNum(b)) return 0;
 
     const A = a as number;
@@ -94,21 +119,23 @@ export class AemetService {
 
   assignGachasLevel(data: SimplifiedData[]): SimplifiedData[] {
     return data.map((day) => {
-      const temp = day.launchTemperature;
-      const rain = day.launchTimeRainProbability;
-      const sky = day.skyStatus.toLowerCase();
+      const temp = Number.isFinite(day.launchTemperature)
+        ? day.launchTemperature
+        : 0;
+      const rain = Number.isFinite(day.launchTimeRainProbability)
+        ? day.launchTimeRainProbability
+        : 0;
+      const sky = (day.skyStatus ?? 'desconocido').toString().toLowerCase();
 
       const score =
         this.scoreTemperature(temp) + this.scoreRain(rain) + this.scoreSky(sky);
 
-      return {
-        ...day,
-        gachasLevel: this.getLevelFromScore(score),
-      };
+      return { ...day, gachasLevel: this.getLevelFromScore(score) };
     });
   }
 
   private scoreTemperature(temp: number): number {
+    if (!Number.isFinite(temp)) return 0;
     if (temp <= 12) return 2;
     if (temp <= 17) return 1;
     if (temp >= 22) return -2;
@@ -117,6 +144,7 @@ export class AemetService {
   }
 
   private scoreRain(rain: number): number {
+    if (!Number.isFinite(rain)) return 0;
     if (rain >= 60) return 2;
     if (rain >= 40) return 1;
     return 0;
@@ -133,8 +161,8 @@ export class AemetService {
     ];
     const sunnyKeywords = ['despejado', 'soleado'];
 
-    if (cloudyKeywords.some((keyword) => sky.includes(keyword))) return 2;
-    if (sunnyKeywords.some((keyword) => sky.includes(keyword))) return -1;
+    if (cloudyKeywords.some((k) => sky.includes(k))) return 2;
+    if (sunnyKeywords.some((k) => sky.includes(k))) return -1;
     return 0;
   }
 
