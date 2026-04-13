@@ -20,7 +20,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
         },
       ],
     }),
-    CacheModule.register({ isGlobal: true, ttl: 3600, max: 200 }),
+    CacheModule.register({ isGlobal: true, ttl: 3600 * 1000, max: 200 }),
     WeatherModule,
     CitiesModule,
   ],
