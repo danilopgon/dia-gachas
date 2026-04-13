@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { WeatherRequest } from '../models/weather-request';
 import { AemetService } from '../services/aemet.service';
+import { AemetError } from '../errors/aemet.error';
 import { CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('weather')
@@ -19,15 +20,19 @@ export class WeatherController {
   async fetchWeatherData(@Body() weatherRequest: WeatherRequest) {
     try {
       const { townCode, provinceCode } = weatherRequest;
-      const weather = await this.aemetService.getWeather(townCode, provinceCode);
+      const weather = await this.aemetService.getWeather(
+        townCode,
+        provinceCode,
+      );
       return { status: 'ok', data: weather };
     } catch (error) {
       if (error instanceof HttpException) throw error;
       const message = error instanceof Error ? error.message : String(error);
-      throw new HttpException(
-        { status: 'error', message },
-        HttpStatus.BAD_GATEWAY,
-      );
+      const httpStatus =
+        error instanceof AemetError
+          ? HttpStatus.BAD_GATEWAY
+          : HttpStatus.INTERNAL_SERVER_ERROR;
+      throw new HttpException({ status: 'error', message }, httpStatus);
     }
   }
 
@@ -47,10 +52,11 @@ export class WeatherController {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       const message = error instanceof Error ? error.message : String(error);
-      throw new HttpException(
-        { status: 'error', message },
-        HttpStatus.BAD_GATEWAY,
-      );
+      const httpStatus =
+        error instanceof AemetError
+          ? HttpStatus.BAD_GATEWAY
+          : HttpStatus.INTERNAL_SERVER_ERROR;
+      throw new HttpException({ status: 'error', message }, httpStatus);
     }
   }
 }

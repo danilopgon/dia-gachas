@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { AemetData, Dato, Dia } from '../models/aemet-data';
+import { AemetError } from '../errors/aemet.error';
 import { SimplifiedData } from '../models/simplified-data';
 import { GachasLevel } from '../enums/gachas-level.enum';
 
@@ -46,7 +47,7 @@ export class AemetService {
         error?.response?.data ||
         error?.message ||
         'Error desconocido';
-      throw new Error(`AEMET request failed: ${msg}`);
+      throw new AemetError(`AEMET request failed: ${msg}`);
     }
   }
 
