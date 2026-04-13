@@ -55,19 +55,12 @@ export class ResultComponent {
     }
   }
 
-  private getRandomGachasLevelPhrase(): string {
-    const data = this.weather();
-    if (!Array.isArray(data) || !data.length || !data[0].gachasLevel) return '';
-
-    return getRandomGachasMessage(data[0].gachasLevel);
-  }
-
   async shareResults() {
     if (typeof navigator === 'undefined') return;
 
     const data = this.weather();
     const town = data?.[0]?.town ?? 'mi pueblo';
-    const level = this.getRandomGachasLevelPhrase();
+    const level = this.gachasLevel;
     const message = `Hoy en ${town}, nivel de gachas: ${level}`;
 
     if (navigator.share) {
