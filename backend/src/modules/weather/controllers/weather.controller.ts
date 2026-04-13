@@ -17,9 +17,18 @@ export class WeatherController {
 
   @Post()
   async fetchWeatherData(@Body() weatherRequest: WeatherRequest) {
-    const { townCode, provinceCode } = weatherRequest;
-    const weather = await this.aemetService.getWeather(townCode, provinceCode);
-    return { status: 'ok', data: weather };
+    try {
+      const { townCode, provinceCode } = weatherRequest;
+      const weather = await this.aemetService.getWeather(townCode, provinceCode);
+      return { status: 'ok', data: weather };
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      const message = error instanceof Error ? error.message : String(error);
+      throw new HttpException(
+        { status: 'error', message },
+        HttpStatus.BAD_GATEWAY,
+      );
+    }
   }
 
   @Get(':code')
@@ -36,8 +45,10 @@ export class WeatherController {
       );
       return { status: 'ok', data: weather };
     } catch (error) {
+      if (error instanceof HttpException) throw error;
+      const message = error instanceof Error ? error.message : String(error);
       throw new HttpException(
-        { status: 'error', message: error.message },
+        { status: 'error', message },
         HttpStatus.BAD_GATEWAY,
       );
     }
