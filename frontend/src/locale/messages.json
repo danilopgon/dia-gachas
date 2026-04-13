@@ -12,6 +12,7 @@
     "results.rainProbability": "Probabilidad de lluvia:",
     "results.skyStatus": "Estado del cielo:",
     "results.siesta": "Puede que la AEMET esté echando la siesta. Intenta de nuevo más tarde.",
-    "results.share": "Compartir"
+    "results.share": "Compartir",
+    "results.searchAgain": "Buscar otro pueblo"
   }
 }

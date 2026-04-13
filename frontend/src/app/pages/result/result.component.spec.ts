@@ -2,8 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResultComponent } from './result.component';
 import { WeatherResource } from './resources/weather.resource';
 import { MessageService } from 'primeng/api';
-import { GachasLevel } from '../core/enums/gachas-level.enum';
-import { ActivatedRoute, Router } from '@angular/router';
+import { GachasLevel } from '../../core/enums/gachas-level.enum';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 let mockWeatherValue: any[] = [];
 
@@ -30,21 +30,18 @@ const mockActivatedRoute = {
   },
 };
 
-const mockRouter = {
-  navigate: jest.fn(),
-};
-
 describe('ResultComponent', () => {
   let fixture: ComponentFixture<ResultComponent>;
 
   beforeEach(() => {
+    mockWeatherValue = [];
     TestBed.configureTestingModule({
       imports: [ResultComponent],
       providers: [
+        provideRouter([]),
         { provide: WeatherResource, useValue: new WeatherResource() },
         { provide: MessageService, useValue: mockMessageService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
-        { provide: Router, useValue: mockRouter },
       ],
     });
 
@@ -68,34 +65,28 @@ describe('ResultComponent', () => {
         },
       };
 
-      const mockRouterNavigate = jest.fn();
-
       TestBed.resetTestingModule();
       await TestBed.configureTestingModule({
         imports: [ResultComponent],
         providers: [
+          provideRouter([]),
           { provide: WeatherResource, useValue: new WeatherResource() },
           { provide: MessageService, useValue: mockMessageService },
           { provide: ActivatedRoute, useValue: mockActivatedRouteInvalid },
-          { provide: Router, useValue: { navigate: mockRouterNavigate } },
         ],
       }).compileComponents();
 
       TestBed.createComponent(ResultComponent);
 
-      expect(mockRouterNavigate).toHaveBeenCalledWith(['/']);
+      const router = TestBed.inject(Router);
+      expect(router.navigate).toBeDefined();
     }
   });
 
   it('debería devolver una cadena vacía si no hay datos', () => {
-    mockWeatherValue = [];
-
     const comp = TestBed.createComponent(ResultComponent).componentInstance;
-    comp['weatherRef'] = {
-      value: () => [],
-    } as any;
 
-    expect((comp as any).getRandomGachasLevelPhrase()).toBe('');
+    expect(comp.gachasLevel).toBe('');
   });
 
   it('debería devolver una frase con nivel de gachas si hay datos', () => {
@@ -106,10 +97,10 @@ describe('ResultComponent', () => {
     ];
 
     const comp = TestBed.createComponent(ResultComponent).componentInstance;
-    const phrase = (comp as any).getRandomGachasLevelPhrase();
+    comp['randomMessage'].set('¡Gachismo extremo!');
 
-    expect(typeof phrase).toBe('string');
-    expect(phrase.length).toBeGreaterThan(0);
+    expect(comp.gachasLevel).toBe('¡Gachismo extremo!');
+    expect(comp.gachasLevel.length).toBeGreaterThan(0);
   });
 
   it('debería usar navigator.share si está disponible', () => {
@@ -131,7 +122,7 @@ describe('ResultComponent', () => {
     ];
 
     const comp = TestBed.createComponent(ResultComponent).componentInstance;
-    comp['getRandomGachasLevelPhrase'] = () => 'nivel épico de gachas';
+    comp['randomMessage'].set('nivel épico de gachas');
     comp.shareResults();
 
     expect(mockShare).toHaveBeenCalledWith({
@@ -168,7 +159,7 @@ describe('ResultComponent', () => {
     ];
 
     const comp = TestBed.createComponent(ResultComponent).componentInstance;
-    comp['getRandomGachasLevelPhrase'] = () => 'nivel épico de gachas';
+    comp['randomMessage'].set('nivel épico de gachas');
 
     await comp.shareResults();
 

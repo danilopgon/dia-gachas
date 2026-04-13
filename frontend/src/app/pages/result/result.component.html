@@ -4,7 +4,7 @@
   class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
 >
   <img
-    alt="Fondo cielo"
+    alt=""
     class="absolute top-0 left-0 h-full w-full object-cover"
     id="fondo-cielo"
     src="/assets/images/fondo-tiempo-desktop.webp"
@@ -12,69 +12,98 @@
 </div>
 
 <main
-  class="relative z-20 flex min-h-dvh flex-col items-left gap-6 bg-[url('/assets/images/fondo-cielo.webp')] bg-cover bg-center p-6 py-12 text-left lg:bg-none lg:px-16"
+  class="relative z-20 flex h-dvh flex-col items-start gap-4 bg-[url('/assets/images/fondo-cielo.webp')] bg-cover bg-center p-6 py-8 text-left lg:gap-8 lg:bg-none lg:px-16 lg:py-12"
   role="main"
 >
   @if (weatherRef.isLoading()) {
-    <div class="flex flex-col items-start gap-4 animate-pulse text-surface-50">
-      <h4 class="text-surface-50 text-5xl text-balance uppercase lg:text-7xl xl:text-9xl" i18n="@@results.loading">
-        Mirando al cielo...</h4>
-      <h4 class="text-surface-50 text-2xl" i18n="@@results.consulting">Consultando si es buen día de gachas.</h4>
-      <div class="h-2 w-1/2 bg-surface-50/20 rounded animate-pulse"></div>
+    <div role="status" aria-live="polite" class="flex flex-col items-start gap-4 text-surface-50">
+      <h1 class="text-5xl text-balance uppercase lg:text-7xl xl:text-9xl animate-pulse" i18n="@@results.loading">
+        Mirando al cielo...
+      </h1>
+      <p class="text-2xl opacity-80" i18n="@@results.consulting">Consultando si es buen día de gachas.</p>
     </div>
   } @else if (weatherRef.error()) {
-    <div class="flex flex-col items-start gap-4 text-surface-50">
-      <h4 class="text-surface-50 text-3xl text-balance uppercase lg:text-5xl xl:text-7xl" i18n="@@results.error">
+    <div role="alert" class="flex flex-col items-start gap-6 text-surface-50">
+      <h1 class="text-3xl text-balance uppercase lg:text-5xl xl:text-7xl" i18n="@@results.error">
         No se pudo obtener la predicción meteorológica.
-      </h4>
-      <h4 class="text-surface-50 text-2xl" i18n="@@results.siesta">
+      </h1>
+      <p class="text-xl opacity-80" i18n="@@results.siesta">
         Puede que la AEMET esté echando la siesta. Intenta de nuevo más tarde.
-      </h4>
+      </p>
+      <p-button
+        routerLink="/"
+        label="Buscar otro pueblo"
+        i18n-label="@@results.searchAgain"
+        aria-label="Volver a buscar otro pueblo"
+        icon="pi pi-search"
+      ></p-button>
     </div>
   } @else if (weatherRef.hasValue()) {
     <ng-container *ngIf="weather() as data">
-      <header class="text-surface-50 space-y-2 text-left text-xl flex flex-col items-start">
-        <div class="card hidden lg:flex h-16 w-full max-w-48 justify-center mb-8 self-end">
-          <p-button
-            class="h-full w-full max-w-2xl drop-shadow-2xl"
-            styleClass="h-full w-full max-w-2xl"
-            (onClick)="shareResults()"
-            label="Compartir"
-            i18n-label="@@results.share"
-            aria-label="Compartir resultados"
-            icon="pi pi-share-alt"
-          ></p-button>
-        </div>
-        <h1 class="text-surface-50 text-3xl text-balance uppercase lg:text-5xl xl:text-7xl">
+
+      <!-- Pueblo: identifica el lugar, no el protagonista -->
+      <header class="flex flex-col gap-2 text-surface-50 animate-fade-up">
+        <h1 class="text-2xl text-balance uppercase tracking-wide opacity-90 lg:text-3xl xl:text-4xl">
           {{ data[0].town }} ({{ data[0].province }})
         </h1>
-        <h2 class="text-surface-50 text-2xl">{{ gachasLevel }}</h2>
+        <!-- Mensaje gachas: EL PROTAGONISTA -->
+        <p class="text-4xl text-balance lg:text-6xl xl:text-7xl [font-family:'PPWoodland',serif]">
+          {{ gachasLevel }}
+        </p>
       </header>
 
-      <img *ngIf="icon()" [src]="'assets/icons/' + icon()" alt="Icono del tiempo" class="w-48" />
+      <!-- Icono del tiempo: entra con retraso y luego flota -->
+      <div *ngIf="icon()" class="animate-fade-up [animation-delay:100ms]">
+        <img
+          [src]="'assets/icons/' + icon()"
+          [alt]="data[0].skyStatus"
+          class="w-20 animate-float lg:w-40 [animation-delay:600ms]"
+        />
+      </div>
 
-      <main class="flex flex-col gap-8 text-surface-50">
-        <section class="flex flex-col gap-2">
-          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.temperature">
-            Temperatura a la hora de comer:
-          </h4>
-          <h3 class="text-3xl lg:text-4xl xl:text:5xl">{{ data[0].launchTemperature }} °C</h3>
-        </section>
+      <!-- Datos meteorológicos -->
+      <section class="flex flex-col gap-3 text-surface-50 animate-fade-up lg:gap-6 [animation-delay:200ms]" aria-label="Datos meteorológicos">
+        <div class="flex flex-col gap-1">
+          <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.temperature">
+            Temperatura a la hora de comer
+          </span>
+          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">{{ data[0].launchTemperature }} °C</p>
+        </div>
 
-        <section class="flex flex-col gap-2">
-          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.rainProbability">
-            Probabilidad de lluvia:
-          </h4>
-          <h3 class="text-3xl lg:text-4xl xl:text:5xl">{{ data[0].launchTimeRainProbability }}%</h3>
-        </section>
+        <div class="flex flex-col gap-1">
+          <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.rainProbability">
+            Probabilidad de lluvia
+          </span>
+          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">{{ data[0].launchTimeRainProbability }}%</p>
+        </div>
 
-        <section class="flex flex-col gap-2">
-          <h4 class="text-xl lg:text-2xl xl:text-3xl" i18n="@@results.skyStatus">
-            Estado del cielo:
-          </h4>
-          <h3 class="text-3xl lg:text-4xl xl:text:5xl">{{ data[0].skyStatus }}</h3>
-        </section>
-      </main>
+        <div class="flex flex-col gap-1">
+          <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.skyStatus">
+            Estado del cielo
+          </span>
+          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">{{ data[0].skyStatus }}</p>
+        </div>
+      </section>
+
+      <!-- Acciones: primaria + enlace suave -->
+      <div class="flex items-center gap-4 flex-wrap animate-fade-up [animation-delay:320ms]">
+        <p-button
+          (onClick)="shareResults()"
+          label="Compartir"
+          i18n-label="@@results.share"
+          aria-label="Compartir resultados"
+          icon="pi pi-share-alt"
+        ></p-button>
+        <a
+          routerLink="/"
+          class="text-surface-50 underline underline-offset-4 decoration-2 text-lg font-semibold hover:opacity-80 transition-opacity"
+          aria-label="Volver a buscar otro pueblo"
+          i18n="@@results.searchAgain"
+        >
+          Buscar otro pueblo
+        </a>
+      </div>
+
     </ng-container>
   }
 </main>
