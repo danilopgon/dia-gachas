@@ -18,9 +18,9 @@ export class AemetService {
             headers: {
               api_key: process.env.AEMET_API_KEY ?? '',
               Accept: 'application/json',
-              timeout: 10000,
-              maxRedirects: 5,
             },
+            timeout: 10000,
+            maxRedirects: 5,
           },
         ),
       );

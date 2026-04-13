@@ -2,35 +2,28 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
-  UseInterceptors,
 } from '@nestjs/common';
 import { WeatherRequest } from '../models/weather-request';
 import { AemetService } from '../services/aemet.service';
-import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
+import { CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('weather')
-@UseInterceptors(CacheInterceptor)
 export class WeatherController {
   constructor(private readonly aemetService: AemetService) {}
 
   @Post()
   async fetchWeatherData(@Body() weatherRequest: WeatherRequest) {
-    try {
-      const { townCode, provinceCode } = weatherRequest;
-      const weather = await this.aemetService.getWeather(
-        townCode,
-        provinceCode,
-      );
-      return { status: 'ok', data: weather };
-    } catch (error) {
-      return { status: 'error', message: error.message };
-    }
+    const { townCode, provinceCode } = weatherRequest;
+    const weather = await this.aemetService.getWeather(townCode, provinceCode);
+    return { status: 'ok', data: weather };
   }
 
   @Get(':code')
-  @CacheTTL(3600)
+  @CacheTTL(3600 * 1000)
   async getByWeatherDataParams(@Param() params: { code: string }) {
     try {
       const { code } = params;
@@ -43,7 +36,10 @@ export class WeatherController {
       );
       return { status: 'ok', data: weather };
     } catch (error) {
-      return { status: 'error', message: error.message };
+      throw new HttpException(
+        { status: 'error', message: error.message },
+        HttpStatus.BAD_GATEWAY,
+      );
     }
   }
 }
