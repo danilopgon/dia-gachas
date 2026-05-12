@@ -25,4 +25,4 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
 # Comando por defecto
-CMD ["node", "dist/src/main"]
+CMD ["node", "dist/main"]
