@@ -22,7 +22,8 @@ export class CitiesController {
 
       return { status: 'ok', data: cities, statusCode: 200 };
     } catch (error) {
-      return { status: 'error', message: error.message, statusCode: 500 };
+      const message = error instanceof Error ? error.message : String(error);
+      return { status: 'error', message, statusCode: 500 };
     }
   }
 }
