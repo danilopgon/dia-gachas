@@ -10,6 +10,9 @@ COPY . .
 # Instalar dependencias
 RUN npm install
 
+# Generar el cliente de Prisma
+RUN npx prisma generate
+
 # Compilar el proyecto NestJS
 RUN npm run build
 
