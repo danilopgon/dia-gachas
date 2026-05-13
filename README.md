@@ -21,8 +21,8 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 ## 🛠 Stack técnico
 
-- **Frontend**: Angular (con SSR y PWA)
-- **Backend**: NestJS + Prisma
+- **Frontend**: Angular 19 (PWA) · Tailwind CSS v4 · PrimeNG · GSAP
+- **Backend**: NestJS 11 · Prisma 7 · MariaDB/MySQL
 - **Datos meteorológicos**: API oficial de AEMET
 
 ---
@@ -32,8 +32,8 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 1. **Clona el repo**
 
    ```bash
-   git clone https://github.com/tu-usuario/dia-de-gachas.git
-   cd dia-de-gachas
+   git clone https://github.com/danilopgon/dia-gachas.git
+   cd dia-gachas
    ```
 
 2. **Instala las dependencias de todos los paquetes**
@@ -42,20 +42,41 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
    npm run install:all
    ```
 
-3. **Configura la clave de AEMET**
-   Crea un archivo `.env` en la carpeta `backend/`:
+3. **Prepara la base de datos**
 
-   ```
-   AEMET_API_KEY=tu_clave
+   Necesitas una instancia de MySQL o MariaDB corriendo (local o Docker) con una base de datos creada.
+
+4. **Configura las variables de entorno**
+
+   Copia la plantilla y rellena tus valores:
+
+   ```bash
+   cp backend/.env.dist backend/.env
    ```
 
-4. **Levanta el entorno en desarrollo**
+   ```env
+   DATABASE_URL=mysql://root:root@localhost:3306/db
+   AEMET_API_KEY=tu_clave_de_aemet
+   CORS_ORIGIN=http://localhost:4200
+   ```
+
+   Consigue tu clave de AEMET en [opendata.aemet.es](https://opendata.aemet.es).
+
+5. **Ejecuta las migraciones de Prisma**
+
+   ```bash
+   npm run prisma:migrate --prefix backend
+   ```
+
+6. **Levanta el entorno en desarrollo**
 
    ```bash
    npm run dev
    ```
 
-   Esto ejecutará tanto el backend (`NestJS`) como el frontend (`Angular`) en paralelo.
+   Esto ejecutará backend y frontend en paralelo:
+   - Backend: http://localhost:3000
+   - Frontend: http://localhost:4200
 
 ---
 
@@ -67,6 +88,16 @@ dia-de-gachas/
 ├── frontend/     → Aplicación Angular
 ├── backend/      → API en NestJS + Prisma
 ```
+---
+
+## ⚙️ Comandos útiles
+
+```bash
+npm run test:api      # Tests del backend
+npm run test:web      # Tests del frontend
+npm run build         # Build completo (api + web)
+```
+
 ---
 
 ## 🤔 ¿Por qué esto?
