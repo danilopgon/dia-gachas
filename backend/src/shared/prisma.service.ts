@@ -28,6 +28,7 @@ export class PrismaService
       user,
       password,
       database,
+      allowPublicKeyRetrieval: true,
       connectTimeout: 5_000, // v6 default was 5s; driver default is 1s (too low for container networking)
       idleTimeout: 300,      // v6 default was 300s; driver default is 1800s
       connectionLimit: 10,
