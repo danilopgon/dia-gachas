@@ -1,3 +1,4 @@
 node_modules
 coverage
 .vercel
+bash.exe.stackdump
