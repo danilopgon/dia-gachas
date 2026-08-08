@@ -1,3 +1,3 @@
 export const environment = {
-  BACK_URL: 'https://api.diadegachas.com',
+  BACK_URL: 'https://backgachas.danilopgon.com/',
 };
