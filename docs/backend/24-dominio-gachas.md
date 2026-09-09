@@ -7,7 +7,7 @@
 
 ---
 
-## 47. Dominio de gachas
+## §47 · Dominio de gachas
 
 Crear:
 
@@ -22,7 +22,7 @@ Portar los tests existentes como especificación antes de modificar reglas.
 
 ---
 
-## 48. Nueva funcionalidad
+## §48 · Nueva funcionalidad
 
 Actualmente:
 
@@ -55,7 +55,7 @@ Ejemplo:
 
 ---
 
-## 50. Typo launch/lunch
+## §50 · Typo launch/lunch
 
 No propagar internamente:
 
@@ -79,7 +79,7 @@ El typo se conserva únicamente mientras sea necesario por compatibilidad públi
 
 ---
 
-## 51. Mejor día para gachas
+## §51 · Mejor día para gachas
 
 Comparar los dos días ya procesados.
 

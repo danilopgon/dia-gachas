@@ -4,7 +4,7 @@
 
 ---
 
-## 1. Propósito
+## §1 · Propósito
 
 Este documento define la modernización completa de **Día de Gachas**.
 
@@ -49,7 +49,7 @@ Angular 22 + Angular primitives + ASP.NET Core + EF Core
 
 ---
 
-## 2. Principio rector
+## §2 · Principio rector
 
 Día de Gachas seguirá siendo una aplicación pequeña.
 
@@ -67,7 +67,7 @@ No:
 
 ---
 
-## 74. Cosas que no vamos a introducir
+## §74 · Cosas que no vamos a introducir
 
 Frontend:
 

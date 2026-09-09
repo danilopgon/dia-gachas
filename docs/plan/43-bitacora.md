@@ -2,8 +2,8 @@
 
 > Índice general en [`../README.md`](../README.md).
 >
-> [`50-instrucciones-generales.md §77.8`](../agents/50-instrucciones-generales.md)
-> obliga a documentar cualquier desviación del plan. Este es el sitio.
+> [`../agents/50-instrucciones-generales.md`](../agents/50-instrucciones-generales.md)
+> (§77, punto 8) obliga a documentar cualquier desviación del plan. Este es el sitio.
 
 ---
 
@@ -76,3 +76,25 @@ un roadmap paralelo troceado (duplicaría `40-fases.md`).
 
 **Impacto en el plan:** `docs/plan/40-fases.md` gana una señal de verificación
 por fase; `AGENTS.md` cambia el paso 1 del flujo de trabajo.
+
+---
+
+## 2026-09-09 · Fase — · Los `§` se prefijan para no parecer numeración rota
+
+**Contexto:** al trocear el BRS, cada sección conservó su número como encabezado
+(`## 74. Cosas que no vamos a introducir`). Dentro de un documento eso se lee como
+numeración rota (`1`, `2`, `74`), y además colisiona con los números de fichero:
+`40-fases.md` y `§40 SearchCities` compartían símbolo sin compartir significado.
+
+**Decisión:** los encabezados de sección pasan a `## §74 · Título`. El `§` marca
+que es una **cita al BRS**, no un ordinal del documento, y desambigua frente a los
+números de fichero. La distinción queda explicada en `docs/README.md` y `AGENTS.md`.
+
+**Alternativas descartadas:** renumerar las secciones de forma correlativa dentro
+de cada documento (se pierde la trazabilidad con el BRS y las citas `§N` de PRs
+antiguos dejan de resolver); renumerar los ficheros con prefijo de área (`b20-`,
+`f10-`) para evitar la colisión (mucho churn y rompe todos los enlaces, cuando el
+`§` ya resuelve la ambigüedad).
+
+**Impacto en el plan:** ninguno en contenido. Las 80 secciones siguen presentes,
+únicas y citables como `§N`.

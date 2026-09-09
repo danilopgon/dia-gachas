@@ -4,7 +4,7 @@
 
 ---
 
-## 71. Definition of Done frontend
+## §71 · Definition of Done frontend
 
 Frontend terminado cuando:
 
@@ -30,7 +30,7 @@ Frontend terminado cuando:
 
 ---
 
-## 72. Definition of Done backend
+## §72 · Definition of Done backend
 
 - ASP.NET Core en producción;
 - EF Core;
@@ -50,7 +50,7 @@ Frontend terminado cuando:
 
 ---
 
-## 73. Definition of Done producto
+## §73 · Definition of Done producto
 
 El usuario puede:
 

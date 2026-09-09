@@ -4,7 +4,7 @@
 
 ---
 
-## 64. Coolify
+## §64 · Coolify
 
 Durante la migración:
 
@@ -28,7 +28,7 @@ port 8080
 
 ---
 
-## 65. Docker
+## §65 · Docker
 
 Multi-stage:
 

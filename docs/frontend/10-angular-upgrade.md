@@ -7,7 +7,7 @@
 
 ---
 
-## 20. Angular 19 → 20
+## §20 · Angular 19 → 20
 
 Ejecutar migration oficial.
 
@@ -31,7 +31,7 @@ UI
 
 ---
 
-## 21. Angular 20 → 21
+## §21 · Angular 20 → 21
 
 Después:
 
@@ -45,7 +45,7 @@ Estabilizar completamente antes de abordar PrimeNG.
 
 ---
 
-## 24. Angular 21 → 22
+## §24 · Angular 21 → 22
 
 Una vez PrimeNG ya no exista:
 
@@ -59,7 +59,7 @@ Esto reduce muchísimo el coste futuro de upgrades Angular.
 
 ---
 
-## 25. Objetivo Angular 22
+## §25 · Objetivo Angular 22
 
 No basta con:
 

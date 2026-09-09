@@ -8,7 +8,7 @@
 
 ---
 
-## 67. Fases completas
+## §67 · Fases completas
 
 ### Fase 0 — Baseline
 

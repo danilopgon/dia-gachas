@@ -4,7 +4,7 @@
 
 ---
 
-## 57. Caching
+## §57 · Caching
 
 Backend:
 
@@ -28,7 +28,7 @@ No duplicar lógica de cache meteorológico compleja en frontend.
 
 ---
 
-## 58. Rate limiting
+## §58 · Rate limiting
 
 Aplicar policies diferenciadas.
 
@@ -42,7 +42,7 @@ Weather
 
 ---
 
-## 59. Healthcheck
+## §59 · Healthcheck
 
 ```http
 GET /health

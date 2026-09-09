@@ -40,6 +40,23 @@ vecinos al final.
 
 ---
 
+## Dos numeraciones, y no son la misma
+
+Es la confusión fácil de este repo, así que queda dicha una vez:
+
+| Símbolo | Qué es | Ejemplo |
+|---|---|---|
+| `NN-nombre.md` | **Número de fichero.** Ordena la documentación por temática. No significa nada más | `40-fases.md` es el plan de fases |
+| `§N` | **Sección del BRS original.** Es una cita, no un orden. Por eso los `§` saltan dentro de un documento | `§40` es `SearchCities`, y vive en `backend/22-cities.md` |
+
+O sea: **`40-fases.md` y `§40` no tienen nada que ver.** Los números de fichero
+van de 00 a 61 por temática; los `§` van de 1 a 80 siguiendo el BRS.
+
+Cuando cites algo en un PR o un issue, usa el `§`: es estable aunque los
+documentos se reorganicen. Para decir "lee esto", usa la ruta del fichero.
+
+---
+
 ## Índice
 
 ### Transversal
@@ -121,86 +138,86 @@ Las 80 secciones del BRS original están repartidas sin pérdida. Mapa completo:
 
 | BRS § | Documento |
 |---|---|
-| §1 Propósito | `00-vision-y-alcance.md` |
-| §2 Principio rector | `00-vision-y-alcance.md` |
-| §3 Estado actual | `01-estado-actual.md` |
-| §4 Decisión sobre PrimeNG | `frontend/11-primeng-decision.md` |
-| §5 Filosofía de sustitución | `frontend/11-primeng-decision.md` |
-| §6 Huella actual de PrimeNG | `01-estado-actual.md` |
-| §7 Mapa de equivalencias UI | `frontend/12-primeng-sustituciones.md` |
-| §8 Botones | `frontend/12-primeng-sustituciones.md` |
-| §9 Iconos | `frontend/12-primeng-sustituciones.md` |
-| §10 Float label | `frontend/12-primeng-sustituciones.md` |
-| §11 Autocomplete de municipios | `frontend/14-autocomplete-accesible.md` |
-| §12 Componente CityAutocomplete | `frontend/14-autocomplete-accesible.md` |
-| §13 Signal Forms | `frontend/14-autocomplete-accesible.md` |
-| §14 Popover de créditos | `frontend/12-primeng-sustituciones.md` |
-| §15 Toast | `frontend/12-primeng-sustituciones.md` |
-| §16 Theming | `frontend/13-theming.md` |
-| §17 Tokens PrimeNG existentes | `frontend/13-theming.md` |
-| §18 Estrategia de transición | `frontend/11-primeng-decision.md` |
-| §19 Punto de salida de PrimeNG | `frontend/11-primeng-decision.md` |
-| §20 Angular 19 → 20 | `frontend/10-angular-upgrade.md` |
-| §21 Angular 20 → 21 | `frontend/10-angular-upgrade.md` |
-| §22 Retirada de PrimeNG (orden) | `frontend/11-primeng-decision.md` |
-| §23 Angular ARIA | `frontend/14-autocomplete-accesible.md` |
-| §24 Angular 21 → 22 | `frontend/10-angular-upgrade.md` |
-| §25 Objetivo Angular 22 | `frontend/10-angular-upgrade.md` |
-| §26 Zoneless | `frontend/15-reactividad-signals.md` |
-| §27 OnPush | `frontend/15-reactividad-signals.md` |
-| §28 WeatherResource actual | `frontend/15-reactividad-signals.md` |
-| §29 CitiesResource actual | `frontend/15-reactividad-signals.md` |
-| §30 Effects | `frontend/15-reactividad-signals.md` |
-| §31 linkedSignal | `frontend/15-reactividad-signals.md` |
-| §32 Animaciones | `frontend/15-reactividad-signals.md` |
-| §33 Testing frontend (runner) | `frontend/17-testing-frontend.md` |
-| §34 Backend objetivo | `backend/20-arquitectura.md` |
-| §35 Arquitectura | `backend/20-arquitectura.md` |
-| §36 Organización funcional | `backend/20-arquitectura.md` |
-| §37 CQRS | `backend/20-arquitectura.md` |
-| §38 Persistencia | `backend/21-persistencia.md` |
-| §39 EF Core | `backend/21-persistencia.md` |
-| §40 SearchCities | `backend/22-cities.md` |
-| §41 SearchCitiesQuery | `backend/22-cities.md` |
-| §42 ImportMunicipalityCatalogCommand | `backend/22-cities.md` |
-| §43 Weather actual | `backend/23-aemet.md` |
-| §44 Arquitectura Weather | `backend/23-aemet.md` |
-| §45 IAemetForecastProvider | `backend/23-aemet.md` |
-| §46 AemetForecastMapper | `backend/23-aemet.md` |
-| §47 Dominio de gachas | `backend/24-dominio-gachas.md` |
-| §48 Nueva funcionalidad | `backend/24-dominio-gachas.md` |
-| §49 Contrato Weather nuevo | `backend/25-contratos-api.md` |
-| §50 Typo launch/lunch | `backend/24-dominio-gachas.md` |
-| §51 Mejor día para gachas | `backend/24-dominio-gachas.md` |
-| §52 Angular consume Weather nuevo | `frontend/16-ui-veredicto-y-share.md` |
-| §53 UI del nuevo veredicto | `frontend/16-ui-veredicto-y-share.md` |
-| §54 Loading y errors sin PrimeNG | `frontend/15-reactividad-signals.md` |
-| §55 Share feedback | `frontend/16-ui-veredicto-y-share.md` |
-| §56 ProblemDetails | `backend/25-contratos-api.md` |
-| §57 Caching | `backend/26-resiliencia.md` |
-| §58 Rate limiting | `backend/26-resiliencia.md` |
-| §59 Healthcheck | `backend/26-resiliencia.md` |
-| §60 Testing backend | `backend/27-testing-backend.md` |
-| §61 Testing frontend (cobertura) | `frontend/17-testing-frontend.md` |
-| §62 Accessibility tests | `frontend/17-testing-frontend.md` |
-| §63 Contract parity | `backend/25-contratos-api.md` |
-| §64 Coolify | `ops/30-docker-coolify.md` |
-| §65 Docker | `ops/30-docker-coolify.md` |
-| §66 CI | `ops/31-ci.md` |
-| §67 Fases completas | `plan/40-fases.md` |
-| §68 Estrategia de PRs | `plan/41-estrategia-prs.md` |
-| §69 Dependencias objetivo frontend | `referencia/60-dependencias-objetivo.md` |
-| §70 APIs Angular a demostrar | `referencia/60-dependencias-objetivo.md` |
-| §71 DoD frontend | `agents/53-definition-of-done.md` |
-| §72 DoD backend | `agents/53-definition-of-done.md` |
-| §73 DoD producto | `agents/53-definition-of-done.md` |
-| §74 Cosas que no vamos a introducir | `00-vision-y-alcance.md` |
-| §75 Narrativa técnica final | `referencia/61-narrativa-y-valor.md` |
-| §76 Valor para entrevista | `referencia/61-narrativa-y-valor.md` |
-| §77 Instrucciones para agentes | `agents/50-instrucciones-generales.md` |
-| §78 Criterio dependencia nueva | `agents/51-criterio-dependencias.md` |
-| §79 Criterio de modernización | `agents/52-criterio-modernizacion.md` |
-| §80 Regla final | `referencia/61-narrativa-y-valor.md` |
+| §1 · Propósito | `00-vision-y-alcance.md` |
+| §2 · Principio rector | `00-vision-y-alcance.md` |
+| §3 · Estado actual | `01-estado-actual.md` |
+| §4 · Decisión sobre PrimeNG | `frontend/11-primeng-decision.md` |
+| §5 · Filosofía de sustitución | `frontend/11-primeng-decision.md` |
+| §6 · Huella actual de PrimeNG | `01-estado-actual.md` |
+| §7 · Mapa de equivalencias UI | `frontend/12-primeng-sustituciones.md` |
+| §8 · Botones | `frontend/12-primeng-sustituciones.md` |
+| §9 · Iconos | `frontend/12-primeng-sustituciones.md` |
+| §10 · Float label | `frontend/12-primeng-sustituciones.md` |
+| §11 · Autocomplete de municipios | `frontend/14-autocomplete-accesible.md` |
+| §12 · Componente CityAutocomplete | `frontend/14-autocomplete-accesible.md` |
+| §13 · Signal Forms | `frontend/14-autocomplete-accesible.md` |
+| §14 · Popover de créditos | `frontend/12-primeng-sustituciones.md` |
+| §15 · Toast | `frontend/12-primeng-sustituciones.md` |
+| §16 · Theming | `frontend/13-theming.md` |
+| §17 · Tokens PrimeNG existentes | `frontend/13-theming.md` |
+| §18 · Estrategia de transición | `frontend/11-primeng-decision.md` |
+| §19 · Punto de salida de PrimeNG | `frontend/11-primeng-decision.md` |
+| §20 · Angular 19 → 20 | `frontend/10-angular-upgrade.md` |
+| §21 · Angular 20 → 21 | `frontend/10-angular-upgrade.md` |
+| §22 · Retirada de PrimeNG (orden) | `frontend/11-primeng-decision.md` |
+| §23 · Angular ARIA | `frontend/14-autocomplete-accesible.md` |
+| §24 · Angular 21 → 22 | `frontend/10-angular-upgrade.md` |
+| §25 · Objetivo Angular 22 | `frontend/10-angular-upgrade.md` |
+| §26 · Zoneless | `frontend/15-reactividad-signals.md` |
+| §27 · OnPush | `frontend/15-reactividad-signals.md` |
+| §28 · WeatherResource actual | `frontend/15-reactividad-signals.md` |
+| §29 · CitiesResource actual | `frontend/15-reactividad-signals.md` |
+| §30 · Effects | `frontend/15-reactividad-signals.md` |
+| §31 · linkedSignal | `frontend/15-reactividad-signals.md` |
+| §32 · Animaciones | `frontend/15-reactividad-signals.md` |
+| §33 · Testing frontend (runner) | `frontend/17-testing-frontend.md` |
+| §34 · Backend objetivo | `backend/20-arquitectura.md` |
+| §35 · Arquitectura | `backend/20-arquitectura.md` |
+| §36 · Organización funcional | `backend/20-arquitectura.md` |
+| §37 · CQRS | `backend/20-arquitectura.md` |
+| §38 · Persistencia | `backend/21-persistencia.md` |
+| §39 · EF Core | `backend/21-persistencia.md` |
+| §40 · SearchCities | `backend/22-cities.md` |
+| §41 · SearchCitiesQuery | `backend/22-cities.md` |
+| §42 · ImportMunicipalityCatalogCommand | `backend/22-cities.md` |
+| §43 · Weather actual | `backend/23-aemet.md` |
+| §44 · Arquitectura Weather | `backend/23-aemet.md` |
+| §45 · IAemetForecastProvider | `backend/23-aemet.md` |
+| §46 · AemetForecastMapper | `backend/23-aemet.md` |
+| §47 · Dominio de gachas | `backend/24-dominio-gachas.md` |
+| §48 · Nueva funcionalidad | `backend/24-dominio-gachas.md` |
+| §49 · Contrato Weather nuevo | `backend/25-contratos-api.md` |
+| §50 · Typo launch/lunch | `backend/24-dominio-gachas.md` |
+| §51 · Mejor día para gachas | `backend/24-dominio-gachas.md` |
+| §52 · Angular consume Weather nuevo | `frontend/16-ui-veredicto-y-share.md` |
+| §53 · UI del nuevo veredicto | `frontend/16-ui-veredicto-y-share.md` |
+| §54 · Loading y errors sin PrimeNG | `frontend/15-reactividad-signals.md` |
+| §55 · Share feedback | `frontend/16-ui-veredicto-y-share.md` |
+| §56 · ProblemDetails | `backend/25-contratos-api.md` |
+| §57 · Caching | `backend/26-resiliencia.md` |
+| §58 · Rate limiting | `backend/26-resiliencia.md` |
+| §59 · Healthcheck | `backend/26-resiliencia.md` |
+| §60 · Testing backend | `backend/27-testing-backend.md` |
+| §61 · Testing frontend (cobertura) | `frontend/17-testing-frontend.md` |
+| §62 · Accessibility tests | `frontend/17-testing-frontend.md` |
+| §63 · Contract parity | `backend/25-contratos-api.md` |
+| §64 · Coolify | `ops/30-docker-coolify.md` |
+| §65 · Docker | `ops/30-docker-coolify.md` |
+| §66 · CI | `ops/31-ci.md` |
+| §67 · Fases completas | `plan/40-fases.md` |
+| §68 · Estrategia de PRs | `plan/41-estrategia-prs.md` |
+| §69 · Dependencias objetivo frontend | `referencia/60-dependencias-objetivo.md` |
+| §70 · APIs Angular a demostrar | `referencia/60-dependencias-objetivo.md` |
+| §71 · DoD frontend | `agents/53-definition-of-done.md` |
+| §72 · DoD backend | `agents/53-definition-of-done.md` |
+| §73 · DoD producto | `agents/53-definition-of-done.md` |
+| §74 · Cosas que no vamos a introducir | `00-vision-y-alcance.md` |
+| §75 · Narrativa técnica final | `referencia/61-narrativa-y-valor.md` |
+| §76 · Valor para entrevista | `referencia/61-narrativa-y-valor.md` |
+| §77 · Instrucciones para agentes | `agents/50-instrucciones-generales.md` |
+| §78 · Criterio dependencia nueva | `agents/51-criterio-dependencias.md` |
+| §79 · Criterio de modernización | `agents/52-criterio-modernizacion.md` |
+| §80 · Regla final | `referencia/61-narrativa-y-valor.md` |
 
 ---
 

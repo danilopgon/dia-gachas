@@ -4,7 +4,7 @@
 
 ---
 
-## 79. Criterio de modernización
+## §79 · Criterio de modernización
 
 Cada refactor debe mejorar al menos una de:
 

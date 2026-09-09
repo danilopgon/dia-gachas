@@ -4,7 +4,7 @@
 
 ---
 
-## 4. Decisión sobre PrimeNG
+## §4 · Decisión sobre PrimeNG
 
 No se adoptará PrimeNG 22.
 
@@ -42,7 +42,7 @@ La UI quedará bajo control directo del proyecto.
 
 ---
 
-## 5. Filosofía de sustitución de PrimeNG
+## §5 · Filosofía de sustitución de PrimeNG
 
 No sustituir una component library grande por otra component library grande.
 
@@ -68,7 +68,7 @@ Crear únicamente primitives que Día de Gachas necesite.
 
 ---
 
-## 18. Estrategia de transición PrimeNG
+## §18 · Estrategia de transición PrimeNG
 
 No intentar actualizar directamente:
 
@@ -102,7 +102,7 @@ No se desarrollará nueva UI PrimeNG durante ese periodo.
 
 ---
 
-## 19. Punto de salida de PrimeNG
+## §19 · Punto de salida de PrimeNG
 
 PrimeNG debe desaparecer **antes de considerar terminado el salto a Angular 22**.
 
@@ -124,7 +124,7 @@ salvo documentación histórica de la migración.
 
 ---
 
-## 22. Retirada de PrimeNG
+## §22 · Retirada de PrimeNG
 
 La retirada se realizará preferentemente sobre Angular 21, donde ya están disponibles varias primitives modernas que facilitan la sustitución.
 

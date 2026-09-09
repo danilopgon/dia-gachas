@@ -8,7 +8,7 @@
 
 ---
 
-## 7. Mapa de equivalencias UI
+## §7 · Mapa de equivalencias UI
 
 | PrimeNG | Sustitución |
 |---|---|
@@ -24,7 +24,7 @@
 
 ---
 
-## 8. Botones
+## §8 · Botones
 
 Los botones no justifican dependencia alguna.
 
@@ -63,7 +63,7 @@ para tres botones.
 
 ---
 
-## 9. Iconos
+## §9 · Iconos
 
 Los iconos utilizados son muy pocos:
 
@@ -99,7 +99,7 @@ completamente.
 
 ---
 
-## 10. Float label
+## §10 · Float label
 
 El `p-floatlabel` actual se reemplazará por markup propio.
 
@@ -117,7 +117,7 @@ La funcionalidad y accesibilidad tienen prioridad sobre clonar exactamente el co
 
 ---
 
-## 14. Popover de créditos
+## §14 · Popover de créditos
 
 Actualmente existe un botón flotante que abre créditos, enlaces y atribución AEMET.
 
@@ -139,7 +139,7 @@ No utilizar una librería externa para un único panel informativo.
 
 ---
 
-## 15. Toast
+## §15 · Toast
 
 Actualmente se utiliza PrimeNG Toast principalmente para comunicar que un enlace se ha copiado.
 

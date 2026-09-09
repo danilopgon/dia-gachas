@@ -9,7 +9,7 @@
 
 ---
 
-## 11. Autocomplete de municipios
+## §11 · Autocomplete de municipios
 
 Es la sustitución más importante.
 
@@ -50,7 +50,7 @@ No implementar accesibilidad manualmente si Angular ya proporciona primitives of
 
 ---
 
-## 12. Componente CityAutocomplete
+## §12 · Componente CityAutocomplete
 
 Crear un componente específico:
 
@@ -80,7 +80,7 @@ El componente debe ser reusable dentro de Día de Gachas, no intentar convertirs
 
 ---
 
-## 13. Signal Forms
+## §13 · Signal Forms
 
 Evaluar utilizar Signal Forms para el selector de municipio.
 
@@ -101,7 +101,7 @@ El objetivo es código idiomático, no una checklist.
 
 ---
 
-## 23. Angular ARIA
+## §23 · Angular ARIA
 
 Para el autocomplete utilizar primitives oficiales:
 

@@ -5,7 +5,7 @@
 
 ---
 
-## 3. Estado actual
+## §3 · Estado actual
 
 Frontend:
 
@@ -49,7 +49,7 @@ Por tanto no se plantea reescribir Angular desde cero.
 
 ---
 
-## 6. Huella actual de PrimeNG
+## §6 · Huella actual de PrimeNG
 
 Los componentes principales a sustituir son:
 

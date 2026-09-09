@@ -4,7 +4,7 @@
 
 ---
 
-## 34. Backend objetivo
+## §34 · Backend objetivo
 
 Crear:
 
@@ -25,7 +25,7 @@ backend-dotnet/
 
 ---
 
-## 35. Arquitectura
+## §35 · Arquitectura
 
 Dependencias:
 
@@ -55,7 +55,7 @@ MediatR
 
 ---
 
-## 36. Organización funcional
+## §36 · Organización funcional
 
 No organizar exclusivamente:
 
@@ -80,7 +80,7 @@ Application/
 
 ---
 
-## 37. CQRS
+## §37 · CQRS
 
 Queries:
 

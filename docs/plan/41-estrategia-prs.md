@@ -4,7 +4,7 @@
 
 ---
 
-## 68. Estrategia de PRs
+## §68 · Estrategia de PRs
 
 Ejemplo:
 

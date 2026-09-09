@@ -4,7 +4,7 @@
 
 ---
 
-## 77. Instrucciones para agentes
+## §77 · Instrucciones para agentes
 
 El conjunto de documentos de `docs/` (indexado desde `AGENTS.md`) es la
 **source of truth**.

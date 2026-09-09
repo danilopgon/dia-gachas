@@ -4,7 +4,7 @@
 
 ---
 
-## 38. Persistencia
+## §38 · Persistencia
 
 Modelo:
 
@@ -29,7 +29,7 @@ preservar ceros iniciales de códigos AEMET
 
 ---
 
-## 39. EF Core
+## §39 · EF Core
 
 EF Core será dueño completo del nuevo schema.
 

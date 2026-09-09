@@ -4,7 +4,7 @@
 
 ---
 
-## 33. Testing frontend (runner)
+## §33 · Testing frontend (runner)
 
 Estado actual:
 
@@ -31,7 +31,7 @@ No mezclar test runner migration con component migration.
 
 ---
 
-## 61. Testing frontend (cobertura)
+## §61 · Testing frontend (cobertura)
 
 Cubrir:
 
@@ -55,7 +55,7 @@ Especial atención a accesibilidad del autocomplete.
 
 ---
 
-## 62. Accessibility tests
+## §62 · Accessibility tests
 
 La retirada de PrimeNG convierte al proyecto en responsable directo de su UI.
 

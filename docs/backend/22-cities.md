@@ -4,7 +4,7 @@
 
 ---
 
-## 40. SearchCities
+## §40 · SearchCities
 
 Mantener:
 
@@ -44,7 +44,7 @@ No reproducir pseudo-404 en body.
 
 ---
 
-## 41. SearchCitiesQuery
+## §41 · SearchCitiesQuery
 
 Debe utilizar:
 
@@ -64,7 +64,7 @@ No devolver relaciones innecesarias.
 
 ---
 
-## 42. ImportMunicipalityCatalogCommand
+## §42 · ImportMunicipalityCatalogCommand
 
 Los datos de municipios y provincias son reproducibles.
 

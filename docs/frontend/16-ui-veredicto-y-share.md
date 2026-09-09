@@ -4,7 +4,7 @@
 
 ---
 
-## 52. Angular consume Weather nuevo
+## §52 · Angular consume Weather nuevo
 
 El frontend Angular 22 debe derivar:
 
@@ -30,7 +30,7 @@ Evitar estado duplicado.
 
 ---
 
-## 53. UI del nuevo veredicto
+## §53 · UI del nuevo veredicto
 
 Mantener estética actual.
 
@@ -58,7 +58,7 @@ No rediseñar toda la pantalla.
 
 ---
 
-## 55. Share feedback
+## §55 · Share feedback
 
 Al copiar enlace:
 

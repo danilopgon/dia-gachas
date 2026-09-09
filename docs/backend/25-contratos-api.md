@@ -6,7 +6,7 @@
 
 ---
 
-## 49. Contrato Weather nuevo
+## §49 · Contrato Weather nuevo
 
 Mantener compatibilidad:
 
@@ -41,7 +41,7 @@ Los nuevos campos son aditivos.
 
 ---
 
-## 56. ProblemDetails
+## §56 · ProblemDetails
 
 Backend utilizará semántica HTTP real:
 
@@ -63,7 +63,7 @@ Angular deberá mapear esos errores a mensajes de producto.
 
 ---
 
-## 63. Contract parity
+## §63 · Contract parity
 
 Durante coexistencia:
 

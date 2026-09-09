@@ -4,7 +4,7 @@
 
 ---
 
-## 43. Weather actual
+## §43 · Weather actual
 
 Actualmente una sola pieza realiza:
 
@@ -24,7 +24,7 @@ Esto se separará.
 
 ---
 
-## 44. Arquitectura Weather
+## §44 · Arquitectura Weather
 
 Objetivo:
 
@@ -42,7 +42,7 @@ GachasVerdict
 
 ---
 
-## 45. IAemetForecastProvider
+## §45 · IAemetForecastProvider
 
 Application define:
 
@@ -72,7 +72,7 @@ No contiene reglas de gachas.
 
 ---
 
-## 46. AemetForecastMapper
+## §46 · AemetForecastMapper
 
 Transforma:
 

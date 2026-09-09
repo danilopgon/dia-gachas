@@ -4,7 +4,7 @@
 
 ---
 
-## 78. Criterio para una dependencia frontend nueva
+## §78 · Criterio para una dependencia frontend nueva
 
 Antes de añadir una dependencia, responder:
 

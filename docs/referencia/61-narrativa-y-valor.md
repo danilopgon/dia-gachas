@@ -4,7 +4,7 @@
 
 ---
 
-## 75. Narrativa técnica final
+## §75 · Narrativa técnica final
 
 Al terminar, la descripción del proyecto será aproximadamente:
 
@@ -28,7 +28,7 @@ EF Core
 
 ---
 
-## 76. Valor para entrevista
+## §76 · Valor para entrevista
 
 ### Angular
 
@@ -80,7 +80,7 @@ Permite explicar:
 
 ---
 
-## 80. Regla final
+## §80 · Regla final
 
 La arquitectura final debe parecer más profesional que la inicial.
 

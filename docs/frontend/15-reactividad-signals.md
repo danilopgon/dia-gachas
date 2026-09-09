@@ -5,7 +5,7 @@
 
 ---
 
-## 26. Zoneless
+## §26 · Zoneless
 
 Eliminar:
 
@@ -31,7 +31,7 @@ service worker
 
 ---
 
-## 27. OnPush
+## §27 · OnPush
 
 Angular 22 debe trabajar naturalmente con OnPush.
 
@@ -53,7 +53,7 @@ signal.update()
 
 ---
 
-## 28. WeatherResource actual
+## §28 · WeatherResource actual
 
 Actualmente Weather combina:
 
@@ -91,7 +91,7 @@ reload()
 
 ---
 
-## 29. CitiesResource actual
+## §29 · CitiesResource actual
 
 Actualmente la búsqueda realiza manualmente:
 
@@ -130,7 +130,7 @@ también es válida.
 
 ---
 
-## 30. Effects
+## §30 · Effects
 
 Auditar todos los `effect()`.
 
@@ -162,7 +162,7 @@ resource
 
 ---
 
-## 31. linkedSignal
+## §31 · linkedSignal
 
 Evaluar `linkedSignal` para estados derivados que necesiten conservar conocimiento del valor anterior.
 
@@ -176,7 +176,7 @@ No introducirlo donde una simple `computed()` sea suficiente.
 
 ---
 
-## 32. Animaciones
+## §32 · Animaciones
 
 Mantener:
 
@@ -206,7 +206,7 @@ La eliminación de PrimeNG probablemente facilitará también esta limpieza.
 
 ---
 
-## 54. Loading y errors sin PrimeNG
+## §54 · Loading y errors sin PrimeNG
 
 `httpResource` proporcionará el estado async.
 

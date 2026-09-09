@@ -4,7 +4,7 @@
 
 ---
 
-## 16. Theming
+## §16 · Theming
 
 Eliminar:
 
@@ -34,7 +34,7 @@ No crear centenares de design tokens.
 
 ---
 
-## 17. Tokens PrimeNG existentes
+## §17 · Tokens PrimeNG existentes
 
 El frontend utiliza actualmente clases como:
 

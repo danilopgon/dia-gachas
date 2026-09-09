@@ -4,7 +4,7 @@
 
 ---
 
-## 69. Dependencias objetivo frontend
+## §69 · Dependencias objetivo frontend
 
 Idealmente:
 
@@ -32,7 +32,7 @@ No generic UI framework
 
 ---
 
-## 70. APIs Angular que queremos demostrar
+## §70 · APIs Angular que queremos demostrar
 
 Al terminar:
 

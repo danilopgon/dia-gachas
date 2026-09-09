@@ -206,8 +206,15 @@ docs/archivo/brs-original.md  ← congelado, solo trazabilidad histórica
 ```
 
 Si `docs/` y el BRS congelado se contradicen, **gana `docs/`**.
-Cada sección de `docs/` conserva su numeración original del BRS (`§42`), así que
-se puede citar en PRs sin ambigüedad.
+
+Ojo con las dos numeraciones, que no son la misma:
+
+- `NN-nombre.md` → **número de fichero**, ordena la documentación por temática.
+- `§N` → **sección del BRS original**, es una cita. Por eso los `§` saltan dentro
+  de un documento: `00-vision-y-alcance.md` contiene `§1`, `§2` y `§74`, y está bien.
+
+`40-fases.md` y `§40` no tienen relación alguna. Para citar en un PR usa el `§`
+(sobrevive a reorganizaciones); para decir "lee esto", usa la ruta del fichero.
 
 ---
 
