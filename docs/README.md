@@ -31,10 +31,11 @@ Ningún documento supera el tamaño de un contexto cómodo, y cada uno enlaza a 
 vecinos al final.
 
 ```text
-1. ¿En qué fase estoy?      → plan/40-fases.md
-2. ¿Qué dice el plan?       → el documento que esa fase referencia
-3. ¿Cómo debo comportarme?  → agents/50-instrucciones-generales.md
-4. ¿Cuándo he terminado?    → agents/53-definition-of-done.md
+1. ¿En qué fase estoy?      → ./scripts/migration-status.sh  (y plan/42-estado.md)
+2. ¿Qué toca hacer?         → plan/40-fases.md
+3. ¿Qué dice el plan?       → el documento que esa fase referencia
+4. ¿Cómo debo comportarme?  → agents/50-instrucciones-generales.md
+5. ¿Cuándo he terminado?    → agents/53-definition-of-done.md
 ```
 
 ---
@@ -87,6 +88,8 @@ vecinos al final.
 |---|---|
 | [`plan/40-fases.md`](./plan/40-fases.md) | Fases 0 → 23, con enlace al documento de cada una |
 | [`plan/41-estrategia-prs.md`](./plan/41-estrategia-prs.md) | Troceado en PRs y convención de ramas del repo |
+| [`plan/42-estado.md`](./plan/42-estado.md) | **Dónde estamos.** Estado por fase, PRs y protocolo de apertura/cierre |
+| [`plan/43-bitacora.md`](./plan/43-bitacora.md) | Decisiones y desviaciones respecto al plan |
 
 ### Reglas para agentes
 

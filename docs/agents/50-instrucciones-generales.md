@@ -39,7 +39,14 @@ y solo después considerar una dependencia externa pequeña
 
 **Antes de tocar código:**
 
-- Localiza la fase en [`../plan/40-fases.md`](../plan/40-fases.md).
+```bash
+./scripts/migration-status.sh
+```
+
+- El script deriva la fase actual **del propio repositorio**. Es el paso 1, siempre.
+- Contrasta con [`../plan/42-estado.md`](../plan/42-estado.md) (PRs, fechas, decisiones)
+  y marca la fase como `🔄` en tu primer commit.
+- Localiza qué hace esa fase en [`../plan/40-fases.md`](../plan/40-fases.md).
 - Carga solo los documentos de `docs/` que esa fase referencia. No cargues todo.
 - Lee el código real; el documento describe el objetivo, no el estado presente.
 
@@ -56,8 +63,12 @@ npm run lint:web && npm run test:web && npm run build:web   # frontend
 npm run lint:api && npm run test:api && npm run build:api   # backend Nest (mientras exista)
 ```
 
+- Vuelve a correr `./scripts/migration-status.sh`: la columna DETECTADO de tu fase
+  debe pasar a `✅` sola. Si no pasa, **la fase no está hecha**. No la marques a mano.
 - Revisa tu propio diff línea a línea.
-- Si te has desviado del plan, documenta la desviación en el PR **y** actualiza
+- Marca la fase como `✅` en [`../plan/42-estado.md`](../plan/42-estado.md) con PR y fecha.
+- Si te has desviado del plan, escribe una entrada en
+  [`../plan/43-bitacora.md`](../plan/43-bitacora.md), dilo en el PR **y** actualiza
   el documento de `docs/` correspondiente. Los documentos son vivos; el BRS
   congelado de `docs/archivo/` no se toca.
 

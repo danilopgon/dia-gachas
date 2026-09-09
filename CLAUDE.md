@@ -10,9 +10,14 @@ Este fichero no duplica nada de eso a propósito: una sola fuente de verdad.
 
 ## Lo mínimo antes de empezar
 
+```bash
+./scripts/migration-status.sh   # ¿en qué fase estamos? El repo responde, no un doc.
+```
+
 1. [`AGENTS.md`](./AGENTS.md) — contexto y reglas.
-2. [`docs/plan/40-fases.md`](./docs/plan/40-fases.md) — en qué fase estamos.
-3. Solo los documentos que esa fase referencia. **No cargues `docs/` entero.**
+2. [`docs/plan/42-estado.md`](./docs/plan/42-estado.md) — estado, PRs y protocolo de fase.
+3. [`docs/plan/40-fases.md`](./docs/plan/40-fases.md) — qué hace la fase actual.
+4. Solo los documentos que esa fase referencia. **No cargues `docs/` entero.**
 
 ## Recordatorio rápido
 
@@ -20,3 +25,5 @@ Este fichero no duplica nada de eso a propósito: una sola fuente de verdad.
 - No se avanza de fase por iniciativa propia.
 - Se preserva el comportamiento salvo cambio documentado.
 - `lint` + `test` + `build` verdes antes de cerrar, y revisa tu propio diff.
+- Al cerrar una fase: actualiza `docs/plan/42-estado.md` y anota desviaciones en
+  `docs/plan/43-bitacora.md`.

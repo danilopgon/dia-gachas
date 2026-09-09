@@ -100,14 +100,28 @@ Y una mejora funcional pequeña pero real:
 ## Flujo de trabajo del agente
 
 ```text
-1. ¿En qué fase estamos?        → docs/plan/40-fases.md
-2. Carga SOLO los docs de esa fase
-3. Lee el código real (el doc describe el objetivo, no el presente)
-4. Implementa sin mezclar fases
-5. lint + test + build
-6. Revisa el diff
-7. Documenta cualquier desviación en el PR y en el doc correspondiente
+1. ./scripts/migration-status.sh    → en qué fase estamos (lo dice el repo, no un doc)
+2. docs/plan/42-estado.md           → PRs, fechas y protocolo de apertura/cierre
+3. Carga SOLO los docs de esa fase
+4. Lee el código real (el doc describe el objetivo, no el presente)
+5. Implementa sin mezclar fases
+6. lint + test + build
+7. El script debe pasar la fase a ✅ solo. Si no, no está hecha
+8. Revisa el diff, actualiza 42-estado.md y anota desviaciones en 43-bitacora.md
 ```
+
+### Cómo sabemos en qué punto estamos
+
+El estado **se deriva del repositorio**, no de un fichero que alguien tiene que
+acordarse de actualizar:
+
+```bash
+./scripts/migration-status.sh
+```
+
+Compara lo que dice el código (versión de Angular, si queda PrimeNG, si existe
+`GachasScoringPolicy`…) con lo declarado en `docs/plan/42-estado.md`, y avisa
+cuando no coinciden. **Si hay discrepancia, gana el código.**
 
 Reglas completas: [`docs/agents/50-instrucciones-generales.md`](./docs/agents/50-instrucciones-generales.md).
 
@@ -132,6 +146,8 @@ npm run test:api         # jest backend Nest
 npm run build:api        # build backend Nest
 
 npm run build            # api + web
+
+./scripts/migration-status.sh   # estado de la migración, derivado del repo
 ```
 
 Variables de entorno del backend: `backend/.env` (plantilla en `backend/.env.dist`)
@@ -165,7 +181,9 @@ Variables de entorno del backend: `backend/.env` (plantilla en `backend/.env.dis
 | Tests de backend | [`docs/backend/27-testing-backend.md`](./docs/backend/27-testing-backend.md) |
 | Docker y Coolify | [`docs/ops/30-docker-coolify.md`](./docs/ops/30-docker-coolify.md) |
 | CI | [`docs/ops/31-ci.md`](./docs/ops/31-ci.md) |
-| El plan de fases 0→23 | [`docs/plan/40-fases.md`](./docs/plan/40-fases.md) |
+| En qué fase estamos y qué se decidió | [`docs/plan/42-estado.md`](./docs/plan/42-estado.md) |
+| El plan de fases 0→23 y sus señales de verificación | [`docs/plan/40-fases.md`](./docs/plan/40-fases.md) |
+| Por qué nos desviamos del plan aquel día | [`docs/plan/43-bitacora.md`](./docs/plan/43-bitacora.md) |
 | Cómo trocear en PRs | [`docs/plan/41-estrategia-prs.md`](./docs/plan/41-estrategia-prs.md) |
 | Cómo debe comportarse un agente | [`docs/agents/50-instrucciones-generales.md`](./docs/agents/50-instrucciones-generales.md) |
 | Si puedo añadir una dependencia | [`docs/agents/51-criterio-dependencias.md`](./docs/agents/51-criterio-dependencias.md) |

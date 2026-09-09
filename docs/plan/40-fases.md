@@ -292,7 +292,49 @@ Eliminar deployment antiguo.
 
 ---
 
+## Señales de verificación
+
+Cada fase tiene una señal **objetiva y derivable del repositorio**. No se marca
+una fase como hecha porque lo diga nadie: se marca porque el repo lo demuestra.
+
+```bash
+./scripts/migration-status.sh
+```
+
+| Fase | Señal de que está hecha |
+|---|---|
+| 00 | Existe un tag `baseline/*` |
+| 01 | `@angular/core` ≥ 20 |
+| 02 | `@angular/core` ≥ 21 |
+| 03 | Cero `p-button`, `p-floatlabel`, `p-popover`, `p-toast` en `frontend/src` |
+| 04 | Cero `p-autocomplete` y existe `CityAutocompleteComponent` |
+| 05 | Cero coincidencias de `prime` en `frontend/src` y en `frontend/package.json` |
+| 06 | `@angular/core` ≥ 22 |
+| 07 | Sin `zone.js` en `package.json` ni `provideZoneChangeDetection` en el código |
+| 08 | `vitest` en devDependencies y `jest.config.js` eliminado |
+| 09 | `httpResource` presente en `frontend/src` |
+| 10 | Existe `backend-dotnet/src/DiaGachas.Api` |
+| 11 | Existe `SearchCitiesQuery` |
+| 12 | Existe `ImportMunicipalityCatalogCommand` |
+| 13 | Existen `AemetForecastProvider` y `AemetForecastMapper` |
+| 14 | Existe `GachasScoringPolicy` |
+| 15 | Existe `GetWeatherForecastQuery` |
+| 16 | `HybridCache` o `AddRateLimiter` configurados |
+| 17 | `BestForGachas` presente en el backend |
+| 18 | ✋ No derivable: vive en la configuración del deploy |
+| 19 | `gachasReasons` renderizado en `frontend/src` |
+| 20 | Existen contract tests |
+| 21 | ✋ No derivable: vive en Coolify |
+| 22 | ✋ No derivable: vive en el DNS |
+| 23 | `backend/src/app.module.ts` ya no existe |
+
+Las tres fases ✋ se declaran a mano en [`42-estado.md`](./42-estado.md).
+
+---
+
 ## Documentos relacionados
 
+- Dónde estamos ahora mismo: [`42-estado.md`](./42-estado.md)
+- Bitácora de desviaciones: [`43-bitacora.md`](./43-bitacora.md)
 - Estrategia de PRs (una fase ≠ un PR necesariamente): [`41-estrategia-prs.md`](./41-estrategia-prs.md)
 - Definition of Done: [`../agents/53-definition-of-done.md`](../agents/53-definition-of-done.md)
