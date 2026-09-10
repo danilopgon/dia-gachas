@@ -98,3 +98,40 @@ antiguos dejan de resolver); renumerar los ficheros con prefijo de área (`b20-`
 
 **Impacto en el plan:** ninguno en contenido. Las 80 secciones siguen presentes,
 únicas y citables como `§N`.
+
+---
+
+## 2026-09-10 · Fase — · Se incorpora la dirección de diseño Future Medieval Manchego
+
+**Contexto:** llegó una dirección de arte completa (27 secciones) que redefine el
+frontend visualmente. Chocaba en dos puntos con el BRS ya troceado, y traía siete
+fases propias (D1–D7) que amenazaban con convertirse en un segundo roadmap.
+
+**Decisión:**
+
+1. Troceada en `docs/diseno/` (9 documentos, 70–78), citable como `§D1`–`§D27`.
+   Prefijo `§D` para no colisionar con los `§` del BRS ni con los números de fichero.
+2. Los dos conflictos se resuelven **anotando, no borrando**:
+   - **§53** "mantener estética actual" queda superado en lo visual por **§D17**;
+     lo funcional de §53 (qué información se muestra, no ampliar alcance) sigue vigente.
+   - **§16** (lista `--color-gachas-*`) queda sustituida por **§D7**; la intención de
+     §16 (pocos tokens, propios, sin PrimeNG) es lo que sobrevive.
+3. **Las fases D no son un track paralelo.** Se mapean sobre las fases 0–23 existentes
+   (D1→3, D2→3 y 4, D3→4, D4→19, D5→19+, D6→9, D7 continuo). El seguimiento sigue
+   siendo `scripts/migration-status.sh`, sin columnas D.
+4. `frontend/.impeccable.md` recibe una cabecera que cede la dirección visual a
+   `docs/diseno/`. No se reescribe todavía: eso es trabajo de D4/D7.
+
+**Alternativas descartadas:** meter el documento entero de una pieza (1175 líneas,
+rompe el principio de troceado); borrar §53 y §16 en lugar de anotarlos (se pierde
+la trazabilidad con el BRS y el porqué del cambio); crear un seguimiento D paralelo
+en `42-estado.md` (dos verdades sobre dónde estamos, justo lo que evitamos).
+
+**Impacto en el plan:** `01-estado-actual.md` documenta ahora el punto de partida
+visual real (7 usos de `text-surface-*`, 5 hex sueltos, 2 fondos full-bleed);
+`40-fases.md` engancha las fases D donde tocan; el DoD del frontend (§71) queda
+explícitamente incompleto sin el DoD visual (§D25).
+
+**Pendiente de decisión humana:** PPWoodland es una tipografía comercial y §D5 la
+conserva "mientras su licencia y asset actual sigan siendo válidos". Conviene
+confirmar la licencia antes de que la marca dependa de ella.

@@ -48,9 +48,12 @@ Es la confusión fácil de este repo, así que queda dicha una vez:
 |---|---|---|
 | `NN-nombre.md` | **Número de fichero.** Ordena la documentación por temática. No significa nada más | `40-fases.md` es el plan de fases |
 | `§N` | **Sección del BRS original.** Es una cita, no un orden. Por eso los `§` saltan dentro de un documento | `§40` es `SearchCities`, y vive en `backend/22-cities.md` |
+| `§DN` | **Sección de la dirección de diseño.** Misma lógica, documento distinto | `§D18` es el Gachómetro, y vive en `diseno/75-pantallas.md` |
+| `Fase N` / `Fase DN` | **Fases de trabajo.** La palabra `Fase` siempre está delante | `Fase 19` es del plan; `Fase D4` es del rediseño y se hace dentro de la 19 |
 
 O sea: **`40-fases.md` y `§40` no tienen nada que ver.** Los números de fichero
-van de 00 a 61 por temática; los `§` van de 1 a 80 siguiendo el BRS.
+van de 00 a 78 por temática; los `§` van de 1 a 80 siguiendo el BRS; los `§D`
+van de 1 a 27 siguiendo la dirección de diseño.
 
 Cuando cites algo en un PR o un issue, usa el `§`: es estable aunque los
 documentos se reorganicen. Para decir "lee esto", usa la ruta del fichero.
@@ -108,6 +111,22 @@ documentos se reorganicen. Para decir "lee esto", usa la ruta del fichero.
 | [`plan/42-estado.md`](./plan/42-estado.md) | **Dónde estamos.** Estado por fase, PRs y protocolo de apertura/cierre |
 | [`plan/43-bitacora.md`](./plan/43-bitacora.md) | Decisiones y desviaciones respecto al plan |
 
+### Diseño
+
+> Dirección de arte del frontend. Se cita como `§DN`.
+
+| Documento | Contenido |
+|---|---|
+| [`diseno/70-direccion-visual.md`](./diseno/70-direccion-visual.md) | **Empieza aquí.** Concepto Future Medieval Manchego, personalidad, filtro anti-AI-slop, qué se conserva |
+| [`diseno/71-sistema-de-tokens.md`](./diseno/71-sistema-de-tokens.md) | Paleta, tipografía, espaciado, bordes y sombras, arquitectura de tokens, Tailwind v4 |
+| [`diseno/72-composicion-y-layout.md`](./diseno/72-composicion-y-layout.md) | Papel en vez de card, composición editorial, responsive |
+| [`diseno/73-marginalia-e-ilustracion.md`](./diseno/73-marginalia-e-ilustracion.md) | Marginalia, Dither Boy, motivos, tokens de ilustración |
+| [`diseno/74-movimiento.md`](./diseno/74-movimiento.md) | Motion tokens, el "thunk", dónde sigue teniendo sentido GSAP |
+| [`diseno/75-pantallas.md`](./diseno/75-pantallas.md) | Primitives propios, Home, Result, Gachómetro, sellos, clima, share |
+| [`diseno/76-accesibilidad-visual.md`](./diseno/76-accesibilidad-visual.md) | Lo que la dirección de arte no puede romper |
+| [`diseno/77-implantacion.md`](./diseno/77-implantacion.md) | Fases D1–D7, su mapeo a las fases 0–23 y la Definition of Done visual |
+| [`diseno/78-reglas-agentes-ui.md`](./diseno/78-reglas-agentes-ui.md) | Debe / no debe al implementar UI, y qué leer según qué toques |
+
 ### Reglas para agentes
 
 | Documento | Contenido |
@@ -129,6 +148,7 @@ documentos se reorganicen. Para decir "lee esto", usa la ruta del fichero.
 | Documento | Contenido |
 |---|---|
 | [`archivo/brs-original.md`](./archivo/brs-original.md) | BRS original íntegro. **Congelado.** No es fuente de verdad; solo trazabilidad |
+| [`archivo/direccion-diseno-original.md`](./archivo/direccion-diseno-original.md) | Dirección de diseño original íntegra. **Congelada.** Ídem |
 
 ---
 
@@ -221,9 +241,54 @@ Las 80 secciones del BRS original están repartidas sin pérdida. Mapa completo:
 
 ---
 
+## Trazabilidad dirección de diseño → documentos
+
+Las 27 secciones de la dirección de diseño, repartidas sin pérdida:
+
+| §D | Documento |
+|---|---|
+| §D1 · Contexto | `diseno/70-direccion-visual.md` |
+| §D2 · Concepto rector | `diseno/70-direccion-visual.md` |
+| §D3 · Personalidad | `diseno/70-direccion-visual.md` |
+| §D4 · Principio anti-AI-slop | `diseno/70-direccion-visual.md` |
+| §D5 · Qué conservamos | `diseno/70-direccion-visual.md` |
+| §D6 · Superficie y composición | `diseno/72-composicion-y-layout.md` |
+| §D7 · Paleta | `diseno/71-sistema-de-tokens.md` |
+| §D8 · Tipografía | `diseno/71-sistema-de-tokens.md` |
+| §D9 · Espaciado y layout | `diseno/71-sistema-de-tokens.md` |
+| §D10 · Bordes, radios y sombras | `diseno/71-sistema-de-tokens.md` |
+| §D11 · Marginalia y Dither Boy | `diseno/73-marginalia-e-ilustracion.md` |
+| §D12 · Movimiento | `diseno/74-movimiento.md` |
+| §D13 · Design system: arquitectura | `diseno/71-sistema-de-tokens.md` |
+| §D14 · Tailwind CSS v4 | `diseno/71-sistema-de-tokens.md` |
+| §D15 · Primitives propios | `diseno/75-pantallas.md` |
+| §D16 · Home objetivo | `diseno/75-pantallas.md` |
+| §D17 · Resultado objetivo | `diseno/75-pantallas.md` |
+| §D18 · El Gachómetro | `diseno/75-pantallas.md` |
+| §D19 · Veredicto y sellos | `diseno/75-pantallas.md` |
+| §D20 · Clima como variante visual | `diseno/75-pantallas.md` |
+| §D21 · Share-first | `diseno/75-pantallas.md` |
+| §D22 · Accesibilidad | `diseno/76-accesibilidad-visual.md` |
+| §D23 · Responsive | `diseno/72-composicion-y-layout.md` |
+| §D24 · Plan de implantación | `diseno/77-implantacion.md` |
+| §D25 · Definition of Done visual | `diseno/77-implantacion.md` |
+| §D26 · Reglas para agentes | `diseno/78-reglas-agentes-ui.md` |
+| §D27 · Resumen ejecutivo | `diseno/70-direccion-visual.md` |
+
+### Dónde la dirección de diseño gana al BRS
+
+| BRS | Dirección de diseño | Qué pasa |
+|---|---|---|
+| §53 "Mantener estética actual" | §D17 Resultado objetivo | **Superado en lo visual.** Lo funcional de §53 sigue vigente |
+| §16 lista `--color-gachas-*` | §D7 Paleta | **Sustituido.** La intención de §16 se mantiene; los nombres y valores no |
+
+Cualquier otra pareja es complementaria, no contradictoria.
+
+---
+
 ## Mantenimiento
 
 - Los documentos de `docs/` son **vivos**: si el plan cambia, se editan.
-- `docs/archivo/brs-original.md` es **inmutable**.
+- `docs/archivo/` es **inmutable**: tanto el BRS como la dirección de diseño originales.
 - Cada sección conserva su numeración original (`## 42. …`) para poder citarla
   en PRs e issues: "según §42" sigue siendo inequívoco.

@@ -136,3 +136,5 @@ producto
 - `CitiesResource` y el debounce actual: [`15-reactividad-signals.md`](./15-reactividad-signals.md) §29
 - Tests de accesibilidad obligatorios: [`17-testing-frontend.md`](./17-testing-frontend.md) §62
 - Endpoint que lo alimenta: [`../backend/22-cities.md`](../backend/22-cities.md)
+- **Cómo debe verse el campo** (borde seco, sin float-label ornamental, sin pill):
+  [`../diseno/75-pantallas.md`](../diseno/75-pantallas.md) §D16

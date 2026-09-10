@@ -74,6 +74,23 @@ error announcements
 
 No considerar terminada la sustitución del autocomplete únicamente porque “se puede clicar”.
 
+### Lo que añade la dirección de diseño
+
+Al pasar a UI propia con dirección de arte, hay que comprobar además
+([`../diseno/76-accesibilidad-visual.md`](../diseno/76-accesibilidad-visual.md) §D22):
+
+```text
+contraste WCAG AA con la paleta paper/ink/paprika
+foco visible que no pelee con la paleta
+prefers-reduced-motion
+marginalia con aria-hidden="true"
+el score legible en texto, no solo en el Gachómetro
+targets táctiles adecuados
+```
+
+El Gachómetro es el caso crítico: una barra gráfica **no puede ser la única fuente**
+del valor ([`../diseno/75-pantallas.md`](../diseno/75-pantallas.md) §D18).
+
 ---
 
 ## Documentos relacionados
@@ -81,3 +98,4 @@ No considerar terminada la sustitución del autocomplete únicamente porque “s
 - Fase 8 — Vitest: [`../plan/40-fases.md`](../plan/40-fases.md)
 - CI frontend: [`../ops/31-ci.md`](../ops/31-ci.md)
 - Definition of Done frontend: [`../agents/53-definition-of-done.md`](../agents/53-definition-of-done.md)
+- Accesibilidad de la dirección visual: [`../diseno/76-accesibilidad-visual.md`](../diseno/76-accesibilidad-visual.md)

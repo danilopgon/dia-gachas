@@ -62,7 +62,10 @@ theme
 
 No autocomplete todavía.
 
-→ [`../frontend/12-primeng-sustituciones.md`](../frontend/12-primeng-sustituciones.md), [`../frontend/13-theming.md`](../frontend/13-theming.md)
+**Dirección visual: fases D1 (Foundation) y D2 (Primitives).** Aquí nacen
+`tokens.css` y los primitives propios, no una copia de PrimeNG.
+
+→ [`../frontend/12-primeng-sustituciones.md`](../frontend/12-primeng-sustituciones.md), [`../frontend/13-theming.md`](../frontend/13-theming.md), [`../diseno/71-sistema-de-tokens.md`](../diseno/71-sistema-de-tokens.md)
 
 ---
 
@@ -79,7 +82,10 @@ httpResource
 
 Probar teclado y accesibilidad.
 
-→ [`../frontend/14-autocomplete-accesible.md`](../frontend/14-autocomplete-accesible.md)
+**Dirección visual: fases D2 y D3 (Home).** El campo de búsqueda se rediseña como
+control editorial y la home pierde el fondo full-screen.
+
+→ [`../frontend/14-autocomplete-accesible.md`](../frontend/14-autocomplete-accesible.md), [`../diseno/75-pantallas.md`](../diseno/75-pantallas.md)
 
 ---
 
@@ -156,7 +162,10 @@ Signal Forms donde aporte
 animations legacy → CSS/native
 ```
 
-→ [`../frontend/15-reactividad-signals.md`](../frontend/15-reactividad-signals.md)
+**Dirección visual: fase D6 (Motion).** Al tocar animación, se introducen los
+motion tokens en vez de improvisar duraciones.
+
+→ [`../frontend/15-reactividad-signals.md`](../frontend/15-reactividad-signals.md), [`../diseno/74-movimiento.md`](../diseno/74-movimiento.md)
 
 ---
 
@@ -256,7 +265,10 @@ Frontend apunta al backend .NET.
 
 Renderizar explicación.
 
-→ [`../frontend/16-ui-veredicto-y-share.md`](../frontend/16-ui-veredicto-y-share.md)
+**Dirección visual: fases D4 (Result) y D5 (Marginalia).** Es la fase con más carga
+de identidad: veredicto protagonista, Gachómetro, "Los augurios", sellos.
+
+→ [`../frontend/16-ui-veredicto-y-share.md`](../frontend/16-ui-veredicto-y-share.md), [`../diseno/75-pantallas.md`](../diseno/75-pantallas.md)
 
 ---
 
@@ -289,6 +301,27 @@ ASP.NET
 ### Fase 23 — Nest retirement
 
 Eliminar deployment antiguo.
+
+---
+
+## Y las fases D del rediseño, ¿dónde encajan?
+
+La dirección de diseño trae siete fases propias (D1–D7). **No son un track
+paralelo**: son el contenido visual de las fases de arriba.
+
+```text
+D1 Foundation   → Fase 3
+D2 Primitives   → Fases 3 y 4
+D3 Home         → Fase 4
+D4 Result       → Fase 19
+D5 Marginalia   → Fase 19 o posterior
+D6 Motion       → Fase 9 + pasada final
+D7 Docs cleanup → continuo, no es una fase
+```
+
+Detalle y motivos en [`../diseno/77-implantacion.md`](../diseno/77-implantacion.md).
+El seguimiento sigue siendo el de siempre: `./scripts/migration-status.sh`, sin
+columnas D.
 
 ---
 

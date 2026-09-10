@@ -50,6 +50,13 @@ y solo después considerar una dependencia externa pequeña
 - Carga solo los documentos de `docs/` que esa fase referencia. No cargues todo.
 - Lee el código real; el documento describe el objetivo, no el estado presente.
 
+**Si el cambio toca UI:**
+
+- Lee [`../diseno/78-reglas-agentes-ui.md`](../diseno/78-reglas-agentes-ui.md) §D26
+  antes de decidir cómo se ve algo. Tiene una tabla de "vas a tocar X → lee Y".
+- Reutiliza tokens antes de inventar valores. Un hexadecimal suelto en un template
+  es una regresión, no un detalle.
+
 **Mientras trabajas:**
 
 - No mezcles fases en un mismo cambio (ver [`../plan/41-estrategia-prs.md`](../plan/41-estrategia-prs.md)).
@@ -79,3 +86,4 @@ npm run lint:api && npm run test:api && npm run build:api   # backend Nest (mien
 - Criterio para añadir dependencias: [`51-criterio-dependencias.md`](./51-criterio-dependencias.md)
 - Criterio de modernización: [`52-criterio-modernizacion.md`](./52-criterio-modernizacion.md)
 - Definition of Done: [`53-definition-of-done.md`](./53-definition-of-done.md)
+- Reglas específicas de UI: [`../diseno/78-reglas-agentes-ui.md`](../diseno/78-reglas-agentes-ui.md)

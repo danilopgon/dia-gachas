@@ -76,6 +76,11 @@ GSAP (se mantiene)                Docker + Coolify
 PrimeNG = 0
 ```
 
+Y una dirección de arte propia: **Future Medieval Manchego** — bando municipal ×
+recetario castellano × grabado medieval × estación meteorológica × fanzine. La UI
+deja de parecer una app del tiempo personalizada. Ver
+[`docs/diseno/70-direccion-visual.md`](./docs/diseno/70-direccion-visual.md).
+
 Y una mejora funcional pequeña pero real:
 
 > La aplicación no solo dirá **si** hace día de gachas, sino **por qué**
@@ -94,6 +99,10 @@ Y una mejora funcional pequeña pero real:
    testabilidad, performance, ownership, mantenibilidad, dependency footprint).
    "Esta API es nueva" no es una razón.
 6. **Build y tests verdes antes de cerrar.** Y revisa tu propio diff.
+7. **Si tocas UI, la dirección de arte manda.** Nada de cards genéricas, gradientes,
+   radios grandes, sombras suaves ni pills. Tokens antes que hexadecimales sueltos.
+   Filtro: *¿podría esta pantalla salir de una landing generada para cualquier startup?*
+   Si sí, no vale. → [`docs/diseno/78-reglas-agentes-ui.md`](./docs/diseno/78-reglas-agentes-ui.md)
 
 ---
 
@@ -171,6 +180,15 @@ Variables de entorno del backend: `backend/.env` (plantilla en `backend/.env.dis
 | Zoneless, OnPush, httpResource, effects | [`docs/frontend/15-reactividad-signals.md`](./docs/frontend/15-reactividad-signals.md) |
 | La nueva UI del veredicto y el share | [`docs/frontend/16-ui-veredicto-y-share.md`](./docs/frontend/16-ui-veredicto-y-share.md) |
 | Tests y accesibilidad en frontend | [`docs/frontend/17-testing-frontend.md`](./docs/frontend/17-testing-frontend.md) |
+| **Qué aspecto tiene todo esto** | [`docs/diseno/70-direccion-visual.md`](./docs/diseno/70-direccion-visual.md) |
+| Colores, tipos, espaciado, sombras | [`docs/diseno/71-sistema-de-tokens.md`](./docs/diseno/71-sistema-de-tokens.md) |
+| Componer una pantalla | [`docs/diseno/72-composicion-y-layout.md`](./docs/diseno/72-composicion-y-layout.md) |
+| Iconos, ilustración, marginalia | [`docs/diseno/73-marginalia-e-ilustracion.md`](./docs/diseno/73-marginalia-e-ilustracion.md) |
+| Animación y transiciones | [`docs/diseno/74-movimiento.md`](./docs/diseno/74-movimiento.md) |
+| Home, Result, Gachómetro, sellos | [`docs/diseno/75-pantallas.md`](./docs/diseno/75-pantallas.md) |
+| Accesibilidad de la dirección visual | [`docs/diseno/76-accesibilidad-visual.md`](./docs/diseno/76-accesibilidad-visual.md) |
+| Cuándo se hace cada parte del rediseño | [`docs/diseno/77-implantacion.md`](./docs/diseno/77-implantacion.md) |
+| Reglas al implementar UI | [`docs/diseno/78-reglas-agentes-ui.md`](./docs/diseno/78-reglas-agentes-ui.md) |
 | Montar el backend .NET | [`docs/backend/20-arquitectura.md`](./docs/backend/20-arquitectura.md) |
 | EF Core y modelo de datos | [`docs/backend/21-persistencia.md`](./docs/backend/21-persistencia.md) |
 | `GET /cities` e import de municipios | [`docs/backend/22-cities.md`](./docs/backend/22-cities.md) |
@@ -192,6 +210,7 @@ Variables de entorno del backend: `backend/.env` (plantilla en `backend/.env.dis
 | Dependencias y APIs objetivo | [`docs/referencia/60-dependencias-objetivo.md`](./docs/referencia/60-dependencias-objetivo.md) |
 | La narrativa final del proyecto | [`docs/referencia/61-narrativa-y-valor.md`](./docs/referencia/61-narrativa-y-valor.md) |
 | El BRS original íntegro (congelado) | [`docs/archivo/brs-original.md`](./docs/archivo/brs-original.md) |
+| La dirección de diseño original (congelada) | [`docs/archivo/direccion-diseno-original.md`](./docs/archivo/direccion-diseno-original.md) |
 
 ---
 
@@ -201,8 +220,9 @@ Variables de entorno del backend: `backend/.env` (plantilla en `backend/.env.dis
 docs/**  (vivo, editable)     ← fuente de verdad
    ↑
 AGENTS.md (router)
-   ↑
-docs/archivo/brs-original.md  ← congelado, solo trazabilidad histórica
+
+docs/archivo/*                ← congelados, solo trazabilidad histórica
+frontend/.impeccable.md       ← dirección visual anterior, subordinada a docs/diseno/
 ```
 
 Si `docs/` y el BRS congelado se contradicen, **gana `docs/`**.
@@ -212,9 +232,21 @@ Ojo con las dos numeraciones, que no son la misma:
 - `NN-nombre.md` → **número de fichero**, ordena la documentación por temática.
 - `§N` → **sección del BRS original**, es una cita. Por eso los `§` saltan dentro
   de un documento: `00-vision-y-alcance.md` contiene `§1`, `§2` y `§74`, y está bien.
+- `§DN` → **sección de la dirección de diseño**. `§D18` es el Gachómetro.
+- `Fase N` / `Fase DN` → fases de trabajo; la palabra `Fase` siempre va delante.
 
 `40-fases.md` y `§40` no tienen relación alguna. Para citar en un PR usa el `§`
 (sobrevive a reorganizaciones); para decir "lee esto", usa la ruta del fichero.
+
+### Dónde la dirección de diseño gana al BRS
+
+Solo en dos sitios, y ambos están anotados en el documento afectado:
+
+- **§53** "mantener estética actual" → superado por **§D17**. Lo funcional de §53 sigue.
+- **§16** lista `--color-gachas-*` → sustituida por **§D7**. La intención de §16 sigue.
+
+En todo lo demás son complementarios: el BRS dice qué hace la app, la dirección de
+diseño dice qué aspecto tiene.
 
 ---
 

@@ -2,6 +2,10 @@
 
 > Fuente: BRS §7, §8, §9, §10, §14, §15. Índice general en [`../README.md`](../README.md).
 >
+> No basta con quitar PrimeNG: lo que se pone en su lugar tiene dirección de arte.
+> Lee [`../diseno/71-sistema-de-tokens.md`](../diseno/71-sistema-de-tokens.md) antes
+> de decidir un color, un radio o una sombra.
+>
 > El inventario de dónde se usa cada componente PrimeNG está en
 > [`../01-estado-actual.md`](../01-estado-actual.md) §6.
 > El autocomplete tiene documento propio: [`14-autocomplete-accesible.md`](./14-autocomplete-accesible.md).
@@ -181,3 +185,6 @@ No recrear toda la API de PrimeNG Toast.
 - Uso del toast al compartir: [`16-ui-veredicto-y-share.md`](./16-ui-veredicto-y-share.md) §55
 - Theming y retirada de tokens PrimeNG: [`13-theming.md`](./13-theming.md)
 - Criterio antes de añadir cualquier dependencia: [`../agents/51-criterio-dependencias.md`](../agents/51-criterio-dependencias.md)
+- **Qué aspecto tienen los sustitutos:** [`../diseno/75-pantallas.md`](../diseno/75-pantallas.md) §D15
+  (`GachasButton`, `EditorialRule`, `WeatherDatum`…), iconografía en
+  [`../diseno/73-marginalia-e-ilustracion.md`](../diseno/73-marginalia-e-ilustracion.md) §D11

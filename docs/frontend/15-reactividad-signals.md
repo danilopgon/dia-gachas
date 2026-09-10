@@ -204,6 +204,10 @@ y retirar `provideAnimationsAsync()` cuando ya no sea necesario.
 
 La eliminación de PrimeNG probablemente facilitará también esta limpieza.
 
+> **Cómo debe sentirse** ese movimiento (tokens de duración, easing, el "thunk" de
+> los controles, dónde sigue teniendo sentido GSAP):
+> [`../diseno/74-movimiento.md`](../diseno/74-movimiento.md) §D12.
+
 ---
 
 ## §54 · Loading y errors sin PrimeNG
@@ -227,3 +231,4 @@ No depender de componentes UI externos para estos estados.
 - Fases 7 y 9 del plan: [`../plan/40-fases.md`](../plan/40-fases.md)
 - Mapeo de errores del backend a mensajes de producto: [`../backend/25-contratos-api.md`](../backend/25-contratos-api.md) §56
 - Derivación del veredicto en la UI: [`16-ui-veredicto-y-share.md`](./16-ui-veredicto-y-share.md)
+- Dirección del movimiento: [`../diseno/74-movimiento.md`](../diseno/74-movimiento.md)

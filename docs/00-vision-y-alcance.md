@@ -111,3 +111,5 @@ ML predictor de gachas
 - Estado actual del código: [`01-estado-actual.md`](./01-estado-actual.md)
 - Definition of Done: [`agents/53-definition-of-done.md`](./agents/53-definition-of-done.md)
 - Narrativa final y valor del proyecto: [`referencia/61-narrativa-y-valor.md`](./referencia/61-narrativa-y-valor.md)
+- La versión **visual** de esta lista (el filtro anti-AI-slop):
+  [`diseno/70-direccion-visual.md`](./diseno/70-direccion-visual.md) §D4

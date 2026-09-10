@@ -28,6 +28,12 @@ Frontend terminado cuando:
 - PWA funciona;
 - tests pasan.
 
+> Esta lista cubre lo **funcional y de plataforma**. El frontend no está terminado
+> sin cumplir además la Definition of Done **visual**:
+> [`../diseno/77-implantacion.md`](../diseno/77-implantacion.md) §D25.
+> Son complementarias: se puede tener Angular 22 zoneless impecable y una UI que
+> sigue pareciendo una landing genérica.
+
 ---
 
 ## §72 · Definition of Done backend
@@ -67,4 +73,5 @@ El usuario puede:
 ## Documentos relacionados
 
 - Fases: [`../plan/40-fases.md`](../plan/40-fases.md)
+- Definition of Done visual: [`../diseno/77-implantacion.md`](../diseno/77-implantacion.md) §D25
 - Narrativa final: [`../referencia/61-narrativa-y-valor.md`](../referencia/61-narrativa-y-valor.md)
