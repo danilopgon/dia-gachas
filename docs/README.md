@@ -284,6 +284,23 @@ Las 27 secciones de la dirección de diseño, repartidas sin pérdida:
 
 Cualquier otra pareja es complementaria, no contradictoria.
 
+### Qué es estado actual y qué es estado objetivo
+
+Confusión fácil al leer documentación de migración: PPWoodland, Alegreya Sans, los
+fondos full-bleed, el verde salvia y `text-surface-*` aparecen en varios documentos.
+**Siempre como estado actual a retirar, nunca como destino.**
+
+```text
+ACTUAL (dev)                    OBJETIVO
+─────────────────────────────   ──────────────────────────────────────
+PPWoodland + Alegreya Sans   →  UnifrakturCook + Newsreader + IBM Plex Mono
+#94aa8b de fondo             →  papel / tinta (--color-paper-50, --color-ink-900)
+terracota #e15b2e            →  pimentón (--color-red-500)
+paisajes full-bleed          →  composición editorial; ilustración opcional
+text-surface-* de PrimeNG    →  tokens propios
+light mode only              →  light-first
+```
+
 ---
 
 ## Mantenimiento

@@ -23,7 +23,7 @@ La rama `dev` actual tiene una identidad reconocible, pero la interfaz sigue dep
 - tokens visuales heredados de PrimeNG (`text-surface-50`, theme, etc.);
 - una jerarquía de UI típica de landing/app;
 - iconografía meteorológica convencional;
-- PPWoodland + Alegreya Sans como base tipográfica;
+- PPWoodland + Alegreya Sans como base tipográfica (ambas se retiran; la tipografía objetivo es UnifrakturCook + Newsreader + IBM Plex Mono, §D8);
 - GSAP para movimiento ambiental.
 
 La migración Angular 19 → 22 ya incluye la retirada completa de PrimeNG y devuelve el control visual al proyecto. Ese cambio es una oportunidad para que la UI deje de parecer una app meteorológica personalizada y pase a tener **una dirección de arte propia**.
@@ -125,32 +125,46 @@ El 5 % medieval es importante: si sube demasiado, el producto se convierte en co
 
 ## §D5 · Qué conservamos del diseño actual
 
-La nueva dirección **no borra todo el trabajo existente**.
+La nueva dirección **no borra todo el trabajo existente**, pero tampoco arrastra lo
+visual por el mero hecho de que exista en `dev`.
 
-Se conservan:
+### Se conserva
 
-- PPWoodland como display principal mientras su licencia y asset actual sigan siendo válidos;
-- Alegreya Sans como texto funcional inicial;
+- concepto de producto;
+- humor;
+- identidad regional;
+- contenido y copy que siga funcionando;
+- el flujo de UX;
+- shareability;
+- objetivos de accesibilidad;
 - terracota / pimentón como color identitario;
-- humor regional y copy existente que siga funcionando;
 - enfoque mobile-first;
 - lógica `check → laugh → share`;
-- algunas ilustraciones rurales actuales como material de marca;
 - GSAP únicamente donde aporte narrativa o ambientación;
 - soporte de `prefers-reduced-motion`.
 
-### Qué cambia de las ilustraciones actuales
+### No se conserva automáticamente
 
-Los paisajes dejan de ser necesariamente el fondo full-bleed permanente.
+- los assets de paisaje existentes;
+- los fondos actuales;
+- la composición visual actual;
+- la tipografía actual (PPWoodland, Alegreya Sans);
+- cualquier convención visual heredada de PrimeNG.
 
-Pueden reutilizarse como:
+### Qué pasa con las ilustraciones actuales
 
-- cabeceras recortadas;
-- estampas;
-- franjas horizontales;
-- fondos de piezas compartibles;
-- source material para versiones tramadas/dither;
-- pequeñas escenas editoriales.
+Las ilustraciones heredadas **pueden** reutilizarse si encajan de verdad en la nueva
+dirección. Es opcional: **su reutilización no es una restricción de diseño.**
+
+Como material de exploración pueden servir de:
+
+- recortes;
+- estampas editoriales;
+- tratamientos dither;
+- assets de la pieza compartible;
+- pequeñas escenas.
+
+Los paisajes dejan de ser el fondo full-bleed permanente.
 
 La UI debe poder sostenerse visualmente sobre una superficie de “papel” sin depender de una ilustración a pantalla completa.
 

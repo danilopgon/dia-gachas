@@ -37,7 +37,9 @@ El rediseño debe acoplarse a la retirada de PrimeNG, no convertirse en una migr
 ### Fase D1 — Foundation
 
 - crear `tokens.css`;
-- mover fuentes y estilos base a una estructura clara;
+- mover estilos base a una estructura clara;
+- cargar las tipografías objetivo (UnifrakturCook, Newsreader, IBM Plex Mono) y
+  retirar PPWoodland y Alegreya Sans (§D8);
 - definir superficie `paper`;
 - definir tinta y pimentón;
 - integrar tokens con Tailwind v4;

@@ -76,10 +76,19 @@ GSAP (se mantiene)                Docker + Coolify
 PrimeNG = 0
 ```
 
-Y una dirección de arte propia: **Future Medieval Manchego** — bando municipal ×
-recetario castellano × grabado medieval × estación meteorológica × fanzine. La UI
-deja de parecer una app del tiempo personalizada. Ver
-[`docs/diseno/70-direccion-visual.md`](./docs/diseno/70-direccion-visual.md).
+Y una dirección de arte propia: **Future Medieval Manchego / Vernacular Editorial**
+— bando municipal × recetario castellano × grabado medieval × estación meteorológica
+× fanzine contemporáneo. La UI deja de parecer una app del tiempo personalizada.
+
+```text
+UnifrakturCook + Newsreader + IBM Plex Mono
+papel / tinta / pimentón
+composición editorial
+marginalia dither (Dither Boy, en diseño; nunca en runtime)
+80 % editorial · 15 % dither/textura · 5 % medieval explícito
+```
+
+Ver [`docs/diseno/70-direccion-visual.md`](./docs/diseno/70-direccion-visual.md).
 
 Y una mejora funcional pequeña pero real:
 

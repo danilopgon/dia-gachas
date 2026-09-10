@@ -38,8 +38,8 @@ Integrarlos con Tailwind cuando sea útil.
 No crear centenares de design tokens.
 
 > **Sustituido.** Estos nombres eran un esbozo previo a que existiera dirección de
-> arte. El set real —`--paper-*`, `--ink-*`, `--paprika-*`, tokens semánticos y
-> tokens de dominio (`--gacha-glorious`)— está en
+> arte. El set real —`--color-paper-*`, `--color-ink-*`, `--color-red-*`, tokens
+> semánticos y tokens de dominio (`--gacha-glorious`)— está en
 > [`../diseno/71-sistema-de-tokens.md`](../diseno/71-sistema-de-tokens.md) §D7.
 > **No implementes los `--color-gachas-*` de arriba.** El principio de "pocos tokens
 > y nada de PrimeNG" es lo que sobrevive.

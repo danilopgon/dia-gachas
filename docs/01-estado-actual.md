@@ -173,7 +173,8 @@ Dependencias visuales a retirar:
 providePrimeNG(...)       en app.config.ts + config/prime-ng-theme-settings.ts
 ```
 
-Assets existentes reutilizables como material de marca (§D5):
+Assets existentes que **pueden** explorarse como material de marca si encajan en la
+nueva dirección — su reutilización es opcional, no un requisito (§D5):
 
 ```text
 public/assets/images/  fondo-main, fondo-cielo, fondo-sol,
@@ -181,6 +182,11 @@ public/assets/images/  fondo-main, fondo-cielo, fondo-sol,
 public/assets/icons/   icon-sun, icon-cloud, icon-rain, icon-snow, icon-storm
 public/assets/fonts/   PPWoodland-Bold.otf, AlegreyaSans-Regular.ttf
 ```
+
+Nada de esto es estado objetivo. La tipografía de destino es **UnifrakturCook +
+Newsreader + IBM Plex Mono** (§D8) y la superficie de destino es papel/tinta (§D7):
+PPWoodland, Alegreya Sans, el verde salvia de fondo y los paisajes full-bleed son
+**estado actual a retirar**, no material que haya que conservar.
 
 > `frontend/.impeccable.md` describe la dirección visual **anterior** (los paisajes
 > como referencia obligatoria, paleta terracota `#e15b2e` + salvia `#94aa8b`).

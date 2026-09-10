@@ -135,3 +135,44 @@ explícitamente incompleto sin el DoD visual (§D25).
 **Pendiente de decisión humana:** PPWoodland es una tipografía comercial y §D5 la
 conserva "mientras su licencia y asset actual sigan siendo válidos". Conviene
 confirmar la licencia antes de que la marca dependa de ella.
+
+---
+
+## 2026-09-10 · Fase — · Corrección de la dirección de diseño generada
+
+**Contexto:** el documento de dirección de diseño incorporado el día anterior era una
+versión **generada** que arrastraba decisiones del `dev` actual en lugar de reflejar
+la dirección acordada. No era una diferencia de matiz: la tipografía objetivo, la
+paleta y el estatus de las ilustraciones estaban mal.
+
+**Decisión:** corregir la documentación contra la dirección acordada, sin
+reinterpretarla ni explorar alternativas.
+
+| Punto | Decía | Dice ahora |
+|---|---|---|
+| Tipografía | PPWoodland + Alegreya Sans | **UnifrakturCook + Newsreader + IBM Plex Mono** |
+| Primitives | `--paper-*`, `--ink-*`, `--paprika-*`, `--sky-*`, `--olive-*` | `--color-paper-*`, `--color-ink-*`, `--color-red-*`, `--color-blue-*`, `--color-green-*` con los valores acordados |
+| Semánticos | `--surface-subtle/strong`, `--weather-accent`, `--state-positive/negative` | `--surface-raised/sunken`, `--weather-cold/warm`, `--state-good/bad`; `--border-muted` al 35 % |
+| Ilustraciones | se conservan como material de marca | reutilización **opcional**, nunca una restricción de diseño |
+| Tema | light-only | **light-first**: sin tema oscuro en la migración, no prohibido a futuro |
+| Dither | `--illustration-primary`, `--marginalia-*` en rem, fondo 0.14 | `--illustration-color`, `--dither-size-*` en px, fondo 0.16 |
+| Movimiento | `--motion-fast/normal/slow` | `--duration-fast/normal/slow` |
+| Textura de papel | no estaba | regla explícita: 2–4 %, se siente más que se ve |
+| Component tokens | solo ejemplos sueltos | botón, bloque meteorológico y Gachómetro completos |
+
+**Alternativas descartadas:** conservar PPWoodland/Alegreya "porque ya están en el
+repo" (es exactamente el sesgo que produjo el error); elegir otra tipografía medieval
+distinta de UnifrakturCook por criterio propio (sería una decisión de diseño nueva, y
+debe tomarse aparte si algún día se reconsidera).
+
+**Impacto en el plan:** `01-estado-actual.md` deja claro qué es estado actual a
+retirar y qué es destino; `13-theming.md` apunta a los nombres correctos;
+`frontend/.impeccable.md` enumera qué deja de ser dirección objetivo; `docs/README.md`
+añade una tabla actual → objetivo; la fase D1 incluye cargar las tipografías nuevas.
+El archivo congelado lleva una cabecera que enumera lo que estaba mal, para que nadie
+lo lea como referencia de implementación.
+
+**Queda resuelto:** el aviso sobre la licencia comercial de PPWoodland deja de
+aplicar como riesgo de marca — no es tipografía objetivo. UnifrakturCook, Newsreader
+e IBM Plex Mono son tipografías libres; conviene igualmente autoalojarlas en vez de
+depender de un CDN externo, por SSR y privacidad.

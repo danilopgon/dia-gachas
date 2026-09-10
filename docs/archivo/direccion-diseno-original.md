@@ -1,14 +1,27 @@
 <!--
-  DOCUMENTO CONGELADO — NO EDITAR.
+  DOCUMENTO CONGELADO — NO EDITAR. CONTIENE DECISIONES CORREGIDAS DESPUÉS.
 
-  Dirección de diseño original ("18 · Dirección de diseño — Future Medieval Manchego"),
-  conservada íntegra por trazabilidad histórica.
+  Esta es la versión GENERADA de la dirección de diseño, conservada por trazabilidad.
+  NO refleja la dirección acordada en varios puntos, corregidos el 2026-09-10:
 
-  NO es la fuente de verdad operativa. La fuente de verdad viva es `docs/diseno/`,
-  indexada desde `AGENTS.md` y `docs/README.md`, donde cada sección se cita como §DN.
+    · Tipografía  → decía PPWoodland + Alegreya (heredadas de dev).
+                    La objetivo es UnifrakturCook + Newsreader + IBM Plex Mono.
+    · Paleta      → los primitives correctos llevan prefijo --color-* y algunos
+                    valores difieren (paper-200, ink-700/800, blue-*, earth-*,
+                    green-500, amber-500).
+    · Semánticos  → --surface-raised/sunken, --weather-cold/warm, --state-good/bad.
+    · Ilustración → no es obligatorio conservar los paisajes actuales.
+    · Tema        → light-first, no "light-only".
+    · Dither      → --illustration-color y --dither-size-*, opacidad de fondo 0.16.
+    · Movimiento  → --duration-*, no --motion-*.
+    · Faltaban    → regla de textura de papel (2–4 %) y los component tokens de
+                    botón y bloque meteorológico.
 
-  Si detectas una discrepancia entre este archivo y `docs/diseno/`, gana `docs/diseno/`.
-  Los agentes NO deben cargar este archivo salvo para auditar trazabilidad.
+  La fuente de verdad viva es `docs/diseno/`, indexada desde `AGENTS.md` y
+  `docs/README.md`, donde cada sección se cita como §DN.
+
+  NO uses este archivo como referencia de implementación. Gana `docs/diseno/`.
+  Detalle de la corrección en `docs/plan/43-bitacora.md`.
 -->
 
 # 18 · Dirección de diseño — Future Medieval Manchego

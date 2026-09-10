@@ -6,7 +6,8 @@
 
 ## §D11 · Marginalia y Dither Boy
 
-**Dither Boy encaja como herramienta de producción visual**, no como dependencia runtime.
+**Dither Boy es una herramienta de diseño y producción de assets, nunca una
+dependencia en runtime.**
 
 La marginalia sirve para introducir identidad humana y humor sin cargar la UI principal.
 
@@ -14,55 +15,68 @@ La marginalia sirve para introducir identidad humana y humor sin cargar la UI pr
 
 Crear una pequeña biblioteca de elementos propios:
 
-- perol;
-- ajo;
-- cuchara;
-- harina;
-- molino;
-- nube;
-- lluvia;
-- viento;
-- sol hostil;
-- lumbre;
-- oveja;
-- casa o silueta rural;
-- mano señalando;
-- símbolos meteorológicos reinterpretados;
-- pequeños ornamentos;
-- sellos del veredicto.
+```text
+perol
+ajo
+cuchara
+molino
+nube
+lluvia
+viento
+sol hostil
+lumbre
+oveja
+casa manchega
+manos / pointers
+símbolos meteorológicos
+pequeños ornamentos
+```
+
+Siguen siendo válidos `harina` y los `sellos del veredicto` del set inicial: §D19
+depende del sello.
 
 ### Tratamiento
+
+Motivos originales simples, procesados con dither visible:
 
 - una tinta por defecto;
 - dos tintas como máximo;
 - dither visible, no fotorealista;
 - imperfección deliberada;
+- contextual al clima o al resultado cuando aporte;
 - sin sombras 3D;
-- sin volumen plástico;
-- sin ilustración “cute” genérica.
+- sin volumen plástico.
+
+Evitar:
+
+- ilustración pulida de IA;
+- imaginería pseudo-Pixar;
+- grabado de fantasía genérico;
+- fotorrealismo;
+- ilustración “cute” genérica.
 
 Los assets deben funcionar preferentemente en:
 
 ```text
 ink
 paprika
-weather-accent
+weather-cold / weather-warm
 ```
 
 ### Tokens
 
 ```css
 :root {
-  --illustration-primary: var(--ink-900);
-  --illustration-accent: var(--paprika-500);
+  --illustration-color: var(--color-ink-900);
+  --illustration-accent: var(--color-red-500);
 
   --illustration-opacity-primary: 1;
   --illustration-opacity-secondary: 0.55;
-  --illustration-opacity-background: 0.14;
+  --illustration-opacity-background: 0.16;
 
-  --marginalia-sm: 4rem;
-  --marginalia-md: 8rem;
-  --marginalia-lg: 15rem;
+  --dither-size-sm: 64px;
+  --dither-size-md: 128px;
+  --dither-size-lg: 240px;
 }
 ```
 

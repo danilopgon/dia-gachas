@@ -17,13 +17,15 @@ El movimiento debe ayudar a crear carácter, no demostrar que tenemos GSAP.
 
 ```css
 :root {
-  --motion-fast: 100ms;
-  --motion-normal: 180ms;
-  --motion-slow: 320ms;
+  --duration-fast: 100ms;
+  --duration-normal: 180ms;
+  --duration-slow: 320ms;
 
   --ease-snap: cubic-bezier(0.2, 0, 0, 1);
 }
 ```
+
+El movimiento es corto, seco y mecánico.
 
 ### UI
 
@@ -32,7 +34,7 @@ Los controles deben sentirse físicos y rápidos.
 Ejemplo:
 
 ```css
-.action:hover {
+.button:hover {
   transform: translate(-2px, -2px);
   box-shadow: var(--shadow-hard-sm);
 }
@@ -48,7 +50,7 @@ No:
 
 ### Ambientación
 
-GSAP puede seguir utilizándose para:
+GSAP se conserva **solo** para movimiento ambiental o narrativo intencionado:
 
 - revelar una estampa;
 - pequeños parallax;

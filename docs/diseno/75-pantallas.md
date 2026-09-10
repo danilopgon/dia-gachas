@@ -172,8 +172,8 @@ NO ├──────┼──────┼──────┼──●�
 
 ```css
 :root {
-  --gachometer-track: var(--ink-900);
-  --gachometer-marker: var(--paprika-500);
+  --gachometer-track: var(--color-ink-900);
+  --gachometer-marker: var(--accent-primary);
 
   --gachometer-height: 2px;
   --gachometer-tick-height: 12px;
@@ -239,20 +239,20 @@ Ejemplo:
 
 ```css
 [data-weather="rain"] {
-  --weather-accent: var(--sky-500);
+  --weather-cold: var(--color-blue-500);
   --illustration-opacity-background: 0.20;
 }
 
 [data-weather="cold"] {
-  --weather-accent: var(--sky-700);
+  --weather-cold: var(--color-blue-700);
 }
 
 [data-weather="sun"] {
-  --weather-accent: var(--earth-500);
+  --weather-warm: var(--color-earth-500);
 }
 
 [data-gacha-level="glorious"] {
-  --illustration-accent: var(--paprika-500);
+  --illustration-accent: var(--color-red-500);
 }
 ```
 

@@ -23,6 +23,28 @@ Usar:
 
 Evitar encerrar cada dato en una caja.
 
+### Textura de papel
+
+La página **puede** llevar una textura de papel/impresión extremadamente sutil.
+
+```text
+intensidad visual aproximada: 2–4 %
+```
+
+Se tiene que **sentir más que ver**.
+
+No usar:
+
+- pergamino falso;
+- viñeteado marrón;
+- bordes quemados;
+- grano pesado;
+- simulación de papel medieval.
+
+El resultado debe seguir pareciendo una interfaz web contemporánea.
+
+### Los augurios
+
 Los datos meteorológicos pueden aparecer como una tabla editorial o un parte:
 
 ```text

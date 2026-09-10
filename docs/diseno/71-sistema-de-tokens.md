@@ -11,40 +11,48 @@
 
 ## §D7 · Paleta
 
-La app permanece **light-first / light-only** salvo que exista una razón de producto para introducir otro tema.
+La app es **light-first**.
+
+```text
+Light-first.
+No se requiere tema oscuro para la migración.
+Una futura interpretación en oscuro está fuera de alcance, no prohibida.
+```
+
+El sistema está construido sobre papel y tinta, así que el modo claro es su estado
+natural. Eso no convierte "nada de dark mode" en una regla fundamental.
 
 ### Primitives
 
 ```css
 :root {
-  /* Paper */
-  --paper-50:  #f8f4ea;
-  --paper-100: #f1eadc;
-  --paper-200: #e5d9c3;
+  /* Neutrals */
+  --color-paper-50:  #f8f4ea;
+  --color-paper-100: #f1eadc;
+  --color-paper-200: #e6dcc8;
 
-  /* Ink */
-  --ink-700: #4a453d;
-  --ink-800: #302d28;
-  --ink-900: #1c1a17;
+  --color-ink-700:   #403c34;
+  --color-ink-800:   #2c2924;
+  --color-ink-900:   #1c1a17;
 
   /* Paprika */
-  --paprika-300: #d9785c;
-  --paprika-500: #b84830;
-  --paprika-700: #84301f;
+  --color-red-300:   #d9785c;
+  --color-red-500:   #b84830;
+  --color-red-700:   #84301f;
 
-  /* Weather */
-  --sky-300: #9aabb2;
-  --sky-500: #657d87;
-  --sky-700: #415861;
+  /* Weather cold */
+  --color-blue-300:  #91a8b8;
+  --color-blue-500:  #5f7888;
+  --color-blue-700:  #3f5664;
 
   /* Earth */
-  --earth-300: #baa47c;
-  --earth-500: #8a6d45;
-  --earth-700: #5d482e;
+  --color-earth-300: #b29b72;
+  --color-earth-500: #876d45;
+  --color-earth-700: #5f4a2e;
 
-  /* Supporting states */
-  --olive-500: #69745a;
-  --amber-500: #bd8237;
+  /* Supporting */
+  --color-green-500: #667556;
+  --color-amber-500: #c2883c;
 }
 ```
 
@@ -54,25 +62,30 @@ Los nombres de primitives describen el color, no su intención.
 
 ```css
 :root {
-  --surface-page: var(--paper-50);
-  --surface-subtle: var(--paper-100);
-  --surface-strong: var(--ink-900);
+  --surface-page: var(--color-paper-50);
+  --surface-raised: var(--color-paper-100);
+  --surface-sunken: var(--color-paper-200);
 
-  --text-primary: var(--ink-900);
-  --text-secondary: var(--ink-700);
-  --text-inverse: var(--paper-50);
+  --text-primary: var(--color-ink-900);
+  --text-secondary: var(--color-ink-700);
+  --text-inverse: var(--color-paper-50);
 
-  --border-default: var(--ink-900);
-  --border-muted: color-mix(in srgb, var(--ink-900) 30%, transparent);
+  --border-default: var(--color-ink-900);
+  --border-muted: color-mix(
+    in srgb,
+    var(--color-ink-900) 35%,
+    transparent
+  );
 
-  --accent-primary: var(--paprika-500);
-  --accent-primary-hover: var(--paprika-700);
+  --accent-primary: var(--color-red-500);
+  --accent-primary-hover: var(--color-red-700);
 
-  --weather-accent: var(--sky-500);
+  --weather-cold: var(--color-blue-500);
+  --weather-warm: var(--color-earth-500);
 
-  --state-positive: var(--olive-500);
-  --state-warning: var(--amber-500);
-  --state-negative: var(--paprika-500);
+  --state-good: var(--color-green-500);
+  --state-warning: var(--color-amber-500);
+  --state-bad: var(--color-red-500);
 }
 ```
 
@@ -82,16 +95,17 @@ El diseño puede nombrar explícitamente conceptos del producto.
 
 ```css
 :root {
-  --gacha-poor: var(--earth-300);
-  --gacha-maybe: var(--amber-500);
-  --gacha-good: var(--paprika-500);
-  --gacha-glorious: var(--paprika-700);
+  --gacha-poor: var(--color-earth-300);
+  --gacha-maybe: var(--color-amber-500);
+  --gacha-good: var(--color-red-500);
+  --gacha-glorious: var(--color-red-700);
 }
 ```
 
 Esto es preferible a convertir Día de Gachas en un sistema abstracto de `success/info/warning` típico de dashboard.
 
-El estado “perfecto para gachas” **no tiene por qué ser verde**. El rojo pimentón es más propio del producto.
+**Un veredicto positivo de gachas usa pimentón, no el verde genérico de dashboard.**
+`--color-green-500` existe como color de apoyo, no como "esto ha ido bien".
 
 ---
 
@@ -99,53 +113,47 @@ El estado “perfecto para gachas” **no tiene por qué ser verde**. El rojo pi
 
 La tipografía tiene tres funciones, no tres estilos decorativos.
 
-### Display
-
 ```css
---font-display: "PPWoodland", serif;
+:root {
+  --font-display: "UnifrakturCook", serif;
+  --font-body: "Newsreader", serif;
+  --font-data: "IBM Plex Mono", monospace;
+}
 ```
 
-Uso:
+### Display — UnifrakturCook
 
 - marca;
-- veredicto;
-- titulares principales;
-- cifras realmente protagonistas.
+- identidad Día de Gachas;
+- veredictos importantes;
+- titulares expresivos concretos.
 
-Debe utilizarse a gran escala y con moderación.
+Usar **con moderación** y a gran escala. **Nunca para lectura larga.**
 
-### Texto
+### Texto — Newsreader
 
-```css
---font-body: "Alegreya", sans-serif;
-```
+- titulares editoriales;
+- cuerpo y contenido;
+- copy explicativo.
 
-Uso:
+Es la tipografía más legible de la interfaz y la que hace el trabajo pesado.
 
-- instrucciones;
-- copy;
-- resultados secundarios;
-- mensajes;
-- acciones.
+### Datos — IBM Plex Mono
 
-### Datos
-
-No es obligatorio introducir un tercer asset tipográfico.
-
-```css
---font-data: ui-monospace, "SFMono-Regular", Consolas, monospace;
-```
-
-Uso:
-
-- temperatura;
-- porcentaje;
-- viento;
-- fecha;
-- etiquetas técnicas;
-- score.
+- datos meteorológicos;
+- etiquetas;
+- fechas;
+- score;
+- información instrumental / de estación.
 
 El contraste `display artesanal + dato mono` es una de las claves de la dirección **future medieval**.
+
+> **PPWoodland y Alegreya Sans no son tipografías objetivo.** Son las actuales de
+> `dev` y se retiran durante la migración. Ver
+> [`../01-estado-actual.md`](../01-estado-actual.md).
+>
+> Si UnifrakturCook se reconsidera en el futuro, eso es una decisión de diseño
+> aparte: no se sustituye en silencio por otra tipografía medieval.
 
 ### Escala
 
@@ -234,8 +242,8 @@ No introducir radios grandes salvo que un componente tenga una justificación co
 ```css
 :root {
   --shadow-none: none;
-  --shadow-hard-sm: 3px 3px 0 var(--ink-900);
-  --shadow-hard-md: 6px 6px 0 var(--ink-900);
+  --shadow-hard-sm: 3px 3px 0 var(--color-ink-900);
+  --shadow-hard-md: 6px 6px 0 var(--color-ink-900);
 }
 ```
 
@@ -283,9 +291,9 @@ COMPONENT
 Describe valores.
 
 ```text
---paper-50
---ink-900
---paprika-500
+--color-paper-50
+--color-ink-900
+--color-red-500
 --space-4
 ```
 
@@ -297,18 +305,55 @@ Describe intención.
 --surface-page
 --text-primary
 --accent-primary
---weather-accent
+--weather-cold
 ```
 
 #### Component
 
 Solo cuando un componente propio necesite contrato visual estable.
 
-```text
---gachometer-marker
---verdict-border
---search-control-height
+Botón:
+
+```css
+:root {
+  --button-bg: var(--text-primary);
+  --button-text: var(--text-inverse);
+  --button-border: var(--text-primary);
+
+  --button-bg-hover: var(--accent-primary);
+  --button-radius: var(--radius-sm);
+
+  --button-padding-x: var(--space-5);
+  --button-padding-y: var(--space-3);
+}
 ```
+
+Bloque meteorológico editorial:
+
+```css
+:root {
+  --forecast-bg: transparent;
+  --forecast-border: var(--rule-heavy);
+  --forecast-label-font: var(--font-data);
+  --forecast-value-font: var(--font-body);
+}
+```
+
+Gachómetro:
+
+```css
+:root {
+  --gachometer-track: var(--color-ink-900);
+  --gachometer-marker: var(--accent-primary);
+
+  --gachometer-height: 2px;
+  --gachometer-tick-height: 12px;
+  --gachometer-marker-size: 18px;
+}
+```
+
+Estos son ejemplos de **contratos visuales de componentes del dominio**, no una
+invitación a construir una librería de UI de propósito general.
 
 No duplicar un token semántico únicamente para “seguir la arquitectura”.
 
@@ -331,6 +376,10 @@ Ejemplo:
   --color-paprika: var(--accent-primary);
 }
 ```
+
+Los primitives (`--color-paper-50`, `--color-red-500`…) viven en `tokens.css` bajo
+`:root`. Solo lo que se declara dentro de `@theme` genera utilidades de Tailwind, así
+que exponer un alias corto ahí no colisiona con el primitive del que sale.
 
 Evitar que el markup vuelva a llenarse de hexadecimales o decisiones visuales arbitrarias.
 

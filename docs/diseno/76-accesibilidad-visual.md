@@ -42,5 +42,6 @@ Nunca introducir ruido a lectores de pantalla por pura decoración.
 
 - Tests de accesibilidad funcional: [`../frontend/17-testing-frontend.md`](../frontend/17-testing-frontend.md) §62
 - El Gachómetro no puede depender solo de color: [`75-pantallas.md`](./75-pantallas.md) §D18
+- UnifrakturCook se usa con moderación y **nunca para lectura larga**: [`71-sistema-de-tokens.md`](./71-sistema-de-tokens.md) §D8
 - Reduced motion: [`74-movimiento.md`](./74-movimiento.md) §D12
 - Marginalia decorativa: [`73-marginalia-e-ilustracion.md`](./73-marginalia-e-ilustracion.md) §D11
