@@ -44,7 +44,7 @@ export class WeatherResource {
           }
 
           return res.data;
-        } catch (err) {
+        } catch {
           throw new Error();
         }
       },
