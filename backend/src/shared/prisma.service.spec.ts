@@ -18,7 +18,9 @@ describe('parseDbUrl', () => {
   });
 
   it('decodifica caracteres especiales en usuario y contraseña', () => {
-    const result = parseDbUrl('mysql://us%40er:p%40ss%21word@localhost:3306/mydb');
+    const result = parseDbUrl(
+      'mysql://us%40er:p%40ss%21word@localhost:3306/mydb',
+    );
     expect(result.user).toBe('us@er');
     expect(result.password).toBe('p@ss!word');
   });
