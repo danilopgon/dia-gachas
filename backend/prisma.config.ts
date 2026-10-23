@@ -1,8 +1,9 @@
 import 'dotenv/config';
-import { defineConfig, env } from 'prisma/config';
+import { defineConfig } from 'prisma/config';
 
 export default defineConfig({
   datasource: {
-    url: env('DATABASE_URL'),
+    // `prisma generate` no necesita conexión; los comandos que sí la usan fallan si falta.
+    url: process.env.DATABASE_URL,
   },
 });
