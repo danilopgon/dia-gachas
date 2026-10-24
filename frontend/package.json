@@ -1,5 +1,5 @@
 {
-  "name": "dia-gachas",
+  "name": "dia-gachas-web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -27,7 +27,6 @@
     "@angular/service-worker": "19.2.20",
     "@primeng/themes": "^19.0.5",
     "@tailwindcss/postcss": "^4.0.0",
-    "dia-gachas": "file:..",
     "gsap": "^3.13.0",
     "postcss": "^8.5.12",
     "primeicons": "^7.0.0",

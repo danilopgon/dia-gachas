@@ -2,26 +2,25 @@
   "name": "dia-gachas",
   "private": true,
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "install:front": "npm install --prefix frontend",
-    "dev": "concurrently -n BACKEND,FRONTEND -c green,blue \"npm run dev:api\" \"npm run dev:web\"",
-    "dev:api": "npm run start:dev --prefix backend",
-    "dev:web": "npm run start --prefix frontend",
-    "build:api": "npm run build --prefix backend",
-    "build:web": "npm run build --prefix frontend",
-    "build": "npm run build:api && npm run build:web",
-    "start:api": "npm run start:prod --prefix backend",
-    "start:web": "npm run start --prefix frontend",
+    "dev": "concurrently -n BACKEND,FRONTEND -c green,blue \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:api": "pnpm --filter dia-gachas-api start:dev",
+    "dev:web": "pnpm --filter dia-gachas-web start",
+    "prisma:generate": "pnpm --filter dia-gachas-api prisma:generate",
+    "build:api": "pnpm --filter dia-gachas-api build",
+    "build:web": "pnpm --filter dia-gachas-web build",
+    "build": "pnpm build:api && pnpm build:web",
+    "start:api": "pnpm --filter dia-gachas-api start:prod",
+    "start:web": "pnpm --filter dia-gachas-web start",
     "clean": "rimraf backend/dist frontend/dist",
-    "lint:api": "npm run lint --prefix backend",
-    "lint:web": "npm run lint --prefix frontend",
-    "test:api": "npm run test --prefix backend",
-    "test:web": "npm run test --prefix frontend",
-    "build:prod": "npm run build:api && npm run build:web",
-    "start:all": "concurrently -n BACKEND,FRONTEND -c green,blue \"npm run start:api\" \"npm run start:web\"",
-    "serve:coolify": "npm run build:prod && npm run start:all",
-    "lint": "npm run lint:api && npm run lint:web",
-    "lint:fix": "npm run lint:fix --prefix backend && npm run lint:fix --prefix frontend"
+    "lint:api": "pnpm --filter dia-gachas-api lint",
+    "lint:web": "pnpm --filter dia-gachas-web lint",
+    "lint": "pnpm lint:api && pnpm lint:web",
+    "lint:fix": "pnpm --filter dia-gachas-api lint:fix && pnpm --filter dia-gachas-web lint:fix",
+    "test:api": "pnpm --filter dia-gachas-api test",
+    "test:web": "pnpm --filter dia-gachas-web test",
+    "build:prod": "pnpm build:api && pnpm build:web",
+    "start:all": "concurrently -n BACKEND,FRONTEND -c green,blue \"pnpm start:api\" \"pnpm start:web\"",
+    "serve:coolify": "pnpm build:prod && pnpm start:all"
   },
   "devDependencies": {
     "concurrently": "^8.2.0",
@@ -29,5 +28,6 @@
   },
   "engines": {
     "node": ">=22.23.4 <23"
-  }
+  },
+  "packageManager": "pnpm@10.34.8"
 }
