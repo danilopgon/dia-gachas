@@ -38,8 +38,11 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 2. **Instala las dependencias de todos los paquetes**
 
+   El repo es un workspace de pnpm (versión fijada en `packageManager`). Con Node 22 basta con activar Corepack:
+
    ```bash
-   npm run install:all
+   corepack enable
+   pnpm install
    ```
 
 3. **Prepara la base de datos**
@@ -65,17 +68,17 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 5. **Ejecuta las migraciones de Prisma**
 
    ```bash
-   npm run prisma:migrate --prefix backend
+   pnpm --filter dia-gachas-api prisma:migrate
    ```
 
 6. **Levanta el entorno en desarrollo**
 
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
    Esto ejecutará backend y frontend en paralelo:
-   - Backend: http://localhost:3000
+   - Backend: http://localhost:4000
    - Frontend: http://localhost:4200
 
 ---
@@ -93,9 +96,11 @@ dia-de-gachas/
 ## ⚙️ Comandos útiles
 
 ```bash
-npm run test:api      # Tests del backend
-npm run test:web      # Tests del frontend
-npm run build         # Build completo (api + web)
+pnpm test:api      # Tests del backend
+pnpm test:web      # Tests del frontend
+pnpm build         # Build completo (api + web)
+pnpm lint          # Lint de ambos paquetes (sin modificar ficheros)
+pnpm lint:fix      # Lint con correcciones automáticas
 ```
 
 ---

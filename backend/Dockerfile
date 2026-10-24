@@ -1,36 +1,40 @@
-# Imagen para Railway (independiente del build de Coolify)
+# Imagen para Railway (independiente del build de Coolify).
+# Se construye desde la raíz del workspace: docker build -f backend/Dockerfile .
 
 # Etapa de build
 FROM node:22.23.4-bookworm AS builder
 
+RUN corepack enable
+
 # Directorio de trabajo
 WORKDIR /app
 
-# Instalar dependencias desde el lockfile
-COPY package.json package-lock.json ./
-RUN npm ci
+# Instalar solo el backend y sus dependencias desde el lockfile del workspace
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY backend/package.json backend/
+RUN pnpm install --frozen-lockfile --filter dia-gachas-api...
 
-# Copiar el resto del código
-COPY . .
+# Copiar el código del backend
+COPY backend/ backend/
 
-# Generar el cliente de Prisma
-RUN npx prisma generate
-
-# Compilar el proyecto NestJS
-RUN npm run build
+# Generar el cliente de Prisma y compilar el proyecto NestJS
+RUN pnpm --filter dia-gachas-api exec prisma generate
+RUN pnpm --filter dia-gachas-api build
 
 # Etapa final (runner)
 FROM node:22.23.4-bookworm AS runner
 
 ENV NODE_ENV=production
 
-# Directorio de trabajo en la imagen final
+# Se conserva la estructura del workspace para que resuelvan los enlaces de pnpm
 WORKDIR /app
-
-# Copiar solo lo necesario desde el builder
-COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/backend/node_modules ./backend/node_modules
+COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/package.json ./backend/package.json
+
+WORKDIR /app/backend
+USER node
 
 # Comando por defecto
 CMD ["node", "dist/main"]

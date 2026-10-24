@@ -1,0 +1,16 @@
+packages:
+  - frontend
+  - backend
+
+# Falla la instalación si un paquete con scripts de build no está revisado abajo
+strictDepBuilds: true
+onlyBuiltDependencies:
+  # Binarios nativos (esbuild, vigilancia de ficheros y caché de Angular, resolver de Jest)
+  - '@parcel/watcher'
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - unrs-resolver
+  # Motores de Prisma (generate y migraciones)
+  - '@prisma/engines'
+  - prisma

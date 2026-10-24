@@ -5,27 +5,31 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
+      # Toma la versión de packageManager
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           check-latest: true
-          cache: npm
-          cache-dependency-path: |
-            package-lock.json
-            backend/package-lock.json
-            frontend/package-lock.json
+          cache: pnpm
 
-      - run: npm ci
-      - run: npm ci --prefix backend
-      - run: npm ci --prefix frontend
-      - run: npm run prisma:generate --prefix backend
-      - run: npm run build
-      - run: npm run test:api
-      - run: npm run test:web
-      - run: npm run lint
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm prisma:generate
+      - run: pnpm build
+      - run: pnpm test:api
+      - run: pnpm test:web
+      - run: pnpm lint
