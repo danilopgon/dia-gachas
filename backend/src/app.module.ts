@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { CitiesModule } from './modules/cities/cities.module';
 import { WeatherModule } from './modules/weather/weather.module';
 import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -22,7 +21,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     }),
     CacheModule.register({ isGlobal: true, ttl: 3600 * 1000, max: 200 }),
     WeatherModule,
-    CitiesModule,
   ],
   controllers: [],
   providers: [{ provide: APP_INTERCEPTOR, useClass: CacheInterceptor }],

@@ -11,6 +11,3 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - unrs-resolver
-  # Motores de Prisma (generate y migraciones)
-  - '@prisma/engines'
-  - prisma
