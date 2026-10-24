@@ -28,7 +28,4 @@ jobs:
       - run: npm run build
       - run: npm run test:api
       - run: npm run test:web
-      # lint:api aplica --fix; hasta separar comprobación y corrección se llama a eslint directamente
-      - run: npx eslint "{src,apps,libs,test}/**/*.ts"
-        working-directory: backend
-      - run: npm run lint:web
+      - run: npm run lint
