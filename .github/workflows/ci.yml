@@ -33,3 +33,4 @@ jobs:
       - run: pnpm test:api
       - run: pnpm test:web
       - run: pnpm lint
+      - run: pnpm test:scripts
