@@ -1,14 +1,17 @@
+# Imagen para Railway (independiente del build de Coolify)
+
 # Etapa de build
-FROM node:20-bullseye AS builder
+FROM node:22.23.4-bookworm AS builder
 
 # Directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos
-COPY . .
+# Instalar dependencias desde el lockfile
+COPY package.json package-lock.json ./
+RUN npm ci
 
-# Instalar dependencias
-RUN npm install
+# Copiar el resto del código
+COPY . .
 
 # Generar el cliente de Prisma
 RUN npx prisma generate
@@ -17,7 +20,9 @@ RUN npx prisma generate
 RUN npm run build
 
 # Etapa final (runner)
-FROM node:20-bullseye AS runner
+FROM node:22.23.4-bookworm AS runner
+
+ENV NODE_ENV=production
 
 # Directorio de trabajo en la imagen final
 WORKDIR /app
