@@ -3,12 +3,12 @@ import {
   AfterViewInit,
   Component,
   computed,
-  effect,
   Inject,
   inject,
   model,
   ModelSignal,
   PLATFORM_ID,
+  ResourceStatus,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -35,21 +35,15 @@ export class HomeComponent implements AfterViewInit {
   searchTerm: WritableSignal<string> = signal('');
   citiesRef = this.citiesResource.createSearchResource(this.searchTerm);
 
-  cities = computed(() => this.lastCities());
-  private lastCities: WritableSignal<ICity[]> = signal([]);
+  // Solo las sugerencias de la consulta actual: mientras carga una nueva, la lista queda vacía.
+  cities = computed(() => this.citiesRef.value() ?? []);
+  loadFailed = computed(() => this.citiesRef.status() === ResourceStatus.Error);
+  noResults = computed(
+    () =>
+      this.citiesRef.status() === ResourceStatus.Resolved && this.citiesRef.value()?.length === 0,
+  );
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {
-    effect(() => {
-      const value = this.citiesRef.value();
-      this.setLastCities(value);
-    });
-  }
-
-  private setLastCities(value: ICity[] | undefined) {
-    if (value && value.length) {
-      this.lastCities.set(value);
-    }
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
