@@ -17,8 +17,7 @@ RUN pnpm install --frozen-lockfile --filter dia-gachas-api...
 # Copiar el código del backend
 COPY backend/ backend/
 
-# Generar el cliente de Prisma y compilar el proyecto NestJS
-RUN pnpm --filter dia-gachas-api exec prisma generate
+# Compilar el proyecto NestJS
 RUN pnpm --filter dia-gachas-api build
 
 # Etapa final (runner)

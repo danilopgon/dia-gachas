@@ -28,9 +28,9 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm prisma:generate
       - run: pnpm build
       - run: pnpm test:api
+      - run: pnpm --filter dia-gachas-api test:e2e
       - run: pnpm test:web
       - run: pnpm lint
       - run: pnpm test:scripts

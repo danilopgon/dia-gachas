@@ -22,7 +22,8 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 ## 🛠 Stack técnico
 
 - **Frontend**: Angular 19 (PWA) · Tailwind CSS v4 · PrimeNG · GSAP
-- **Backend**: NestJS 11 · Prisma 7 · MariaDB/MySQL
+- **Backend**: NestJS 11
+- **Municipios**: catálogo estático en `frontend/public/data/municipios.json`
 - **Datos meteorológicos**: API oficial de AEMET
 
 ---
@@ -45,11 +46,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
    pnpm install
    ```
 
-3. **Prepara la base de datos**
-
-   Necesitas una instancia de MySQL o MariaDB corriendo (local o Docker) con una base de datos creada.
-
-4. **Configura las variables de entorno**
+3. **Configura las variables de entorno**
 
    Copia la plantilla y rellena tus valores:
 
@@ -58,20 +55,13 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
    ```
 
    ```env
-   DATABASE_URL=mysql://root:root@localhost:3306/db
    AEMET_API_KEY=tu_clave_de_aemet
    CORS_ORIGIN=http://localhost:4200
    ```
 
    Consigue tu clave de AEMET en [opendata.aemet.es](https://opendata.aemet.es).
 
-5. **Ejecuta las migraciones de Prisma**
-
-   ```bash
-   pnpm --filter dia-gachas-api prisma:migrate
-   ```
-
-6. **Levanta el entorno en desarrollo**
+4. **Levanta el entorno en desarrollo**
 
    ```bash
    pnpm dev
@@ -89,7 +79,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 dia-de-gachas/
 │
 ├── frontend/     → Aplicación Angular
-├── backend/      → API en NestJS + Prisma
+├── backend/      → API en NestJS
 ```
 ---
 

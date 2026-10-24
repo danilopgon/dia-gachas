@@ -5,7 +5,6 @@
     "dev": "concurrently -n BACKEND,FRONTEND -c green,blue \"pnpm dev:api\" \"pnpm dev:web\"",
     "dev:api": "pnpm --filter dia-gachas-api start:dev",
     "dev:web": "pnpm --filter dia-gachas-web start",
-    "prisma:generate": "pnpm --filter dia-gachas-api prisma:generate",
     "build:api": "pnpm --filter dia-gachas-api build",
     "build:web": "pnpm --filter dia-gachas-web build",
     "build": "pnpm build:api && pnpm build:web",
