@@ -14,7 +14,7 @@ interface MunicipiosCatalog {
 
 interface IndexedCity {
   city: ICity;
-  normalizedName: string;
+  normalizedNames: string[];
 }
 
 // Rango de una coincidencia: empieza por la consulta, la contiene al inicio de una palabra o en cualquier punto.
@@ -25,6 +25,25 @@ function matchRank(normalizedName: string, query: string): number {
   if (WORD_SEPARATORS.some(separator => normalizedName.includes(separator + query))) return 1;
   if (normalizedName.includes(query)) return 2;
   return -1;
+}
+
+// El catálogo oficial pone el artículo al final («Roda, La», «Alfàs del Pi, l'»); se indexa también en orden natural.
+const ARTICLE_SUFFIX = /^(.+), (el|la|los|las|l'|es|sa|ses|les|els|a|o|as|os)$/i;
+
+function searchNames(name: string): string[] {
+  const names = [normalizeSearch(name)];
+  for (const officialName of name.split('/')) {
+    const match = ARTICLE_SUFFIX.exec(officialName.trim());
+    if (!match) continue;
+    const [, base, article] = match;
+    names.push(normalizeSearch(article.endsWith("'") ? article + base : `${article} ${base}`));
+  }
+  return names;
+}
+
+function bestRank(names: string[], query: string): number {
+  const ranks = names.map(name => matchRank(name, query)).filter(rank => rank >= 0);
+  return ranks.length ? Math.min(...ranks) : -1;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -48,7 +67,7 @@ export class MunicipiosCatalogService {
     const cities = await this.load();
 
     return cities
-      .map(entry => ({ entry, rank: matchRank(entry.normalizedName, normalizedQuery) }))
+      .map(entry => ({ entry, rank: bestRank(entry.normalizedNames, normalizedQuery) }))
       .filter(({ rank }) => rank >= 0)
       .sort(
         (a, b) =>
@@ -64,7 +83,7 @@ export class MunicipiosCatalogService {
     const provinces = new Map(data.provinces.map(province => [province.id, province]));
     return data.cities.map(({ id, name, provinceId }) => ({
       city: { id, name, province: provinces.get(provinceId) ?? { id: provinceId, name: '' } },
-      normalizedName: normalizeSearch(name),
+      normalizedNames: searchNames(name),
     }));
   }
 }

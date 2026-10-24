@@ -15,6 +15,7 @@ const catalog = {
   provinces: [
     { id: '01', name: 'Araba Álava' },
     { id: '02', name: 'Albacete' },
+    { id: '03', name: 'Alicante/Alacant' },
     { id: '05', name: 'Ávila' },
     { id: '16', name: 'Cuenca' },
     { id: '28', name: 'Madrid' },
@@ -25,6 +26,9 @@ const catalog = {
     { id: '02003', name: 'Albacete', provinceId: '02' },
     { id: '02050', name: 'Calbarro', provinceId: '02' },
     { id: '02060', name: 'Villa de Albero', provinceId: '02' },
+    { id: '02069', name: 'Roda, La', provinceId: '02' },
+    { id: '03011', name: "Alfàs del Pi, l'", provinceId: '03' },
+    { id: '03105', name: 'Pinoso, el/Pinoso', provinceId: '03' },
     { id: '05019', name: 'Ávila', provinceId: '05' },
     { id: '16058', name: 'Castejón', provinceId: '16' },
     { id: '31070', name: 'Castejón', provinceId: '31' },
@@ -69,6 +73,19 @@ describe('MunicipiosCatalogService', () => {
   it('ordena primero los que empiezan por la consulta, luego inicio de palabra y luego el resto', async () => {
     const result = await searchWithCatalog('alb');
     expect(result.map(c => c.name)).toEqual(['Albacete', 'Villa de Albero', 'Calbarro']);
+  });
+
+  it('encuentra los nombres con el artículo al final escritos en orden natural', async () => {
+    expect((await searchWithCatalog('la roda')).map(c => c.name)).toEqual(['Roda, La']);
+  });
+
+  it('sigue encontrando esos nombres por su forma del catálogo', async () => {
+    expect((await searchWithCatalog('roda')).map(c => c.name)).toEqual(['Roda, La']);
+  });
+
+  it('une el artículo apostrofado sin espacio y lo busca en cada nombre oficial', async () => {
+    expect((await searchWithCatalog("l'alfas")).map(c => c.name)).toEqual(["Alfàs del Pi, l'"]);
+    expect((await service.search('el pinoso')).map(c => c.name)).toEqual(['Pinoso, el/Pinoso']);
   });
 
   it('devuelve como máximo 20 sugerencias', async () => {
