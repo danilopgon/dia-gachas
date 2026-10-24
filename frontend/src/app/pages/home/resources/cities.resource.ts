@@ -1,13 +1,9 @@
-import { Injectable, Signal, effect, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { resource } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { ICity } from '../../../core/models/city.interface';
-import { firstValueFrom } from 'rxjs';
+import { Injectable, Signal, effect, inject, resource, signal } from '@angular/core';
+import { MunicipiosCatalogService } from './municipios-catalog.service';
 
 @Injectable({ providedIn: 'root' })
 export class CitiesResource {
-  private http = inject(HttpClient);
+  private catalog = inject(MunicipiosCatalogService);
 
   createSearchResource(query: Signal<string>) {
     const debounced = signal('');
@@ -29,18 +25,9 @@ export class CitiesResource {
     });
 
     return resource({
-      request: () => debounced(),
-      loader: async ({ request }) => {
-        if (!request) return [];
-
-        const res = await firstValueFrom(
-          this.http.get<{ status: string; data: ICity[] }>(`${environment.BACK_URL}/cities`, {
-            params: { name: request },
-          }),
-        );
-
-        return res.data;
-      },
+      // Sin consulta válida el recurso queda inactivo y no descarga el catálogo.
+      request: () => debounced() || undefined,
+      loader: ({ request }) => this.catalog.search(request),
     });
   }
 }
