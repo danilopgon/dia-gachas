@@ -98,7 +98,7 @@ pnpm lint:fix      # Lint con correcciones automáticas
 ## ☁️ Despliegue
 
 - **Frontend**: Vercel, configurado desde el panel del proyecto (Root Directory `frontend`).
-- **API**: Railway, proyecto `dia-gachas`. La construcción, el healthcheck (`GET /health`) y los cambios que disparan un despliegue están en [`railway.json`](railway.json); la imagen es `backend/Dockerfile`, construida desde la raíz del repo.
+- **API**: Railway, proyecto `dia-gachas`, configurado desde el panel del servicio: imagen `backend/Dockerfile` construida desde la raíz del repo, healthcheck `GET /health` y despliegue solo cuando cambian `backend/**` o los ficheros del workspace (`package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`).
 - **Variables de la API**: `AEMET_API_KEY` y `CORS_ORIGIN` (orígenes separados por comas). `PORT` la pone Railway; en local se usa `4000`. La API no arranca si falta alguna obligatoria.
 
 ---
