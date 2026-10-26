@@ -22,9 +22,10 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 ## 🛠 Stack técnico
 
 - **Frontend**: Angular 19 (PWA) · Tailwind CSS v4 · PrimeNG · GSAP
-- **Backend**: NestJS 11
+- **Backend**: NestJS 11 en Railway
+- **Ingesta**: comando NestJS ejecutado por Railway Cron; snapshots en un Railway Bucket (S3, `@aws-sdk/client-s3`)
 - **Municipios**: catálogo estático en `frontend/public/data/municipios.json`
-- **Datos meteorológicos**: API oficial de AEMET
+- **Datos meteorológicos**: API oficial de AEMET (endpoint agregado de todos los municipios)
 
 ---
 
@@ -73,13 +74,36 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 ---
 
+## 🧭 Arquitectura
+
+```text
+                     build time
+repo localidades-provincias-aemet ──▶ scripts/municipios ──▶ frontend/public/data/municipios.json
+
+                     cada 3 h (Railway Cron, 10 */3 * * * UTC)
+AEMET /municipio/diaria/todos (tar.gz) ──▶ ingesta NestJS ──▶ Railway Bucket
+                                            · nombres del catálogo      snapshots/<fecha>.json.gz
+                                            · valida cobertura ≥ 99 %   latest.json (solo avanza)
+
+                     runtime
+Angular PWA (Vercel) ──▶ búsqueda local en municipios.json
+                    └──▶ GET /weather/:code ──▶ NestJS (Railway)
+```
+
+Ahora mismo la API sigue consultando AEMET por cada municipio. Leer el último snapshot del bucket es el siguiente paso de la migración (issue #22).
+
+Si la ingesta falla (AEMET caído, `429`, datos incompletos), `latest.json` no cambia: se sigue sirviendo el último snapshot válido.
+
+---
+
 ## 📦 Estructura del proyecto
 
 ```
 dia-de-gachas/
 │
 ├── frontend/     → Aplicación Angular
-├── backend/      → API en NestJS
+├── backend/      → API e ingesta en NestJS
+├── scripts/      → Generador del catálogo de municipios
 ```
 ---
 
@@ -91,6 +115,7 @@ pnpm test:web      # Tests del frontend
 pnpm build         # Build completo (api + web)
 pnpm lint          # Lint de ambos paquetes (sin modificar ficheros)
 pnpm lint:fix      # Lint con correcciones automáticas
+pnpm --filter dia-gachas-api ingest   # Ingesta manual (tras `pnpm build`; necesita las variables del bucket)
 ```
 
 ---
@@ -98,8 +123,12 @@ pnpm lint:fix      # Lint con correcciones automáticas
 ## ☁️ Despliegue
 
 - **Frontend**: Vercel, configurado desde el panel del proyecto (Root Directory `frontend`).
-- **API**: Railway, proyecto `dia-gachas`, configurado desde el panel del servicio: imagen `backend/Dockerfile` construida desde la raíz del repo, healthcheck `GET /health` y despliegue solo cuando cambian `backend/**` o los ficheros del workspace (`package.json`, `pnpm-lock.yaml`, `pnpm-workspace.yaml`).
+- **Railway**: proyecto `dia-gachas`, configurado desde el panel de cada servicio. Los dos servicios usan la imagen `backend/Dockerfile`, construida desde la raíz del repo, y solo se despliegan cuando cambian `backend/**`, `frontend/public/data/municipios.json` o los ficheros del workspace.
+  - **`api`**: `node dist/main`, healthcheck `GET /health`.
+  - **`ingest`**: cron `10 */3 * * *` (UTC) con `node dist/ingest`. Termina con código 0 si publica o si ya había un snapshot más reciente, y con código 1 en cualquier otro caso.
+  - **Bucket `snapshots`**: guarda los snapshots durante 7 días.
 - **Variables de la API**: `AEMET_API_KEY` y `CORS_ORIGIN` (orígenes separados por comas). `PORT` la pone Railway; en local se usa `4000`. La API no arranca si falta alguna obligatoria.
+- **Variables de la ingesta**: `AEMET_API_KEY` y las del bucket (`BUCKET`, `ENDPOINT`, `REGION`, `ACCESS_KEY_ID`, `SECRET_ACCESS_KEY`), como referencias de Railway. `MUNICIPIOS_PATH` es `/app/data/municipios.json` dentro de la imagen.
 
 ---
 
