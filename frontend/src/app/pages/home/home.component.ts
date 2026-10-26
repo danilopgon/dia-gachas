@@ -52,14 +52,15 @@ export class HomeComponent implements AfterViewInit {
   }
 
   private configureGsapAnimations(): void {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches) return;
     gsap.fromTo(
       '#fondo-sol',
-      { scale: 1.2, y: -60 },
+      { scale: 1.05, y: -30 },
       { scale: 1, y: 0, duration: 1.3, ease: 'power2.out' },
     );
 
     gsap.to('#fondo-sol', {
-      y: '+=30',
+      y: '+=12',
       repeat: -1,
       yoyo: true,
       duration: 2.5,
@@ -69,14 +70,14 @@ export class HomeComponent implements AfterViewInit {
 
     gsap.fromTo(
       '#fondo-colinas',
-      { scale: 1.2, y: 40 },
-      { scale: 1, y: 150, duration: 1.4, ease: 'power2.out' },
+      { scale: 1.06, y: 40 },
+      { scale: 1, y: 0, duration: 1.4, ease: 'power2.out' },
     );
 
     gsap.fromTo(
       '#fondo-colinas-frente',
-      { scale: 1.2, y: -40 },
-      { scale: 1, y: 130, duration: 1.5, ease: 'power2.out' },
+      { scale: 1.06, y: 40 },
+      { scale: 1, y: 0, duration: 1.5, ease: 'power2.out' },
     );
   }
 

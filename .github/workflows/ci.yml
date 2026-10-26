@@ -28,6 +28,8 @@ jobs:
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
+      - run: pnpm assets:check
+      - run: pnpm assets:icons:check
       - run: pnpm build
       - run: pnpm test:api
       - run: pnpm --filter dia-gachas-api test:e2e

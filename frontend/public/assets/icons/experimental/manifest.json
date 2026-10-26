@@ -1,0 +1,27 @@
+{
+  "sun": {
+    "sourceSha256": "34209d241da51b291525ca8b6b8f24f3b563e53b328762c1f32fd191d56d7707",
+    "webpSha256": "93426978f2fbc027f540744d6e199b34a101a2b5cca3136124565b7a0aa90441",
+    "bytes": 62424
+  },
+  "cloud": {
+    "sourceSha256": "62e9e8f4a04801793f0cb207a927205e9d2156e4ffeb001b90e86a8ebc2c4126",
+    "webpSha256": "0fba05711b205cc4b6bd10086b0b1556c351d30203e6e124d6d040bbb78fe9b7",
+    "bytes": 33968
+  },
+  "rain": {
+    "sourceSha256": "5f88c840e032a299b691ee798ffa5e0c44b1687e9a6a56e4b156de103eb8fd9c",
+    "webpSha256": "3d7f5c058d699b3926a74103622bae0ae028bf43e455d727a3790c00fd554ee2",
+    "bytes": 56138
+  },
+  "storm": {
+    "sourceSha256": "78d23d2c9aad21ec39417673dac55fd2779e6dcd7c8be0292b79780ba0c03fb7",
+    "webpSha256": "ae7d997a2e6cef8f56dc3cf3b635c4410aedc31f054f62f50a88c911700ca952",
+    "bytes": 45748
+  },
+  "snow": {
+    "sourceSha256": "747475a662f9670be2aed5e1993eccb3cf05829367cd11ecf1b74e0e55631ab2",
+    "webpSha256": "c71a43c439edc0c302e4e0760aa26972a5af8fc5dfe6fe29a496dfb29ce32dc4",
+    "bytes": 47494
+  }
+}

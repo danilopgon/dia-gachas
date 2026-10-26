@@ -1,0 +1,33 @@
+{
+  "sourceSha256": "58a723a427aa9ad2ec5e7917aa96a67c5875ad96a34340e8b0c14939805ed1ea",
+  "files": {
+    "fondo-main-v2.webp": {
+      "width": 1080,
+      "height": 1920,
+      "hasAlpha": false,
+      "bytes": 354940,
+      "sha256": "a47d2d315dced6b2ffc5ff53670fae07cc792c7f818dbcdd812416bfd64e3020"
+    },
+    "fondo-cielo-textured.webp": {
+      "width": 2912,
+      "height": 1632,
+      "hasAlpha": false,
+      "bytes": 375420,
+      "sha256": "de033e22a5994a55ec256c587191e6ec7dd2b8230fa2c09bf0f980fc0e89b7b9"
+    },
+    "fondo-colinas-textured.webp": {
+      "width": 2912,
+      "height": 1632,
+      "hasAlpha": true,
+      "bytes": 142798,
+      "sha256": "b3f87e3999a56a82fbbb8cfa0ba573281cc8d29df3fcf5db7d7e994515848aa6"
+    },
+    "fondo-colinas-frente-textured.webp": {
+      "width": 2912,
+      "height": 1632,
+      "hasAlpha": true,
+      "bytes": 225834,
+      "sha256": "d293c2bfc1ff09d854063e8d5cc71ec133d67b8704eb1dc411688d394e3e126c"
+    }
+  }
+}
