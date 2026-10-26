@@ -150,6 +150,15 @@ describe('buildSnapshot', () => {
     expect(snapshot.towns['04904']).toBeUndefined();
   });
 
+  it('ignora un elaborado con zona horaria o mal formado al elegir el más reciente', () => {
+    const withZone = {
+      ...fixture('01001'),
+      elaborado: '2026-10-27T08:00:00+01:00',
+    };
+    const snapshot = buildSnapshot([fixture('02003'), withZone], catalog, NOW);
+    expect(snapshot.sourceElaborado).toBe('2026-10-26T14:19:08');
+  });
+
   it('usa claves de 5 dígitos y el elaborado más reciente', () => {
     const older = { ...fixture('01001'), elaborado: '2026-10-26T08:00:00' };
     const snapshot = buildSnapshot([fixture('02003'), older], catalog, NOW);
@@ -186,6 +195,15 @@ describe('validateSnapshot', () => {
   it('rechaza un snapshot vacío', () => {
     const snapshot = buildSnapshot([], catalog, NOW);
     expect(validateSnapshot(snapshot).join(' ')).toMatch(/vacío/i);
+  });
+
+  it.each([
+    ['vacío', ''],
+    ['mal formado', '26/10/2026 14:19'],
+    ['en el futuro', '2026-10-26T18:00:00'],
+  ])('rechaza un elaborado %s', (_name, sourceElaborado) => {
+    const snapshot = { ...full(), sourceElaborado };
+    expect(validateSnapshot(snapshot).join(' ')).toMatch(/elaborado/i);
   });
 
   it('rechaza municipios sin exactamente dos días', () => {

@@ -10,6 +10,8 @@ import { SnapshotStore } from '../snapshots/snapshot-store';
 import { SNAPSHOT_STORE } from '../snapshots/snapshots.tokens';
 
 export const REFRESH_INTERVAL_MS = 5 * 60_000;
+/** Una lectura del bucket que tarda más se abandona: nunca bloquea a quien pide una previsión. */
+export const LOAD_TIMEOUT_MS = 10_000;
 export const CLOCK = Symbol('CLOCK');
 
 /**
@@ -39,7 +41,12 @@ export class SnapshotReader implements OnModuleInit {
 
   async current(): Promise<Snapshot | null> {
     const due = this.clock().getTime() - this.checkedAt >= REFRESH_INTERVAL_MS;
-    if (!this.snapshot || due) await this.refresh();
+    // Con un snapshot cargado, el refresco va en segundo plano: un bucket lento no frena a nadie.
+    if (this.snapshot) {
+      if (due) void this.refresh();
+      return this.snapshot;
+    }
+    await this.refresh();
     return this.snapshot;
   }
 
@@ -48,11 +55,27 @@ export class SnapshotReader implements OnModuleInit {
   }
 
   private refresh(): Promise<void> {
-    this.inFlight ??= this.load().finally(() => {
+    this.inFlight ??= this.loadWithTimeout().finally(() => {
       this.checkedAt = this.clock().getTime();
       this.inFlight = null;
     });
     return this.inFlight;
+  }
+
+  private async loadWithTimeout(): Promise<void> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<void>((resolve) => {
+      timer = setTimeout(() => {
+        this.error = `El bucket no respondió en ${LOAD_TIMEOUT_MS / 1000} s (tiempo agotado)`;
+        this.logger.warn(this.error);
+        resolve();
+      }, LOAD_TIMEOUT_MS);
+    });
+    try {
+      await Promise.race([this.load(), timeout]);
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   private async load(): Promise<void> {

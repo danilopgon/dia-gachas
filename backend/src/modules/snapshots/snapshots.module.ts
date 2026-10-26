@@ -21,6 +21,8 @@ import { SNAPSHOT_STORE } from './snapshots.tokens';
             },
             // Los buckets nuevos de Railway usan URLs virtual-hosted.
             forcePathStyle: false,
+            // Sin timeouts el SDK espera indefinidamente a un bucket colgado.
+            requestHandler: { connectionTimeout: 3_000, requestTimeout: 5_000 },
           }),
           config.bucket,
         );

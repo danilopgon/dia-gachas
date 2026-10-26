@@ -3,29 +3,23 @@ import {
   ForecastDay,
   simplifyForecast,
 } from '../../weather/domain/forecast';
+import {
+  ELABORADO_FORMAT,
+  madridDate,
+  madridLocalToUtc,
+  nextDate,
+} from '../../weather/domain/madrid-time';
 import { BulkEntry } from '../aemet-bulk/bulk-entry';
 import { Catalog } from '../catalog/catalog';
 import { Snapshot } from './snapshot';
 
+export { madridDate };
+
 /** Cobertura mínima del catálogo para publicar un snapshot. */
 export const MIN_COVERAGE = 0.99;
 const DAYS = 2;
-
-const madridFormatter = new Intl.DateTimeFormat('en-CA', {
-  timeZone: 'Europe/Madrid',
-});
-
-/** Día siguiente a una fecha YYYY-MM-DD (aritmética de calendario, sin zona horaria). */
-function nextDate(date: string): string {
-  const next = new Date(`${date}T00:00:00Z`);
-  next.setUTCDate(next.getUTCDate() + 1);
-  return next.toISOString().slice(0, 10);
-}
-
-/** Fecha (YYYY-MM-DD) en Europe/Madrid. */
-export function madridDate(now: Date): string {
-  return madridFormatter.format(now);
-}
+// Margen para relojes desajustados entre AEMET y la ingesta.
+const MAX_ELABORADO_AHEAD_MS = 60 * 60_000;
 
 const hasLaunchTemperature = (day: ForecastDay) =>
   (day.temperatura?.dato ?? []).some(
@@ -74,7 +68,13 @@ export function buildSnapshot(
         { town: place.name, province: place.province },
       ),
     );
-    if (entry.elaborado > sourceElaborado) sourceElaborado = entry.elaborado;
+    // Solo cuenta un elaborado con el formato de AEMET (hora local sin zona): otro texto no se compara bien.
+    if (
+      ELABORADO_FORMAT.test(entry.elaborado) &&
+      entry.elaborado > sourceElaborado
+    ) {
+      sourceElaborado = entry.elaborado;
+    }
   }
 
   const missing = [...catalog.towns.keys()].filter((id) => !towns[id]).sort();
@@ -104,6 +104,18 @@ export function validateSnapshot(snapshot: Snapshot): string[] {
   } else if (covered / catalog < MIN_COVERAGE) {
     reasons.push(
       `Cobertura insuficiente: ${covered}/${catalog} (${((covered / catalog) * 100).toFixed(1)} %)`,
+    );
+  }
+
+  const elaborado = madridLocalToUtc(snapshot.sourceElaborado).getTime();
+  if (Number.isNaN(elaborado)) {
+    reasons.push(`Fecha de elaborado no válida: "${snapshot.sourceElaborado}"`);
+  } else if (
+    elaborado >
+    Date.parse(snapshot.generatedAt) + MAX_ELABORADO_AHEAD_MS
+  ) {
+    reasons.push(
+      `Fecha de elaborado en el futuro: ${snapshot.sourceElaborado}`,
     );
   }
 

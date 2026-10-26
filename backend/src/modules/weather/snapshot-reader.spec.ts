@@ -1,6 +1,13 @@
 import { Snapshot } from '../ingest/snapshot/snapshot';
 import { LatestPointer, SnapshotStore } from '../snapshots/snapshot-store';
-import { REFRESH_INTERVAL_MS, SnapshotReader } from './snapshot-reader';
+import {
+  LOAD_TIMEOUT_MS,
+  REFRESH_INTERVAL_MS,
+  SnapshotReader,
+} from './snapshot-reader';
+
+// Deja que terminen los refrescos lanzados en segundo plano.
+const settle = () => new Promise((resolve) => setImmediate(resolve));
 
 const snapshot = (generatedAt: string): Snapshot => ({
   version: 1,
@@ -68,7 +75,10 @@ describe('SnapshotReader', () => {
     store.etag = '"v2"';
     store.latest = snapshot('2026-10-26T18:10:00.000Z');
     advance(REFRESH_INTERVAL_MS);
-    await expect(reader.current()).resolves.toEqual(store.latest);
+    const fresh = store.latest;
+    await reader.current();
+    await settle();
+    await expect(reader.current()).resolves.toEqual(fresh);
   });
 
   it('conserva el último snapshot bueno si el bucket falla', async () => {
@@ -78,6 +88,7 @@ describe('SnapshotReader', () => {
     store.failPointer = true;
     advance(REFRESH_INTERVAL_MS);
     await expect(reader.current()).resolves.toEqual(loaded);
+    await settle();
     expect(reader.lastError()).toContain('bucket caído');
   });
 
@@ -105,9 +116,39 @@ describe('SnapshotReader', () => {
     store.failPointer = true;
     advance(REFRESH_INTERVAL_MS);
     await reader.current();
+    await settle();
     store.failPointer = false;
     advance(REFRESH_INTERVAL_MS);
     await reader.current();
+    await settle();
     expect(reader.lastError()).toBeNull();
+  });
+
+  it('no hace esperar a las peticiones si el bucket se cuelga y ya hay snapshot', async () => {
+    const { reader, store, advance } = setup();
+    await reader.onModuleInit();
+    const loaded = store.latest;
+    store.readPointer.mockImplementation(() => new Promise(() => undefined));
+    advance(REFRESH_INTERVAL_MS);
+    const result = await Promise.race([
+      reader.current(),
+      new Promise((resolve) => setTimeout(() => resolve('bloqueado'), 50)),
+    ]);
+    expect(result).toEqual(loaded);
+  });
+
+  it(`abandona una lectura colgada a los ${LOAD_TIMEOUT_MS / 1000} s`, async () => {
+    jest.useFakeTimers();
+    try {
+      const store = new FakeStore();
+      store.readPointer.mockImplementation(() => new Promise(() => undefined));
+      const { reader } = setup(store);
+      const init = reader.onModuleInit();
+      await jest.advanceTimersByTimeAsync(LOAD_TIMEOUT_MS);
+      await expect(init).resolves.toBeUndefined();
+      expect(reader.lastError()).toMatch(/tiempo/i);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });

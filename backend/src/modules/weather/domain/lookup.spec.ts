@@ -3,6 +3,7 @@ import { Snapshot } from '../../ingest/snapshot/snapshot';
 import { SimplifiedData } from '../models/simplified-data';
 import {
   lookupForecast,
+  lookupFreshness,
   madridLocalToUtc,
   STALE_AFTER_HOURS,
   UNAVAILABLE_AFTER_HOURS,
@@ -157,4 +158,18 @@ describe('lookupForecast', () => {
       reason: 'no-snapshot',
     });
   });
+
+  it.each(['', 'basura', '2026-10-27T08:00:00+01:00'])(
+    'trata un elaborado mal formado (%p) como datos caducados, sin lanzar',
+    (sourceElaborado) => {
+      const broken = { ...SNAPSHOT, sourceElaborado };
+      const now = at('2026-10-26T15:00:00Z');
+      expect(lookupForecast('02003', broken, catalog, now)).toEqual({
+        kind: 'unavailable',
+        reason: 'too-old',
+      });
+      expect(() => lookupFreshness(broken, now)).not.toThrow();
+      expect(lookupFreshness(broken, now).stale).toBe(true);
+    },
+  );
 });
