@@ -6,9 +6,11 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { gunzipSync, gzipSync } from 'node:zlib';
-import { Snapshot } from '../snapshot/snapshot';
+import { Snapshot } from '../ingest/snapshot/snapshot';
 
 export const LATEST_KEY = 'latest.json';
+export const RUN_STATUS_KEY = 'status/last-run.json';
+const PROBE_KEY = 'probe/conditional.json';
 const SNAPSHOTS_PREFIX = 'snapshots/';
 
 export interface LatestPointer {
@@ -20,11 +22,30 @@ export interface LatestPointer {
 
 export type PublishOutcome = 'published' | 'superseded';
 
+/** Resultado de la última ejecución de la ingesta, también si falló o se rechazó. */
+export interface RunStatus {
+  outcome: 'published' | 'superseded' | 'rejected' | 'failed';
+  finishedAt: string;
+  durationMs: number;
+  covered?: number;
+  missing?: number;
+  key?: string;
+  failure?: string;
+  reasons?: string[];
+  aemetKeyExpiresAt?: string;
+  conditionalWrites?: 'supported' | 'ignored' | 'unknown';
+}
+
 export interface SnapshotStore {
   publish(
     snapshot: Snapshot,
   ): Promise<{ outcome: PublishOutcome; key: string }>;
   readLatest(): Promise<Snapshot | null>;
+  readPointer(): Promise<{ pointer: LatestPointer; etag: string } | null>;
+  writeRunStatus(status: RunStatus): Promise<void>;
+  readRunStatus(): Promise<RunStatus | null>;
+  /** Comprueba si el bucket respeta If-None-Match escribiendo dos veces un objeto de prueba. */
+  probeConditionalWrites(): Promise<'supported' | 'ignored'>;
   /** Borra los snapshots más antiguos que la retención, salvo el vigente; devuelve cuántos. */
   prune(now: Date, retentionDays: number): Promise<number>;
 }
@@ -34,10 +55,15 @@ const isNotFound = (error: unknown) =>
   (error as { $metadata?: { httpStatusCode?: number } })?.$metadata
     ?.httpStatusCode === 404;
 
+// 412, o 409 cuando dos escrituras condicionales compiten (AWS: ConditionalRequestConflict).
 const isPreconditionFailed = (error: unknown) =>
-  (error as Error)?.name === 'PreconditionFailed' ||
-  (error as { $metadata?: { httpStatusCode?: number } })?.$metadata
-    ?.httpStatusCode === 412;
+  ['PreconditionFailed', 'ConditionalRequestConflict'].includes(
+    (error as Error)?.name,
+  ) ||
+  [409, 412].includes(
+    (error as { $metadata?: { httpStatusCode?: number } })?.$metadata
+      ?.httpStatusCode ?? 0,
+  );
 
 // Primero manda el dato de AEMET; con el mismo dato, la ingesta más reciente.
 const isNewer = (snapshot: Snapshot, current: LatestPointer) =>
@@ -143,7 +169,7 @@ export class S3SnapshotStore implements SnapshotStore {
     return deleted;
   }
 
-  private async readPointer(): Promise<{
+  async readPointer(): Promise<{
     pointer: LatestPointer;
     etag: string;
   } | null> {
@@ -161,6 +187,58 @@ export class S3SnapshotStore implements SnapshotStore {
     } catch (error) {
       if (isNotFound(error)) return null;
       throw error;
+    }
+  }
+
+  async writeRunStatus(status: RunStatus): Promise<void> {
+    await this.client.send(
+      new PutObjectCommand({
+        Bucket: this.bucket,
+        Key: RUN_STATUS_KEY,
+        Body: JSON.stringify(status),
+        ContentType: 'application/json',
+      }),
+    );
+  }
+
+  async readRunStatus(): Promise<RunStatus | null> {
+    try {
+      return JSON.parse(
+        (await this.getBytes(RUN_STATUS_KEY)).toString('utf8'),
+      ) as RunStatus;
+    } catch (error) {
+      if (isNotFound(error)) return null;
+      throw error;
+    }
+  }
+
+  async probeConditionalWrites(): Promise<'supported' | 'ignored'> {
+    const put = () =>
+      this.client.send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: PROBE_KEY,
+          Body: '{}',
+          ContentType: 'application/json',
+          IfNoneMatch: '*',
+        }),
+      );
+    await this.client.send(
+      new DeleteObjectCommand({ Bucket: this.bucket, Key: PROBE_KEY }),
+    );
+    try {
+      await put();
+      try {
+        await put();
+        return 'ignored';
+      } catch (error) {
+        if (isPreconditionFailed(error)) return 'supported';
+        throw error;
+      }
+    } finally {
+      await this.client.send(
+        new DeleteObjectCommand({ Bucket: this.bucket, Key: PROBE_KEY }),
+      );
     }
   }
 

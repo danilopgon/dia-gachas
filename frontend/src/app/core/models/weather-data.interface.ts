@@ -9,3 +9,15 @@ export interface IWeatherData {
   skyStatus: string;
   gachasLevel?: GachasLevel;
 }
+
+export interface IWeatherMeta {
+  updatedAt: string;
+  ageHours: number;
+  stale: boolean;
+}
+
+export interface IWeatherResponse {
+  status: 'ok';
+  data: IWeatherData[];
+  meta?: IWeatherMeta;
+}

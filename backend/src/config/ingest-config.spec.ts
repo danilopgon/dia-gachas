@@ -1,4 +1,4 @@
-import { loadIngestConfig } from './ingest-config';
+import { jwtExpiresAt, loadIngestConfig } from './ingest-config';
 
 const env = {
   AEMET_API_KEY: 'clave-secreta',
@@ -42,4 +42,26 @@ describe('loadIngestConfig', () => {
     for (const value of Object.values(env))
       expect(message).not.toContain(value);
   });
+});
+
+describe('jwtExpiresAt', () => {
+  const jwt = (payload: object) =>
+    [
+      'e30',
+      Buffer.from(JSON.stringify(payload)).toString('base64url'),
+      'firma',
+    ].join('.');
+
+  it('devuelve la caducidad de un JWT en ISO', () => {
+    expect(jwtExpiresAt(jwt({ exp: 1801663225 }))).toBe(
+      '2027-02-03T14:00:25.000Z',
+    );
+  });
+
+  it.each(['no-es-un-jwt', jwt({ sub: 'x' }), 'a.%%%.c'])(
+    'devuelve undefined con %s',
+    (token) => {
+      expect(jwtExpiresAt(token)).toBeUndefined();
+    },
+  );
 });

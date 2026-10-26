@@ -31,6 +31,11 @@ describe('readTarGz', () => {
     ).toThrow(InvalidBulkError);
   });
 
+  it('lanza InvalidBulkError si la descompresión supera el límite', () => {
+    const buffer = makeTarGz({ 'grande.json': 'x'.repeat(10_000) });
+    expect(() => readTarGz(buffer, 4_096)).toThrow(InvalidBulkError);
+  });
+
   it('lanza InvalidBulkError si no es un gzip', () => {
     expect(() => readTarGz(Buffer.from('<html>error</html>'))).toThrow(
       InvalidBulkError,

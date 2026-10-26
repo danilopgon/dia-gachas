@@ -6,7 +6,7 @@ import {
 } from './aemet-bulk/aemet-bulk.client';
 import { Catalog, loadCatalog } from './catalog/catalog';
 import { IngestService } from './ingest.service';
-import { SnapshotStore } from './store/snapshot-store';
+import { SnapshotStore } from '../snapshots/snapshot-store';
 
 const NOW = new Date('2026-10-26T15:00:00Z');
 
@@ -35,7 +35,15 @@ function setup({
     readLatest: jest.fn(),
     prune: jest.fn(),
   } as unknown as SnapshotStore;
-  return { service: new IngestService(client, store, catalog), store };
+  return {
+    service: new IngestService(
+      client,
+      store,
+      catalog,
+      '2027-02-03T14:00:25.000Z',
+    ),
+    store,
+  };
 }
 
 describe('IngestService', () => {
@@ -52,6 +60,13 @@ describe('IngestService', () => {
     expect(store.publish).toHaveBeenCalledTimes(1);
     const snapshot = (store.publish as jest.Mock).mock.calls[0][0];
     expect(snapshot.towns['01001'][0].town).toBe('Alegría-Dulantzi');
+  });
+
+  it('incluye la caducidad de la clave de AEMET en el resultado', async () => {
+    const { service } = setup();
+    await expect(service.run(NOW)).resolves.toMatchObject({
+      aemetKeyExpiresAt: '2027-02-03T14:00:25.000Z',
+    });
   });
 
   it('informa cuando otro snapshot más reciente ya estaba publicado', async () => {

@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ThrottlerModule } from '@nestjs/throttler';
-import { WeatherModule } from './modules/weather/weather.module';
 import { HealthModule } from './modules/health/health.module';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { StatusModule } from './modules/status/status.module';
+import { WeatherModule } from './modules/weather/weather.module';
 
 @Module({
   imports: [
@@ -12,19 +10,9 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       isGlobal: true,
       envFilePath: ['.env'],
     }),
-    ThrottlerModule.forRoot({
-      throttlers: [
-        {
-          ttl: 60000,
-          limit: 10,
-        },
-      ],
-    }),
-    CacheModule.register({ isGlobal: true, ttl: 3600 * 1000, max: 200 }),
     WeatherModule,
     HealthModule,
+    StatusModule,
   ],
-  controllers: [],
-  providers: [{ provide: APP_INTERCEPTOR, useClass: CacheInterceptor }],
 })
 export class AppModule {}

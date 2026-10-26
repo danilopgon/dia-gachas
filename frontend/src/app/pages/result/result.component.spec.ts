@@ -4,16 +4,21 @@ import { WeatherResource } from './resources/weather.resource';
 import { MessageService } from 'primeng/api';
 import { GachasLevel } from '../../core/enums/gachas-level.enum';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+import { WeatherLoadError } from './resources/weather.resource';
 
 let mockWeatherValue: any[] = [];
+let mockMeta: { ageHours: number; stale: boolean } | undefined;
+let mockError: unknown = undefined;
 
 jest.mock('./resources/weather.resource', () => ({
+  WeatherLoadError: jest.requireActual('./resources/weather.resource').WeatherLoadError,
   WeatherResource: jest.fn().mockImplementation(() => ({
     createWeatherResource: () => ({
-      value: () => mockWeatherValue,
+      value: () =>
+        mockWeatherValue?.length ? { days: mockWeatherValue, meta: mockMeta } : undefined,
       isLoading: () => false,
       hasValue: () => !!mockWeatherValue?.length,
-      error: () => false,
+      error: () => mockError,
     }),
   })),
 }));
@@ -35,6 +40,8 @@ describe('ResultComponent', () => {
 
   beforeEach(() => {
     mockWeatherValue = [];
+    mockMeta = undefined;
+    mockError = undefined;
     TestBed.configureTestingModule({
       imports: [ResultComponent],
       providers: [
@@ -166,5 +173,51 @@ describe('ResultComponent', () => {
     expect(mockClipboard.writeText).toHaveBeenCalledWith(
       expect.stringContaining('nivel épico de gachas'),
     );
+  });
+
+  describe('avisos', () => {
+    const albacete = {
+      town: 'Albacete',
+      province: 'Albacete',
+      date: '2026-10-26',
+      launchTemperature: 21,
+      launchTimeRainProbability: 0,
+      skyStatus: 'Nubes altas',
+      gachasLevel: GachasLevel.LOW,
+    };
+    const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
+    const render = () => {
+      fixture = TestBed.createComponent(ResultComponent);
+      fixture.detectChanges();
+    };
+
+    it('avisa cuando los datos son antiguos', () => {
+      mockWeatherValue = [albacete];
+      mockMeta = { ageHours: 7.6, stale: true };
+      render();
+      expect(text()).toContain(
+        'Datos de hace 8 horas: AEMET aún no ha publicado una previsión más reciente.',
+      );
+    });
+
+    it('no avisa con datos recientes', () => {
+      mockWeatherValue = [albacete];
+      mockMeta = { ageHours: 1.7, stale: false };
+      render();
+      expect(text()).not.toContain('Datos de hace');
+    });
+
+    it.each([
+      ['not-found', 'No encontramos ese municipio.'],
+      [
+        'unavailable',
+        'Ahora mismo no hay previsión para este municipio. Vuelve a intentarlo en un rato.',
+      ],
+      ['network', 'No se ha podido conectar. Revisa tu conexión.'],
+    ] as const)('explica el error %s', (kind, message) => {
+      mockError = new WeatherLoadError(kind);
+      render();
+      expect(text()).toContain(message);
+    });
   });
 });

@@ -1,11 +1,5 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-
-export class WeatherRequest {
-  @IsString()
-  @IsNotEmpty()
+/** Cuerpo de `POST /weather`: el código de municipio partido en provincia y localidad. */
+export interface WeatherRequest {
   townCode: string;
-
-  @IsString()
-  @IsNotEmpty()
   provinceCode: string;
 }

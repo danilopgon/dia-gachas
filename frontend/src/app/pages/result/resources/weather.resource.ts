@@ -1,8 +1,35 @@
 import { effect, inject, Injectable, resource, signal, Signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { IWeatherData } from '../../../core/models/weather-data.interface';
+import {
+  IWeatherData,
+  IWeatherMeta,
+  IWeatherResponse,
+} from '../../../core/models/weather-data.interface';
 import { firstValueFrom } from 'rxjs';
+
+export type WeatherErrorKind = 'not-found' | 'unavailable' | 'network';
+
+/** Error de la previsión con su causa, para mostrar un mensaje adecuado. */
+export class WeatherLoadError extends Error {
+  constructor(readonly kind: WeatherErrorKind) {
+    super(kind);
+    this.name = 'WeatherLoadError';
+  }
+}
+
+export interface WeatherResult {
+  days: IWeatherData[];
+  meta?: IWeatherMeta;
+}
+
+function toWeatherError(error: unknown): WeatherLoadError {
+  if (error instanceof HttpErrorResponse) {
+    if (error.status === 0) return new WeatherLoadError('network');
+    if (error.status === 404) return new WeatherLoadError('not-found');
+  }
+  return new WeatherLoadError('unavailable');
+}
 
 @Injectable({ providedIn: 'root' })
 export class WeatherResource {
@@ -29,24 +56,20 @@ export class WeatherResource {
 
     return resource({
       request: () => debounced(),
-      loader: async ({ request }) => {
+      loader: async ({ request }): Promise<WeatherResult | null> => {
         if (!request) return null;
 
+        let res: IWeatherResponse;
         try {
-          const res = await firstValueFrom(
-            this.http.get<{ status: string; data: IWeatherData[] }>(
-              `${environment.BACK_URL}/weather/${request}`,
-            ),
+          res = await firstValueFrom(
+            this.http.get<IWeatherResponse>(`${environment.BACK_URL}/weather/${request}`),
           );
-
-          if (res.status !== 'ok') {
-            throw new Error();
-          }
-
-          return res.data;
-        } catch {
-          throw new Error();
+        } catch (error) {
+          throw toWeatherError(error);
         }
+
+        if (res.status !== 'ok') throw new WeatherLoadError('unavailable');
+        return { days: res.data, meta: res.meta };
       },
     });
   }
