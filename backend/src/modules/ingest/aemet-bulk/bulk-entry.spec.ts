@@ -58,6 +58,16 @@ describe('parseBulkEntry', () => {
     expect(today.temperatura?.dato).toEqual([{ hora: 12, value: 7 }]);
   });
 
+  it('ignora una descripción del cielo que no es texto (elemento XML vacío)', () => {
+    const entry = JSON.parse(raw('02003').toString());
+    entry.root.prediccion.dia[0].estado_cielo[6].descripcion = {};
+    const [today] = parseBulkEntry(Buffer.from(JSON.stringify(entry)))!.days;
+    expect(() =>
+      simplifyForecast([today], { town: 'A', province: 'A' }),
+    ).not.toThrow();
+    expect(today.estadoCielo?.[6].descripcion).toBeUndefined();
+  });
+
   it.each(['{', '{}', '{"root":{}}', '{"root":{"id":"02003"}}'])(
     'devuelve null con una entrada inválida (%s)',
     (text) => {

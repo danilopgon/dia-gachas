@@ -68,16 +68,42 @@ describe('buildSnapshot', () => {
   });
 
   it('descarta los días anteriores a hoy en Madrid al cambiar de día (00:30 en invierno, UTC+1)', () => {
+    const entry = fixture('02003');
+    // Se da al tercer día temperaturas por horas, como haría un agregado ya regenerado.
+    entry.days[2] = {
+      ...entry.days[2],
+      temperatura: {
+        dato: [
+          { hora: 12, value: 15 },
+          { hora: 18, value: 11 },
+        ],
+      },
+    };
     const snapshot = buildSnapshot(
-      [fixture('02003')],
+      [entry],
       catalog,
       new Date('2026-10-26T23:30:00Z'),
     );
     expect(snapshot.today).toBe('2026-10-27');
-    expect(snapshot.towns['02003'].map((d) => d.date)).toEqual([
-      '2026-10-27',
-      '2026-10-28',
+    expect(
+      snapshot.towns['02003'].map((d) => [d.date, d.launchTemperature]),
+    ).toEqual([
+      ['2026-10-27', expect.any(Number)],
+      ['2026-10-28', 13],
     ]);
+  });
+
+  it('deja como ausente un municipio si mañana no trae temperaturas por horas', () => {
+    // A las 00:10 de Madrid el agregado aún es el del día anterior: el nuevo «mañana» es el
+    // tercer día del fichero, que solo trae máximas y mínimas.
+    const snapshot = buildSnapshot(
+      [fixture('02003')],
+      catalog,
+      new Date('2026-10-26T23:10:00Z'),
+    );
+    expect(snapshot.today).toBe('2026-10-27');
+    expect(snapshot.towns['02003']).toBeUndefined();
+    expect(snapshot.stats.missing).toContain('02003');
   });
 
   it('deja como ausente un municipio cuya previsión no incluye hoy', () => {

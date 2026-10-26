@@ -1,5 +1,6 @@
 import {
   assignGachasLevel,
+  ForecastDay,
   simplifyForecast,
 } from '../../weather/domain/forecast';
 import { BulkEntry } from '../aemet-bulk/bulk-entry';
@@ -18,6 +19,11 @@ const madridFormatter = new Intl.DateTimeFormat('en-CA', {
 export function madridDate(now: Date): string {
   return madridFormatter.format(now);
 }
+
+const hasLaunchTemperature = (day: ForecastDay) =>
+  (day.temperatura?.dato ?? []).some(
+    (d) => (d.hora === 12 || d.hora === 18) && Number.isFinite(d.value),
+  );
 
 export function buildSnapshot(
   entries: (BulkEntry | null)[],
@@ -42,8 +48,13 @@ export function buildSnapshot(
     }
 
     // Se descartan los días ya pasados en Madrid; si hoy no está, el municipio queda sin previsión.
-    const days = entry.days.filter((day) => day.fecha.slice(0, 10) >= today);
+    const days = entry.days
+      .filter((day) => day.fecha.slice(0, 10) >= today)
+      .slice(0, DAYS);
     if (days[0]?.fecha.slice(0, 10) !== today) continue;
+    // Los días lejanos del agregado solo traen máximas y mínimas: sin la temperatura de las
+    // 12 o las 18 h las reglas puntuarían 0 °C como frío, así que el municipio queda sin previsión.
+    if (days.length < DAYS || !days.every(hasLaunchTemperature)) continue;
 
     towns[entry.id] = assignGachasLevel(
       simplifyForecast(

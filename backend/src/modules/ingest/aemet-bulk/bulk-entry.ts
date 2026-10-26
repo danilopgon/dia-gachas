@@ -43,7 +43,12 @@ function toForecastDay(raw: any): ForecastDay {
       .map((p) => ({ periodo: p.periodo, value: toNumber(p.valor) })),
     estadoCielo: toArray<RawSlot>(raw.estado_cielo)
       .map(slot)
-      .map((e) => ({ periodo: e.periodo, descripcion: e.descripcion })),
+      .map((e) => ({
+        periodo: e.periodo,
+        // Un elemento XML vacío llega como objeto: no es una descripción.
+        descripcion:
+          typeof e.descripcion === 'string' ? e.descripcion : undefined,
+      })),
   };
 }
 
