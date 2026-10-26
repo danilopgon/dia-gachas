@@ -6,8 +6,13 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { gunzipSync } from 'node:zlib';
-import { Snapshot } from '../snapshot/snapshot';
-import { LATEST_KEY, S3SnapshotStore } from './snapshot-store';
+import { Snapshot } from '../ingest/snapshot/snapshot';
+import {
+  LATEST_KEY,
+  RUN_STATUS_KEY,
+  RunStatus,
+  S3SnapshotStore,
+} from './snapshot-store';
 
 interface StoredObject {
   body: Buffer;
@@ -23,6 +28,7 @@ class FakeS3 {
   private version = 0;
   conditionalSupported = true;
   failNextPointerWithPrecondition = false;
+  failNextPointerWithConflict = false;
 
   async send(command: unknown): Promise<unknown> {
     if (command instanceof PutObjectCommand) return this.put(command.input);
@@ -43,6 +49,13 @@ class FakeS3 {
     this.puts.push(input);
     const key = input.Key!;
     const current = this.objects.get(key);
+    if (key === LATEST_KEY && this.failNextPointerWithConflict) {
+      this.failNextPointerWithConflict = false;
+      throw Object.assign(new Error('ConditionalRequestConflict'), {
+        name: 'ConditionalRequestConflict',
+        $metadata: { httpStatusCode: 409 },
+      });
+    }
     if (key === LATEST_KEY && this.failNextPointerWithPrecondition) {
       this.failNextPointerWithPrecondition = false;
       throw precondition();
@@ -171,6 +184,52 @@ describe('S3SnapshotStore', () => {
     expect(result.outcome).toBe('published');
     expect(s3.puts.filter((p) => p.Key === LATEST_KEY)).toHaveLength(3);
   });
+
+  it('trata un conflicto 409 en el puntero como una condición fallida y vuelve a comparar', async () => {
+    await store.publish(A);
+    s3.failNextPointerWithConflict = true;
+    await expect(store.publish(SAME_SOURCE_LATER)).resolves.toMatchObject({
+      outcome: 'published',
+    });
+  });
+
+  it('readPointer devuelve el puntero y su ETag, o null', async () => {
+    await expect(store.readPointer()).resolves.toBeNull();
+    const { key } = await store.publish(A);
+    await expect(store.readPointer()).resolves.toEqual({
+      pointer: expect.objectContaining({ key }),
+      etag: '"v2"',
+    });
+  });
+
+  it('guarda y lee el estado de la última ejecución', async () => {
+    await expect(store.readRunStatus()).resolves.toBeNull();
+    const status: RunStatus = {
+      outcome: 'rejected',
+      finishedAt: '2026-10-27T00:10:04.000Z',
+      durationMs: 3700,
+      covered: 0,
+      reasons: ['Cobertura insuficiente'],
+      conditionalWrites: 'supported',
+    };
+    await store.writeRunStatus(status);
+    expect(s3.objects.has(RUN_STATUS_KEY)).toBe(true);
+    await expect(store.readRunStatus()).resolves.toEqual(status);
+  });
+
+  it.each([
+    [true, 'supported'],
+    [false, 'ignored'],
+  ] as const)(
+    'detecta si el bucket respeta If-None-Match (soportado: %s)',
+    async (supported, expected) => {
+      s3.conditionalSupported = supported;
+      await expect(store.probeConditionalWrites()).resolves.toBe(expected);
+      expect(
+        [...s3.objects.keys()].filter((k) => k.startsWith('probe/')),
+      ).toEqual([]);
+    },
+  );
 
   it('readLatest devuelve null sin puntero y el snapshot con puntero', async () => {
     await expect(store.readLatest()).resolves.toBeNull();

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { performance } from 'node:perf_hooks';
 import {
   AemetBulkClient,
@@ -8,9 +8,14 @@ import {
 import { parseBulkEntry } from './aemet-bulk/bulk-entry';
 import { InvalidBulkError, readTarGz } from './aemet-bulk/tar';
 import { Catalog } from './catalog/catalog';
-import { AEMET_BULK_CLIENT, CATALOG, SNAPSHOT_STORE } from './ingest.tokens';
+import {
+  AEMET_BULK_CLIENT,
+  AEMET_KEY_EXPIRES_AT,
+  CATALOG,
+  SNAPSHOT_STORE,
+} from './ingest.tokens';
 import { buildSnapshot, validateSnapshot } from './snapshot/build-snapshot';
-import { SnapshotStore } from './store/snapshot-store';
+import { SnapshotStore } from '../snapshots/snapshot-store';
 
 export interface IngestResult {
   outcome: 'published' | 'superseded' | 'rejected' | 'failed';
@@ -20,6 +25,7 @@ export interface IngestResult {
   key?: string;
   reasons?: string[];
   failure?: AemetFailure | 'store';
+  aemetKeyExpiresAt?: string;
 }
 
 /** Descarga el agregado de AEMET, construye el snapshot, lo valida y lo publica. */
@@ -29,9 +35,19 @@ export class IngestService {
     @Inject(AEMET_BULK_CLIENT) private readonly client: AemetBulkClient,
     @Inject(SNAPSHOT_STORE) private readonly store: SnapshotStore,
     @Inject(CATALOG) private readonly catalog: Catalog,
+    @Optional()
+    @Inject(AEMET_KEY_EXPIRES_AT)
+    private readonly aemetKeyExpiresAt?: string,
   ) {}
 
   async run(now: Date = new Date()): Promise<IngestResult> {
+    const result = await this.ingest(now);
+    return this.aemetKeyExpiresAt
+      ? { ...result, aemetKeyExpiresAt: this.aemetKeyExpiresAt }
+      : result;
+  }
+
+  private async ingest(now: Date): Promise<IngestResult> {
     const start = performance.now();
     const elapsed = () => Math.round(performance.now() - start);
 

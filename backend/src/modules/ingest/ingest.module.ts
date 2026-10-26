@@ -1,21 +1,24 @@
-import { S3Client } from '@aws-sdk/client-s3';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { IngestConfig, loadIngestConfig } from '../../config/ingest-config';
+import {
+  IngestConfig,
+  jwtExpiresAt,
+  loadIngestConfig,
+} from '../../config/ingest-config';
+import { SnapshotsModule } from '../snapshots/snapshots.module';
 import { AemetBulkClient } from './aemet-bulk/aemet-bulk.client';
 import { loadCatalog } from './catalog/catalog';
 import {
   AEMET_BULK_CLIENT,
+  AEMET_KEY_EXPIRES_AT,
   CATALOG,
   INGEST_CONFIG,
-  SNAPSHOT_STORE,
 } from './ingest.tokens';
 import { IngestService } from './ingest.service';
-import { S3SnapshotStore } from './store/snapshot-store';
 
 /** Contexto de la ingesta: se levanta sin servidor HTTP desde `dist/ingest`. */
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath: ['.env'] })],
+  imports: [ConfigModule.forRoot({ envFilePath: ['.env'] }), SnapshotsModule],
   providers: [
     { provide: INGEST_CONFIG, useFactory: () => loadIngestConfig(process.env) },
     {
@@ -25,22 +28,9 @@ import { S3SnapshotStore } from './store/snapshot-store';
         new AemetBulkClient(config.aemetApiKey),
     },
     {
-      provide: SNAPSHOT_STORE,
+      provide: AEMET_KEY_EXPIRES_AT,
       inject: [INGEST_CONFIG],
-      useFactory: (config: IngestConfig) =>
-        new S3SnapshotStore(
-          new S3Client({
-            endpoint: config.endpoint,
-            region: config.region,
-            credentials: {
-              accessKeyId: config.accessKeyId,
-              secretAccessKey: config.secretAccessKey,
-            },
-            // Los buckets nuevos de Railway usan URLs virtual-hosted.
-            forcePathStyle: false,
-          }),
-          config.bucket,
-        ),
+      useFactory: (config: IngestConfig) => jwtExpiresAt(config.aemetApiKey),
     },
     {
       provide: CATALOG,

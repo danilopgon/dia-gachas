@@ -18,6 +18,8 @@ const TIMEOUT_MS = 60_000;
 const MAX_ATTEMPTS = 3;
 const MAX_RATE_LIMIT_ATTEMPTS = 2;
 const RETRY_DELAYS_MS = [5_000, 15_000];
+// El límite de AEMET es una ventana deslizante: reintentar a los pocos segundos vuelve a chocar.
+const RATE_LIMIT_DELAY_MS = 60_000;
 
 // AEMET devuelve a veces HTTP 200 con el error real en `estado`.
 function failureFromStatus(status: number): AemetFailure | null {
@@ -51,7 +53,11 @@ export class AemetBulkClient {
               ? MAX_RATE_LIMIT_ATTEMPTS
               : 1;
         if (attempt >= maxAttempts) throw failure;
-        await this.sleep(RETRY_DELAYS_MS[attempt - 1]);
+        await this.sleep(
+          failure.kind === 'rate-limited'
+            ? RATE_LIMIT_DELAY_MS
+            : RETRY_DELAYS_MS[attempt - 1],
+        );
       }
     }
   }

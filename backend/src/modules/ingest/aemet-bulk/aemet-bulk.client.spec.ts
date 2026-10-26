@@ -69,13 +69,14 @@ describe('AemetBulkClient', () => {
     expect(step1Calls()).toBe(1);
   });
 
-  it('reintenta una sola vez un límite de peticiones (estado 429)', async () => {
-    const { client, step1Calls } = setup([
+  it('reintenta una sola vez un límite de peticiones (estado 429) tras 60 s', async () => {
+    const { client, step1Calls, sleeps } = setup([
       json({ estado: 429 }),
       json({ estado: 429 }),
     ]);
     expect(await failure(client.download())).toBe('rate-limited');
     expect(step1Calls()).toBe(2);
+    expect(sleeps).toEqual([60_000]);
   });
 
   it('se recupera de fallos transitorios con pausas de 5 y 15 s', async () => {

@@ -1,41 +1,20 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { IngestModule } from './modules/ingest/ingest.module';
-import { IngestService } from './modules/ingest/ingest.service';
-import { SNAPSHOT_STORE } from './modules/ingest/ingest.tokens';
-import { SnapshotStore } from './modules/ingest/store/snapshot-store';
-
-const RETENTION_DAYS = 7;
+import { runIngest } from './modules/ingest/run-ingest';
 
 /** Ingesta de snapshots de AEMET: la ejecuta Railway Cron y termina al acabar. */
 async function main(): Promise<number> {
-  const logger = new Logger('Ingest');
   const app = await NestFactory.createApplicationContext(IngestModule, {
     logger: ['log', 'warn', 'error'],
   });
-
   try {
-    const now = new Date();
-    const result = await app.get(IngestService).run(now);
-    logger.log(JSON.stringify(result));
-
-    if (result.outcome === 'published') {
-      try {
-        const deleted = await app
-          .get<SnapshotStore>(SNAPSHOT_STORE)
-          .prune(now, RETENTION_DAYS);
-        logger.log(JSON.stringify({ pruned: deleted }));
-      } catch (error) {
-        logger.warn(
-          `No se pudieron borrar snapshots antiguos: ${(error as Error).message}`,
-        );
-      }
-    }
-    return result.outcome === 'published' || result.outcome === 'superseded'
-      ? 0
-      : 1;
+    return await runIngest(app);
   } finally {
-    await app.close();
+    // Un fallo al cerrar no debe tapar el resultado de la ingesta.
+    await app
+      .close()
+      .catch((error: Error) => new Logger('Ingest').warn(error.message));
   }
 }
 

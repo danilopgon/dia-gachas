@@ -9,6 +9,8 @@ export class InvalidBulkError extends Error {
 }
 
 const BLOCK = 512;
+// El tar real ocupa ~71 MB; el límite evita quedarse sin memoria con datos dañados.
+const MAX_OUTPUT_BYTES = 512 * 1024 * 1024;
 
 const field = (header: Buffer, start: number, length: number) =>
   header
@@ -17,10 +19,13 @@ const field = (header: Buffer, start: number, length: number) =>
     .replace(/\0.*$/s, '');
 
 /** Descomprime un tar.gz y devuelve sus ficheros regulares por nombre (parser ustar mínimo). */
-export function readTarGz(buffer: Buffer): Map<string, Buffer> {
+export function readTarGz(
+  buffer: Buffer,
+  maxOutputLength = MAX_OUTPUT_BYTES,
+): Map<string, Buffer> {
   let tar: Buffer;
   try {
-    tar = gunzipSync(buffer);
+    tar = gunzipSync(buffer, { maxOutputLength });
   } catch (error) {
     throw new InvalidBulkError(
       `El agregado no es un gzip válido: ${(error as Error).message}`,
