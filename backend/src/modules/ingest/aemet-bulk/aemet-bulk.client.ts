@@ -69,9 +69,11 @@ export class AemetBulkClient {
       );
     }
 
+    // Un corte o un timeout al leer el cuerpo es transitorio; solo un JSON mal formado es inválido.
+    const text = await response.text();
     let body: { estado?: number; descripcion?: string; datos?: string };
     try {
-      body = await response.json();
+      body = JSON.parse(text);
     } catch {
       throw new AemetBulkError('invalid', 'La respuesta de AEMET no es JSON');
     }

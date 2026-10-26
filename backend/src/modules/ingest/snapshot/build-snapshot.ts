@@ -15,6 +15,13 @@ const madridFormatter = new Intl.DateTimeFormat('en-CA', {
   timeZone: 'Europe/Madrid',
 });
 
+/** Día siguiente a una fecha YYYY-MM-DD (aritmética de calendario, sin zona horaria). */
+function nextDate(date: string): string {
+  const next = new Date(`${date}T00:00:00Z`);
+  next.setUTCDate(next.getUTCDate() + 1);
+  return next.toISOString().slice(0, 10);
+}
+
 /** Fecha (YYYY-MM-DD) en Europe/Madrid. */
 export function madridDate(now: Date): string {
   return madridFormatter.format(now);
@@ -31,6 +38,7 @@ export function buildSnapshot(
   now: Date,
 ): Snapshot {
   const today = madridDate(now);
+  const tomorrow = nextDate(today);
   const towns: Snapshot['towns'] = {};
   const ignored: string[] = [];
   let invalidEntries = 0;
@@ -55,6 +63,8 @@ export function buildSnapshot(
     // Los días lejanos del agregado solo traen máximas y mínimas: sin la temperatura de las
     // 12 o las 18 h las reglas puntuarían 0 °C como frío, así que el municipio queda sin previsión.
     if (days.length < DAYS || !days.every(hasLaunchTemperature)) continue;
+    // El contrato es [hoy, mañana]: si AEMET omite mañana no se acepta el día siguiente en su lugar.
+    if (days[1].fecha.slice(0, 10) !== tomorrow) continue;
 
     towns[entry.id] = assignGachasLevel(
       simplifyForecast(

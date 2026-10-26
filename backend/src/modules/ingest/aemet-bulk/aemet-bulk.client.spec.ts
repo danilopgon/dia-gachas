@@ -100,6 +100,21 @@ describe('AemetBulkClient', () => {
     expect(step1Calls()).toBe(3);
   });
 
+  it('trata como transitorio un corte al leer el cuerpo de la primera respuesta', async () => {
+    const cut = new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode('{"estado": 2'));
+          controller.error(new TypeError('terminated'));
+        },
+      }),
+      { status: 200 },
+    );
+    const { client, step1Calls } = setup([cut, ok(), binary()]);
+    await expect(client.download()).resolves.toEqual(TAR_GZ);
+    expect(step1Calls()).toBe(2);
+  });
+
   it('trata como transitorio un fallo al descargar los datos', async () => {
     const { client } = setup([ok(), json({}, 500), ok(), binary()]);
     await expect(client.download()).resolves.toEqual(TAR_GZ);

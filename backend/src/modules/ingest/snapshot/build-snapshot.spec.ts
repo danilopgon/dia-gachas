@@ -93,6 +93,23 @@ describe('buildSnapshot', () => {
     ]);
   });
 
+  it('deja como ausente un municipio si falta mañana entre sus días', () => {
+    const entry = fixture('02003');
+    entry.days = entry.days.filter((day) => day.fecha !== '2026-10-27');
+    entry.days[1] = {
+      ...entry.days[1],
+      temperatura: {
+        dato: [
+          { hora: 12, value: 15 },
+          { hora: 18, value: 11 },
+        ],
+      },
+    };
+    const snapshot = buildSnapshot([entry], catalog, NOW);
+    expect(snapshot.towns['02003']).toBeUndefined();
+    expect(snapshot.stats.missing).toContain('02003');
+  });
+
   it('deja como ausente un municipio si mañana no trae temperaturas por horas', () => {
     // A las 00:10 de Madrid el agregado aún es el del día anterior: el nuevo «mañana» es el
     // tercer día del fichero, que solo trae máximas y mínimas.
