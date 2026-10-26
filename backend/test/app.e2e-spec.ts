@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { throwError } from 'rxjs';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { IngestService } from '../src/modules/ingest/ingest.service';
 
 describe('API sin base de datos (e2e)', () => {
   let app: INestApplication;
@@ -29,6 +30,10 @@ describe('API sin base de datos (e2e)', () => {
     await request(app.getHttpServer())
       .get('/health')
       .expect(200, { status: 'ok' });
+  });
+
+  it('la API no carga la ingesta (no necesita las variables del bucket)', () => {
+    expect(() => app.get(IngestService, { strict: false })).toThrow();
   });
 
   it('ya no expone /cities', async () => {

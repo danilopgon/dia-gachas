@@ -1,4 +1,4 @@
-# Imagen de la API. La usan Coolify (rollback, hasta la Entrega 8) y Railway.
+# Imagen de la API y de la ingesta (Railway: servicio `api` con `node dist/main`, servicio cron `ingest` con `node dist/ingest`).
 # Se construye desde la raíz del workspace: docker build -f backend/Dockerfile .
 
 # Etapa de build
@@ -31,6 +31,9 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/backend/node_modules ./backend/node_modules
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/package.json ./backend/package.json
+
+# Catálogo de municipios para la ingesta (nombres y provincias por código)
+COPY frontend/public/data/municipios.json /app/data/municipios.json
 
 WORKDIR /app/backend
 USER node
