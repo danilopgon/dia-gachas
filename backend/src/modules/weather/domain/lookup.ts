@@ -48,6 +48,21 @@ export function madridLocalToUtc(local: string): Date {
   return new Date(asUtc - madridOffsetMs(first));
 }
 
+const ageInHours = (snapshot: Snapshot, now: Date) =>
+  (now.getTime() - madridLocalToUtc(snapshot.sourceElaborado).getTime()) /
+  3_600_000;
+
+/** Antigüedad del snapshot medida desde que AEMET generó los datos. */
+export function lookupFreshness(snapshot: Snapshot, now: Date): Freshness {
+  const ageHours = ageInHours(snapshot, now);
+  return {
+    updatedAt: madridLocalToUtc(snapshot.sourceElaborado).toISOString(),
+    generatedAt: snapshot.generatedAt,
+    ageHours: Math.round(ageHours * 10) / 10,
+    stale: ageHours >= STALE_AFTER_HOURS,
+  };
+}
+
 /** Previsión de un municipio desde el snapshot vigente, con su frescura. */
 export function lookupForecast(
   code: string,
@@ -59,10 +74,9 @@ export function lookupForecast(
   if (!catalog.towns.has(code)) return { kind: 'not-found' };
   if (!snapshot) return { kind: 'unavailable', reason: 'no-snapshot' };
 
-  const updatedAt = madridLocalToUtc(snapshot.sourceElaborado);
-  const ageHours = (now.getTime() - updatedAt.getTime()) / 3_600_000;
-  if (ageHours > UNAVAILABLE_AFTER_HOURS)
+  if (ageInHours(snapshot, now) > UNAVAILABLE_AFTER_HOURS) {
     return { kind: 'unavailable', reason: 'too-old' };
+  }
 
   const days = snapshot.towns[code];
   if (!days) return { kind: 'unavailable', reason: 'no-forecast' };
@@ -76,11 +90,6 @@ export function lookupForecast(
   return {
     kind: 'ok',
     days: fromToday,
-    freshness: {
-      updatedAt: updatedAt.toISOString(),
-      generatedAt: snapshot.generatedAt,
-      ageHours: Math.round(ageHours * 10) / 10,
-      stale: ageHours >= STALE_AFTER_HOURS,
-    },
+    freshness: lookupFreshness(snapshot, now),
   };
 }

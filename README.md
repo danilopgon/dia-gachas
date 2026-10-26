@@ -56,11 +56,15 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
    ```
 
    ```env
-   AEMET_API_KEY=tu_clave_de_aemet
    CORS_ORIGIN=http://localhost:4200
+   BUCKET=…            # credenciales de un bucket S3 (en producción, el Railway Bucket)
+   ENDPOINT=…
+   ACCESS_KEY_ID=…
+   SECRET_ACCESS_KEY=…
+   AEMET_API_KEY=…     # solo para la ingesta
    ```
 
-   Consigue tu clave de AEMET en [opendata.aemet.es](https://opendata.aemet.es).
+   La API sirve las previsiones desde el último snapshot del bucket. Para tener uno en local, ejecuta la ingesta (`pnpm --filter dia-gachas-api ingest` tras `pnpm build`). Consigue tu clave de AEMET en [opendata.aemet.es](https://opendata.aemet.es).
 
 4. **Levanta el entorno en desarrollo**
 
@@ -87,10 +91,20 @@ AEMET /municipio/diaria/todos (tar.gz) ──▶ ingesta NestJS ──▶ Railwa
 
                      runtime
 Angular PWA (Vercel) ──▶ búsqueda local en municipios.json
-                    └──▶ GET /weather/:code ──▶ NestJS (Railway)
+                    └──▶ GET /weather/:code ──▶ NestJS (Railway) ──▶ último snapshot del bucket
 ```
 
-Ahora mismo la API sigue consultando AEMET por cada municipio. Leer el último snapshot del bucket es el siguiente paso de la migración (issue #22).
+La API nunca consulta AEMET:
+- Carga el snapshot vigente al arrancar y, como mucho cada 5 minutos, comprueba si `latest.json` ha cambiado.
+- Hoy se elige por fecha en `Europe/Madrid`.
+- Si los datos de AEMET tienen más de 6 h, la respuesta lo indica (`meta.stale`). A partir de 24 h, responde `503`.
+
+| Endpoint | Respuesta |
+|---|---|
+| `GET /weather/:code` | `{ status: 'ok', data: [hoy, mañana], meta: { updatedAt, generatedAt, ageHours, stale } }`. `400` si el código no es válido, `404` si el municipio no existe, `503` si no hay previsión utilizable |
+| `POST /weather` | Lo mismo, con `{ townCode, provinceCode }` |
+| `GET /status` | Snapshot vigente, resultado de la última ingesta (incluida la caducidad de la clave de AEMET) y error del lector, si lo hay |
+| `GET /health` | `{ status: 'ok' }` (healthcheck de Railway) |
 
 Si la ingesta falla (AEMET caído, `429`, datos incompletos), `latest.json` no cambia: se sigue sirviendo el último snapshot válido.
 
@@ -127,7 +141,12 @@ pnpm --filter dia-gachas-api ingest   # Ingesta manual (tras `pnpm build`; neces
   - **`api`**: `node dist/main`, healthcheck `GET /health`.
   - **`ingest`**: cron `10 */3 * * *` (UTC) con `node dist/ingest`. Termina con código 0 si publica o si ya había un snapshot más reciente, y con código 1 en cualquier otro caso.
   - **Bucket `snapshots`**: guarda los snapshots durante 7 días.
-- **Variables de la API**: `AEMET_API_KEY` y `CORS_ORIGIN` (orígenes separados por comas). `PORT` la pone Railway; en local se usa `4000`. La API no arranca si falta alguna obligatoria.
+- **Variables de la API**:
+  - `CORS_ORIGIN`: orígenes separados por comas. Admite `*` dentro de un nombre de host para las previews de Vercel, por ejemplo `https://dia-de-gachas-*-danilopgons-projects.vercel.app`.
+  - Las del bucket, como referencias de Railway.
+  - `PORT` la pone Railway; en local se usa `4000`.
+  - La API no arranca si falta alguna obligatoria.
+  - `AEMET_API_KEY` sigue definida en el servicio `api` solo porque la ingesta la referencia (`${{api.AEMET_API_KEY}}`).
 - **Variables de la ingesta**: `AEMET_API_KEY` y las del bucket (`BUCKET`, `ENDPOINT`, `REGION`, `ACCESS_KEY_ID`, `SECRET_ACCESS_KEY`), como referencias de Railway. `MUNICIPIOS_PATH` es `/app/data/municipios.json` dentro de la imagen.
 
 ---

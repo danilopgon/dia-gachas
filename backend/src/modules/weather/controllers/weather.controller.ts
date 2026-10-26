@@ -4,59 +4,57 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Param,
   Post,
 } from '@nestjs/common';
+import { Catalog } from '../../ingest/catalog/catalog';
+import { lookupForecast } from '../domain/lookup';
 import { WeatherRequest } from '../models/weather-request';
-import { AemetService } from '../services/aemet.service';
-import { AemetError } from '../errors/aemet.error';
-import { CacheTTL } from '@nestjs/cache-manager';
+import { CLOCK, SnapshotReader } from '../snapshot-reader';
+import { WEATHER_CATALOG } from '../weather.tokens';
+
+const error = (message: string, status: HttpStatus) =>
+  new HttpException({ status: 'error', message }, status);
 
 @Controller('weather')
 export class WeatherController {
-  constructor(private readonly aemetService: AemetService) {}
+  constructor(
+    private readonly reader: SnapshotReader,
+    @Inject(WEATHER_CATALOG) private readonly catalog: Catalog,
+    @Inject(CLOCK) private readonly clock: () => Date,
+  ) {}
 
   @Post()
-  async fetchWeatherData(@Body() weatherRequest: WeatherRequest) {
-    try {
-      const { townCode, provinceCode } = weatherRequest;
-      const weather = await this.aemetService.getWeather(
-        townCode,
-        provinceCode,
-      );
-      return { status: 'ok', data: weather };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const message = error instanceof Error ? error.message : String(error);
-      const httpStatus =
-        error instanceof AemetError
-          ? HttpStatus.BAD_GATEWAY
-          : HttpStatus.INTERNAL_SERVER_ERROR;
-      throw new HttpException({ status: 'error', message }, httpStatus);
+  async fetchWeatherData(@Body() body: Partial<WeatherRequest>) {
+    const { townCode, provinceCode } = body ?? {};
+    if (typeof townCode !== 'string' || typeof provinceCode !== 'string') {
+      throw error('Código de municipio no válido', HttpStatus.BAD_REQUEST);
     }
+    return this.forecast(`${provinceCode}${townCode}`);
   }
 
   @Get(':code')
-  @CacheTTL(3600 * 1000)
-  async getByWeatherDataParams(@Param() params: { code: string }) {
-    try {
-      const { code } = params;
-      const provinceCode = code.substring(0, 2);
-      const townCode = code.substring(2);
+  async getByWeatherDataParams(@Param('code') code: string) {
+    return this.forecast(code);
+  }
 
-      const weather = await this.aemetService.getWeather(
-        townCode,
-        provinceCode,
-      );
-      return { status: 'ok', data: weather };
-    } catch (error) {
-      if (error instanceof HttpException) throw error;
-      const message = error instanceof Error ? error.message : String(error);
-      const httpStatus =
-        error instanceof AemetError
-          ? HttpStatus.BAD_GATEWAY
-          : HttpStatus.INTERNAL_SERVER_ERROR;
-      throw new HttpException({ status: 'error', message }, httpStatus);
+  private async forecast(code: string) {
+    const snapshot = await this.reader.current();
+    const result = lookupForecast(code, snapshot, this.catalog, this.clock());
+
+    switch (result.kind) {
+      case 'ok':
+        return { status: 'ok', data: result.days, meta: result.freshness };
+      case 'invalid':
+        throw error('Código de municipio no válido', HttpStatus.BAD_REQUEST);
+      case 'not-found':
+        throw error('Municipio no encontrado', HttpStatus.NOT_FOUND);
+      case 'unavailable':
+        throw error(
+          'Previsión no disponible ahora mismo',
+          HttpStatus.SERVICE_UNAVAILABLE,
+        );
     }
   }
 }
