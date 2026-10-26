@@ -95,6 +95,14 @@ pnpm lint:fix      # Lint con correcciones automáticas
 
 ---
 
+## ☁️ Despliegue
+
+- **Frontend**: Vercel, configurado desde el panel del proyecto (Root Directory `frontend`).
+- **API**: Railway, proyecto `dia-gachas`. La construcción, el healthcheck (`GET /health`) y los cambios que disparan un despliegue están en [`railway.json`](railway.json); la imagen es `backend/Dockerfile`, construida desde la raíz del repo.
+- **Variables de la API**: `AEMET_API_KEY` y `CORS_ORIGIN` (orígenes separados por comas). `PORT` la pone Railway; en local se usa `4000`. La API no arranca si falta alguna obligatoria.
+
+---
+
 ## 🤔 ¿Por qué esto?
 
 Porque en Castilla-La Mancha no necesitamos una app del tiempo.  

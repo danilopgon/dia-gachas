@@ -25,6 +25,12 @@ describe('API sin base de datos (e2e)', () => {
     await app?.close();
   });
 
+  it('GET /health responde ok sin depender de AEMET', async () => {
+    await request(app.getHttpServer())
+      .get('/health')
+      .expect(200, { status: 'ok' });
+  });
+
   it('ya no expone /cities', async () => {
     await request(app.getHttpServer()).get('/cities?name=alb').expect(404);
   });
