@@ -1,12 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { WeatherResource } from './resources/weather.resource';
+import { WeatherLoadError, WeatherResource } from './resources/weather.resource';
 import { getRandomGachasMessage } from '../../core/utils/get-random-gachas-message.util';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { getWeatherIcon, iconMap } from '../../core/utils/weather-icon.util';
+
+const ERROR_MESSAGES = {
+  'not-found': 'No encontramos ese municipio.',
+  unavailable: 'Ahora mismo no hay previsión para este municipio. Vuelve a intentarlo en un rato.',
+  network: 'No se ha podido conectar. Revisa tu conexión.',
+} as const;
 
 @Component({
   standalone: true,
@@ -24,9 +30,18 @@ export class ResultComponent {
   private randomMessage = signal('');
 
   weatherRef = this.weatherResource.createWeatherResource(this.id);
-  weather = computed(() => this.weatherRef.value());
+  weather = computed(() => this.weatherRef.value()?.days);
+  staleHours = computed(() => {
+    const meta = this.weatherRef.value()?.meta;
+    return meta?.stale ? Math.round(meta.ageHours) : null;
+  });
+  errorMessage = computed(() => {
+    const error = this.weatherRef.error();
+    const kind = error instanceof WeatherLoadError ? error.kind : 'unavailable';
+    return ERROR_MESSAGES[kind];
+  });
   icon = computed(() => {
-    const data = this.weatherRef.value();
+    const data = this.weather();
     const description = data?.[0]?.skyStatus ?? '';
     return iconMap[getWeatherIcon(description)];
   });
