@@ -1,4 +1,4 @@
-# Imagen para Railway (independiente del build de Coolify).
+# Imagen de la API. La usan Coolify (rollback, hasta la Entrega 8) y Railway (`railway.json`).
 # Se construye desde la raíz del workspace: docker build -f backend/Dockerfile .
 
 # Etapa de build
