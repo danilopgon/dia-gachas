@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherLoadError, WeatherResource } from './resources/weather.resource';
@@ -15,7 +14,7 @@ const ERROR_MESSAGES = {
 @Component({
   standalone: true,
   selector: 'app-result',
-  imports: [RouterModule, CommonModule, IconComponent],
+  imports: [RouterModule, IconComponent],
   templateUrl: './result.component.html',
 })
 export class ResultComponent {
