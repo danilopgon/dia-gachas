@@ -38,7 +38,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 - **Tokens:** viven en `frontend/src/tokens.css` y las reglas base en `frontend/src/base.css`. `styles.css` no lleva colores ni fuentes escritos a mano.
 - **Proceso:** rediseño hecho con la skill Hallmark. El sello al principio de `styles.css` resume las decisiones, y `.hallmark/log.json` guarda el registro.
 - **Accesibilidad:** contraste AA en todo el texto y foco visible en todos los controles. Con movimiento reducido no se mueve nada, tampoco el paisaje de GSAP.
-- **Pendiente:** una segunda fase podría rediseñar los assets con herramientas de IA por nodos (ComfyUI, Krea, Weavy…), solo si mejoran la marca.
+- **Pendiente:** rediseñar los assets con IA, con Recraft y un estilo «folk manchego» a medio camino entre las ilustraciones actuales y el riso. Las pruebas y los pasos están en [#41](https://github.com/danilopgon/dia-gachas/issues/41).
 
 ---
 
