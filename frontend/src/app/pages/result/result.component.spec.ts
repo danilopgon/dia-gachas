@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ResultComponent } from './result.component';
 import { WeatherResource } from './resources/weather.resource';
-import { MessageService } from 'primeng/api';
 import { GachasLevel } from '../../core/enums/gachas-level.enum';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 import { WeatherLoadError } from './resources/weather.resource';
@@ -23,10 +22,6 @@ jest.mock('./resources/weather.resource', () => ({
   })),
 }));
 
-const mockMessageService = {
-  add: jest.fn(),
-};
-
 const mockActivatedRoute = {
   snapshot: {
     paramMap: {
@@ -47,7 +42,6 @@ describe('ResultComponent', () => {
       providers: [
         provideRouter([]),
         { provide: WeatherResource, useValue: new WeatherResource() },
-        { provide: MessageService, useValue: mockMessageService },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
     });
@@ -78,7 +72,6 @@ describe('ResultComponent', () => {
         providers: [
           provideRouter([]),
           { provide: WeatherResource, useValue: new WeatherResource() },
-          { provide: MessageService, useValue: mockMessageService },
           { provide: ActivatedRoute, useValue: mockActivatedRouteInvalid },
         ],
       }).compileComponents();
@@ -218,6 +211,44 @@ describe('ResultComponent', () => {
       mockError = new WeatherLoadError(kind);
       render();
       expect(text()).toContain(message);
+    });
+  });
+
+  describe('compartir sin navigator.share', () => {
+    beforeEach(() => {
+      Object.defineProperty(navigator, 'share', { value: undefined, writable: true });
+      mockWeatherValue = [
+        {
+          town: 'mi pueblo',
+          province: 'Cuenca',
+          launchTemperature: 12,
+          launchTimeRainProbability: 70,
+          skyStatus: 'Cubierto',
+          gachasLevel: GachasLevel.HIGH,
+        },
+      ];
+    });
+
+    it('avisa de que el texto se ha copiado', async () => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: jest.fn().mockResolvedValue(undefined) },
+        writable: true,
+      });
+      const fixture = TestBed.createComponent(ResultComponent);
+      fixture.detectChanges();
+      await fixture.componentInstance.shareResults();
+      fixture.detectChanges();
+      const live = Array.from(
+        (fixture.nativeElement as HTMLElement).querySelectorAll('[role="status"]'),
+      ).map(el => el.textContent ?? '');
+      expect(live.join(' ')).toContain('Texto copiado al portapapeles');
+    });
+
+    it('no falla si no hay portapapeles', async () => {
+      Object.defineProperty(navigator, 'clipboard', { value: undefined, writable: true });
+      const fixture = TestBed.createComponent(ResultComponent);
+      fixture.detectChanges();
+      await expect(fixture.componentInstance.shareResults()).resolves.toBeUndefined();
     });
   });
 });

@@ -1,0 +1,62 @@
+<div class="flex w-full flex-col gap-2">
+  <label [for]="id" class="text-surface-50 text-lg">{{ label() }}</label>
+  <!-- La lista se posiciona respecto al campo, no al mensaje de estado. -->
+  <div class="relative">
+    <input
+      [id]="id"
+      type="text"
+      role="combobox"
+      autocomplete="off"
+      maxlength="30"
+      aria-autocomplete="list"
+      aria-required="true"
+      [attr.aria-controls]="listboxId"
+      [attr.aria-expanded]="expanded()"
+      [attr.aria-activedescendant]="activeId()"
+      [value]="text()"
+      (input)="onInput($any($event.target).value)"
+      (keydown)="onKeydown($event)"
+      (blur)="close()"
+      class="h-14 w-full rounded-md border border-white/60 bg-white px-4 text-lg text-gray-900 shadow-lg outline-none focus-visible:ring-4 focus-visible:ring-orange-400"
+    />
+
+    <ul
+      [id]="listboxId"
+      role="listbox"
+      [attr.aria-label]="label()"
+      [hidden]="!expanded()"
+      class="absolute top-full z-40 mt-1 max-h-72 w-full overflow-auto rounded-md bg-white py-1 text-gray-900 shadow-xl"
+    >
+      @for (city of suggestions(); track city.id; let i = $index) {
+        <li
+          [id]="optionId(i)"
+          role="option"
+          [attr.aria-selected]="i === activeIndex()"
+          (mousedown)="onOptionMousedown($event, city)"
+          class="cursor-pointer px-4 py-2"
+          [class.bg-orange-100]="i === activeIndex()"
+        >
+          {{ displayName(city) }}
+        </li>
+      }
+    </ul>
+  </div>
+
+  <p class="text-surface-50 min-h-6 text-center text-lg" role="status">
+    @switch (status()) {
+      @case ('error') {
+        <span i18n="@@home.citiesError"
+          >No se han podido cargar los municipios. Inténtalo de nuevo.</span
+        >
+      }
+      @case ('empty') {
+        <span i18n="@@home.citiesEmpty">No hay ningún municipio con ese nombre.</span>
+      }
+      @case ('ready') {
+        @if (expanded()) {
+          <span class="sr-only">{{ suggestions().length }} municipios encontrados</span>
+        }
+      }
+    }
+  </p>
+</div>

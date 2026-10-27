@@ -1,7 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
-@import "primeicons/primeicons.css";
-@config "../tailwind.config.js";
 
 @font-face {
     font-family: 'PPWoodland';
@@ -39,6 +37,8 @@ body {
 }
 
 @theme {
+    /* Antes venía de tailwindcss-primeui (tema Lara, superficie slate). */
+    --color-surface-50: #f8fafc;
     --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
     --animate-float:   float-gentle 3s ease-in-out infinite;
 }

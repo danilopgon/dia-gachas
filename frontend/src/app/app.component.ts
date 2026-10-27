@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { PopoverModule } from 'primeng/popover';
+import { InfoPopoverComponent } from './shared/info-popover/info-popover.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, PopoverModule],
+  imports: [RouterOutlet, InfoPopoverComponent],
   templateUrl: './app.component.html',
 })
 export class AppComponent {}
