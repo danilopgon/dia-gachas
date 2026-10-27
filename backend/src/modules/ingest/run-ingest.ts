@@ -7,7 +7,8 @@ const RETENTION_DAYS = 7;
 
 /**
  * Ejecuta una ingesta, guarda su estado (también si falla) y poda tras publicar.
- * Devuelve el código de salida: 0 si hay un snapshot vigente actualizado o más reciente, 1 si no.
+ * Devuelve el código de salida: 0 si el snapshot vigente está al día (publicado, superado o sin
+ * cambios en AEMET) y 1 si la ingesta falló o se rechazó.
  */
 export async function runIngest(
   app: Pick<INestApplicationContext, 'get'>,
@@ -50,7 +51,10 @@ export async function runIngest(
       );
     }
   }
-  return result.outcome === 'published' || result.outcome === 'superseded'
-    ? 0
-    : 1;
+  const upToDate: RunStatus['outcome'][] = [
+    'published',
+    'superseded',
+    'unchanged',
+  ];
+  return upToDate.includes(result.outcome) ? 0 : 1;
 }

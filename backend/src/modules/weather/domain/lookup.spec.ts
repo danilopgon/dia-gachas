@@ -83,11 +83,37 @@ describe('lookupForecast', () => {
       '02003',
       SNAPSHOT,
       catalog,
-      at('2026-10-26T20:00:00Z'),
+      at('2026-10-27T20:00:00Z'),
     );
     expect(result).toMatchObject({
       kind: 'ok',
-      freshness: { ageHours: 6.7, stale: true },
+      freshness: { ageHours: 30.7, stale: true },
+    });
+  });
+
+  it('no avisa con los datos del día anterior: AEMET publica una vez al día', () => {
+    const result = lookupForecast(
+      '02003',
+      SNAPSHOT,
+      catalog,
+      at('2026-10-27T13:00:00Z'),
+    );
+    expect(result).toMatchObject({
+      kind: 'ok',
+      freshness: { ageHours: 23.7, stale: false },
+    });
+  });
+
+  it('sigue sirviendo hoy pasado un día si AEMET se retrasa', () => {
+    const result = lookupForecast(
+      '02003',
+      SNAPSHOT,
+      catalog,
+      at('2026-10-27T15:00:00Z'),
+    );
+    expect(result).toMatchObject({
+      kind: 'ok',
+      freshness: { ageHours: 25.7, stale: false },
     });
   });
 
@@ -101,12 +127,12 @@ describe('lookupForecast', () => {
     expect(result.kind).toBe('ok');
     if (result.kind !== 'ok') return;
     expect(result.days.map((d) => d.date)).toEqual(['2026-10-27']);
-    expect(result.freshness.stale).toBe(true);
+    expect(result.freshness.stale).toBe(false);
   });
 
   it(`deja de servir datos con más de ${UNAVAILABLE_AFTER_HOURS} h`, () => {
     expect(
-      lookupForecast('02003', SNAPSHOT, catalog, at('2026-10-27T14:00:00Z')),
+      lookupForecast('02003', SNAPSHOT, catalog, at('2026-10-28T14:00:00Z')),
     ).toEqual({
       kind: 'unavailable',
       reason: 'too-old',

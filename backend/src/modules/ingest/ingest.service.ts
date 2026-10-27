@@ -5,7 +5,8 @@ import {
   AemetBulkError,
   AemetFailure,
 } from './aemet-bulk/aemet-bulk.client';
-import { parseBulkEntry } from './aemet-bulk/bulk-entry';
+import { ELABORADO_FORMAT } from '../weather/domain/madrid-time';
+import { BulkEntry, parseBulkEntry } from './aemet-bulk/bulk-entry';
 import { InvalidBulkError, readTarGz } from './aemet-bulk/tar';
 import { Catalog } from './catalog/catalog';
 import {
@@ -18,7 +19,7 @@ import { buildSnapshot, validateSnapshot } from './snapshot/build-snapshot';
 import { SnapshotStore } from '../snapshots/snapshot-store';
 
 export interface IngestResult {
-  outcome: 'published' | 'superseded' | 'rejected' | 'failed';
+  outcome: 'published' | 'superseded' | 'unchanged' | 'rejected' | 'failed';
   durationMs: number;
   covered?: number;
   missing?: number;
@@ -74,11 +75,13 @@ export class IngestService {
       throw error;
     }
 
-    const snapshot = buildSnapshot(
-      [...files.values()].map(parseBulkEntry),
-      this.catalog,
-      now,
-    );
+    const entries = [...files.values()].map(parseBulkEntry);
+    // AEMET regenera el agregado una vez al día: si no es más nuevo que el vigente, no hay nada que hacer.
+    if (await this.isNotNewer(entries)) {
+      return { outcome: 'unchanged', durationMs: elapsed() };
+    }
+
+    const snapshot = buildSnapshot(entries, this.catalog, now);
     const stats = {
       covered: snapshot.stats.covered,
       missing: snapshot.stats.missing.length,
@@ -100,6 +103,22 @@ export class IngestService {
         failure: 'store',
         reasons: [(error as Error).message],
       };
+    }
+  }
+
+  private async isNotNewer(entries: (BulkEntry | null)[]): Promise<boolean> {
+    const latest = entries
+      .map((entry) => entry?.elaborado ?? '')
+      .filter((elaborado) => ELABORADO_FORMAT.test(elaborado))
+      .sort()
+      .pop();
+    if (!latest) return false;
+    try {
+      const current = await this.store.readPointer();
+      return !!current && latest <= current.pointer.sourceElaborado;
+    } catch {
+      // Sin poder comparar, se sigue: publish() ya impide retroceder el puntero.
+      return false;
     }
   }
 }

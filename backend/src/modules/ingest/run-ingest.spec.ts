@@ -43,6 +43,7 @@ describe('runIngest', () => {
   it.each([
     [published, 0],
     [{ outcome: 'superseded', durationMs: 1 } as IngestResult, 0],
+    [{ outcome: 'unchanged', durationMs: 1 } as IngestResult, 0],
     [
       {
         outcome: 'rejected',
