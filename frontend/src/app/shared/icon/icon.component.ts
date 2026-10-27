@@ -4,7 +4,6 @@ export type IconName = 'search' | 'share' | 'info';
 
 /** Iconos SVG en línea. Decorativos por defecto: el nombre accesible lo da el control. */
 @Component({
-  standalone: true,
   selector: 'app-icon',
   template: `
     <svg

@@ -12,7 +12,6 @@ const ERROR_MESSAGES = {
 } as const;
 
 @Component({
-  standalone: true,
   selector: 'app-result',
   imports: [RouterModule, IconComponent],
   templateUrl: './result.component.html',

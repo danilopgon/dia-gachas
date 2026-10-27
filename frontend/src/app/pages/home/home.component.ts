@@ -21,7 +21,6 @@ import {
 import { CitiesResource } from './resources/cities.resource';
 
 @Component({
-  standalone: true,
   selector: 'app-home',
   imports: [MunicipioComboboxComponent, IconComponent, RouterModule],
   templateUrl: './home.component.html',

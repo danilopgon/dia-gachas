@@ -9,6 +9,15 @@ import { IWeatherData } from '../../core/models/weather-data.interface';
 
 jest.useFakeTimers();
 
+// Sin zone.js los efectos no corren solos: el debounce vive en un effect y el recurso resuelve en microtareas.
+const flush = async () => {
+  // debounced() → params → loader: cada salto necesita un tick y sus microtareas.
+  for (let round = 0; round < 3; round++) {
+    TestBed.tick();
+    for (let i = 0; i < 5; i++) await Promise.resolve();
+  }
+};
+
 describe('WeatherResource (TestBed + runInInjectionContext)', () => {
   let resource: WeatherResource;
   let httpMock: jest.Mocked<HttpClient>;
@@ -27,10 +36,10 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     jest.advanceTimersByTime(500);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.value()).toBe(null);
     expect(httpMock.get).not.toHaveBeenCalled();
@@ -45,12 +54,12 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     expect(weatherResource!.value()).toBeUndefined();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.value()).toEqual({ days: weather, meta: undefined });
     expect(httpMock.get).toHaveBeenCalledWith(expect.stringContaining('/weather/28079'));
@@ -65,22 +74,25 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     code.set('2');
+    TestBed.tick();
     jest.advanceTimersByTime(100);
-    await Promise.resolve();
+    await flush();
 
     code.set('28');
+    TestBed.tick();
     jest.advanceTimersByTime(100);
-    await Promise.resolve();
+    await flush();
 
     code.set('28079');
+    TestBed.tick();
     jest.advanceTimersByTime(100);
-    await Promise.resolve();
+    await flush();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.value()).toEqual({ days: weather, meta: undefined });
   });
@@ -91,10 +103,10 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.value()).toBe(null);
     expect(httpMock.get).not.toHaveBeenCalled();
@@ -108,10 +120,10 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.error()).toBeInstanceOf(Error);
     expect(weatherResource!.hasValue()).toBe(false); // el valor no se setea (en Angular 20 leer value() lanza)
@@ -125,10 +137,10 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     expect(weatherResource!.value()).toEqual({ days: [], meta });
   });
@@ -145,10 +157,10 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     TestBed.runInInjectionContext(() => {
       weatherResource = resource.createWeatherResource(code);
     });
+    TestBed.tick();
 
     jest.advanceTimersByTime(400);
-    await Promise.resolve();
-    await Promise.resolve();
+    await flush();
 
     const error = weatherResource!.error();
     expect(error).toBeInstanceOf(WeatherLoadError);

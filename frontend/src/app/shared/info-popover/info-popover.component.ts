@@ -1,19 +1,10 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  input,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, input, signal, viewChild } from '@angular/core';
 import { IconComponent } from '../icon/icon.component';
 
 let nextId = 0;
 
 /** Botón redondo que muestra u oculta un panel (patrón disclosure de la APG). */
 @Component({
-  standalone: true,
   selector: 'app-info-popover',
   imports: [IconComponent],
   template: `
@@ -39,8 +30,12 @@ let nextId = 0;
       </div>
     </div>
   `,
-  // Escape cierra desde el botón o desde el panel.
-  host: { class: 'block', '(keydown.escape)': 'closeAndFocus()' },
+  // Escape cierra desde el botón o desde el panel; un clic fuera también cierra.
+  host: {
+    class: 'block',
+    '(keydown.escape)': 'closeAndFocus()',
+    '(document:click)': 'onDocumentClick($event)',
+  },
 })
 export class InfoPopoverComponent {
   label = input.required<string>();
@@ -61,7 +56,6 @@ export class InfoPopoverComponent {
     this.trigger().nativeElement.focus();
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (this.open() && !this.host.nativeElement.contains(event.target as Node)) {
       this.open.set(false);

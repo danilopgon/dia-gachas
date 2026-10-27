@@ -19,7 +19,6 @@ let nextId = 0;
  * solo pinta y emite; la búsqueda la hace quien lo usa.
  */
 @Component({
-  standalone: true,
   selector: 'app-municipio-combobox',
   templateUrl: './municipio-combobox.component.html',
 })
