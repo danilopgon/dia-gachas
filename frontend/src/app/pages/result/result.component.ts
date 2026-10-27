@@ -28,7 +28,9 @@ export class ResultComponent {
 
   weatherRef = this.weatherResource.createWeatherResource(this.id);
   // En Angular 20 value() lanza si el recurso está en error: se lee solo con valor.
-  private result = computed(() => (this.weatherRef.hasValue() ? this.weatherRef.value() : undefined));
+  private result = computed(() =>
+    this.weatherRef.hasValue() ? this.weatherRef.value() : undefined,
+  );
   weather = computed(() => this.result()?.days);
   staleHours = computed(() => {
     const meta = this.result()?.meta;

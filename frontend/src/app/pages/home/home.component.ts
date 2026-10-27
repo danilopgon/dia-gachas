@@ -38,10 +38,7 @@ export class HomeComponent implements AfterViewInit {
   // En Angular 20 value() lanza si el recurso está en error: se lee solo con valor.
   cities = computed(() => (this.citiesRef.hasValue() ? this.citiesRef.value() : []));
   loadFailed = computed(() => this.citiesRef.status() === 'error');
-  noResults = computed(
-    () =>
-      this.citiesRef.status() === 'resolved' && this.cities().length === 0,
-  );
+  noResults = computed(() => this.citiesRef.status() === 'resolved' && this.cities().length === 0);
 
   comboboxStatus = computed<ComboboxStatus>(() => {
     if (this.loadFailed()) return 'error';
