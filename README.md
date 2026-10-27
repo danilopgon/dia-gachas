@@ -161,7 +161,7 @@ pnpm --filter dia-gachas-api ingest   # Ingesta manual (tras `pnpm build`; neces
   - `PORT` la pone Railway; en local se usa `4000`.
   - La API no arranca si falta alguna obligatoria.
   - `AEMET_API_KEY` sigue definida en el servicio `api` solo porque la ingesta la referencia (`${{api.AEMET_API_KEY}}`).
-- **Coste**: menos de 1 $ al mes (medido en octubre de 2026). El workspace de Railway tiene un aviso de gasto por correo.
+- **Coste**: menos de 1 $ al mes en Railway (medido en octubre de 2026), dentro de lo que incluye el plan.
 - **Variables de la ingesta**: `AEMET_API_KEY` y las del bucket (`BUCKET`, `ENDPOINT`, `REGION`, `ACCESS_KEY_ID`, `SECRET_ACCESS_KEY`), como referencias de Railway. `MUNICIPIOS_PATH` es `/app/data/municipios.json` dentro de la imagen.
 
 ---
