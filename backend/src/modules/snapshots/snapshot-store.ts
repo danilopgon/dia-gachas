@@ -24,7 +24,7 @@ export type PublishOutcome = 'published' | 'superseded';
 
 /** Resultado de la última ejecución de la ingesta, también si falló o se rechazó. */
 export interface RunStatus {
-  outcome: 'published' | 'superseded' | 'rejected' | 'failed';
+  outcome: 'published' | 'superseded' | 'unchanged' | 'rejected' | 'failed';
   finishedAt: string;
   durationMs: number;
   covered?: number;

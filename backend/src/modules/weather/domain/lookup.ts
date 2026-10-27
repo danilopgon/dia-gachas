@@ -6,8 +6,9 @@ import { SimplifiedData } from '../models/simplified-data';
 
 export { ELABORADO_FORMAT, madridLocalToUtc } from './madrid-time';
 
-export const STALE_AFTER_HOURS = 6;
-export const UNAVAILABLE_AFTER_HOURS = 24;
+// AEMET regenera el agregado una vez al día (por la tarde): los umbrales dejan margen a un retraso.
+export const STALE_AFTER_HOURS = 30;
+export const UNAVAILABLE_AFTER_HOURS = 48;
 
 export interface Freshness {
   /** Cuándo generó AEMET los datos (ISO, UTC). */

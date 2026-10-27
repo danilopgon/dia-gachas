@@ -24,15 +24,25 @@ function setup({
     key: 'snapshots/x.json.gz',
   }),
   catalog = smallCatalog,
+  currentElaborado = null as string | null,
 }: {
   download?: () => Promise<Buffer>;
   publish?: SnapshotStore['publish'];
   catalog?: Catalog;
+  currentElaborado?: string | null;
 } = {}) {
   const client = { download: jest.fn(download) } as unknown as AemetBulkClient;
   const store = {
     publish: jest.fn(publish),
     readLatest: jest.fn(),
+    readPointer: jest.fn(async () =>
+      currentElaborado === null
+        ? null
+        : {
+            pointer: { key: 'k', sourceElaborado: currentElaborado },
+            etag: '"v1"',
+          },
+    ),
     prune: jest.fn(),
   } as unknown as SnapshotStore;
   return {
@@ -47,6 +57,39 @@ function setup({
 }
 
 describe('IngestService', () => {
+  it('no reconstruye nada si AEMET no ha publicado datos nuevos', async () => {
+    const { service, store } = setup({
+      currentElaborado: '2026-10-26T14:19:08',
+    });
+    await expect(
+      service.run(new Date('2026-10-27T00:10:00Z')),
+    ).resolves.toMatchObject({
+      outcome: 'unchanged',
+      aemetKeyExpiresAt: '2027-02-03T14:00:25.000Z',
+    });
+    expect(store.publish).not.toHaveBeenCalled();
+  });
+
+  it('tampoco publica si el vigente es más reciente que el fichero', async () => {
+    const { service, store } = setup({
+      currentElaborado: '2026-10-26T15:59:07',
+    });
+    await expect(service.run(NOW)).resolves.toMatchObject({
+      outcome: 'unchanged',
+    });
+    expect(store.publish).not.toHaveBeenCalled();
+  });
+
+  it('publica si el fichero es más reciente que el vigente', async () => {
+    const { service, store } = setup({
+      currentElaborado: '2026-10-25T15:00:00',
+    });
+    await expect(service.run(NOW)).resolves.toMatchObject({
+      outcome: 'published',
+    });
+    expect(store.publish).toHaveBeenCalledTimes(1);
+  });
+
   it('publica un snapshot válido', async () => {
     const { service, store } = setup();
     const result = await service.run(NOW);

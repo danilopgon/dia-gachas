@@ -97,7 +97,7 @@ Angular PWA (Vercel) ──▶ búsqueda local en municipios.json
 La API nunca consulta AEMET:
 - Carga el snapshot vigente al arrancar y, como mucho cada 5 minutos, comprueba si `latest.json` ha cambiado.
 - Hoy se elige por fecha en `Europe/Madrid`.
-- Si los datos de AEMET tienen más de 6 h, la respuesta lo indica (`meta.stale`). A partir de 24 h, responde `503`.
+- AEMET regenera el agregado una vez al día, por la tarde. Si los datos tienen más de 30 h (se ha saltado una actualización), la respuesta lo indica (`meta.stale`); a partir de 48 h responde `503`. Si el fichero de AEMET no ha cambiado, la ingesta termina como `unchanged` sin reconstruir nada.
 
 | Endpoint | Respuesta |
 |---|---|
