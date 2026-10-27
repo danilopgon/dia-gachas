@@ -3,12 +3,10 @@ import {
   AfterViewInit,
   Component,
   computed,
-  Inject,
   inject,
   model,
   ModelSignal,
   PLATFORM_ID,
-  ResourceStatus,
   signal,
   WritableSignal,
 } from '@angular/core';
@@ -37,21 +35,22 @@ export class HomeComponent implements AfterViewInit {
   citiesRef = this.citiesResource.createSearchResource(this.searchTerm);
 
   // Solo las sugerencias de la consulta actual: mientras carga una nueva, la lista queda vacía.
-  cities = computed(() => this.citiesRef.value() ?? []);
-  loadFailed = computed(() => this.citiesRef.status() === ResourceStatus.Error);
+  // En Angular 20 value() lanza si el recurso está en error: se lee solo con valor.
+  cities = computed(() => (this.citiesRef.hasValue() ? this.citiesRef.value() : []));
+  loadFailed = computed(() => this.citiesRef.status() === 'error');
   noResults = computed(
     () =>
-      this.citiesRef.status() === ResourceStatus.Resolved && this.citiesRef.value()?.length === 0,
+      this.citiesRef.status() === 'resolved' && this.cities().length === 0,
   );
 
   comboboxStatus = computed<ComboboxStatus>(() => {
     if (this.loadFailed()) return 'error';
     if (this.noResults()) return 'empty';
-    if (this.citiesRef.status() === ResourceStatus.Loading) return 'loading';
-    return this.citiesRef.status() === ResourceStatus.Resolved ? 'ready' : 'idle';
+    if (this.citiesRef.status() === 'loading') return 'loading';
+    return this.citiesRef.status() === 'resolved' ? 'ready' : 'idle';
   });
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+  private platformId = inject(PLATFORM_ID);
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;

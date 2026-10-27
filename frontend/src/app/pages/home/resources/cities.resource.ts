@@ -26,8 +26,8 @@ export class CitiesResource {
 
     return resource({
       // Sin consulta válida el recurso queda inactivo y no descarga el catálogo.
-      request: () => debounced() || undefined,
-      loader: ({ request }) => this.catalog.search(request),
+      params: () => debounced() || undefined,
+      loader: ({ params }) => this.catalog.search(params),
     });
   }
 }

@@ -1,4 +1,4 @@
-import { ResourceStatus, signal } from '@angular/core';
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ICity } from '../../../core/models/city.interface';
 import { CitiesResource } from './cities.resource';
@@ -43,7 +43,7 @@ describe('CitiesResource', () => {
     const searchResource = create(signal('ab'));
     jest.advanceTimersByTime(500);
     await flush();
-    expect(searchResource.status()).toBe(ResourceStatus.Idle);
+    expect(searchResource.status()).toBe('idle');
     expect(catalog.search).not.toHaveBeenCalled();
   });
 
@@ -51,7 +51,7 @@ describe('CitiesResource', () => {
     const searchResource = create(signal('     '));
     jest.advanceTimersByTime(500);
     await flush();
-    expect(searchResource.status()).toBe(ResourceStatus.Idle);
+    expect(searchResource.status()).toBe('idle');
     expect(catalog.search).not.toHaveBeenCalled();
   });
 
@@ -115,6 +115,6 @@ describe('CitiesResource', () => {
     const searchResource = create(signal('alb'));
     jest.advanceTimersByTime(300);
     await flush();
-    expect(searchResource.status()).toBe(ResourceStatus.Error);
+    expect(searchResource.status()).toBe('error');
   });
 });

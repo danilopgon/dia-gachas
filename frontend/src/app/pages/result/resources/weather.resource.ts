@@ -55,14 +55,14 @@ export class WeatherResource {
     });
 
     return resource({
-      request: () => debounced(),
-      loader: async ({ request }): Promise<WeatherResult | null> => {
-        if (!request) return null;
+      params: () => debounced(),
+      loader: async ({ params }): Promise<WeatherResult | null> => {
+        if (!params) return null;
 
         let res: IWeatherResponse;
         try {
           res = await firstValueFrom(
-            this.http.get<IWeatherResponse>(`${environment.BACK_URL}/weather/${request}`),
+            this.http.get<IWeatherResponse>(`${environment.BACK_URL}/weather/${params}`),
           );
         } catch (error) {
           throw toWeatherError(error);

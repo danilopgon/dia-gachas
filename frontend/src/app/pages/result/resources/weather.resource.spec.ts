@@ -114,7 +114,7 @@ describe('WeatherResource (TestBed + runInInjectionContext)', () => {
     await Promise.resolve();
 
     expect(weatherResource!.error()).toBeInstanceOf(Error);
-    expect(weatherResource!.value()).toBeUndefined(); // el valor no se setea
+    expect(weatherResource!.hasValue()).toBe(false); // el valor no se setea (en Angular 20 leer value() lanza)
   });
 
   it('devuelve también los metadatos de frescura', async () => {
