@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { IngestResult, IngestService } from './ingest.service';
 import { SNAPSHOT_STORE } from './ingest.tokens';
 import { runIngest } from './run-ingest';
@@ -105,5 +106,61 @@ describe('runIngest', () => {
       }),
     });
     await expect(runIngest(app as never, NOW)).resolves.toBe(0);
+  });
+
+  describe('aviso de caducidad de la clave de AEMET', () => {
+    let warn: jest.SpyInstance;
+    beforeEach(() => {
+      warn = jest.spyOn(Logger.prototype, 'warn').mockImplementation();
+    });
+    afterEach(() => warn.mockRestore());
+
+    const keyWarnings = () =>
+      warn.mock.calls
+        .map(([message]) => String(message))
+        .filter((message) => message.includes('clave de AEMET'));
+
+    const withKey = (aemetKeyExpiresAt?: string): IngestResult => ({
+      outcome: 'unchanged',
+      durationMs: 1,
+      aemetKeyExpiresAt,
+    });
+
+    it('avisa si caduca en menos de 30 días, sin cambiar el código de salida', async () => {
+      const { app } = setup(withKey('2026-11-24T15:52:00.000Z'));
+      await expect(runIngest(app as never, NOW)).resolves.toBe(0);
+      expect(keyWarnings()).toEqual([
+        expect.stringContaining(
+          'La clave de AEMET caduca el 2026-11-24 (en 29 días)',
+        ),
+      ]);
+      expect(keyWarnings()[0]).toContain(
+        'https://opendata.aemet.es/centrodedescargas/altaUsuario',
+      );
+    });
+
+    it('no avisa si quedan más de 30 días', async () => {
+      const { app } = setup(withKey('2026-11-26T15:52:00.000Z'));
+      await runIngest(app as never, NOW);
+      expect(keyWarnings()).toEqual([]);
+    });
+
+    it('avisa si ya ha caducado', async () => {
+      const { app } = setup({
+        ...withKey('2026-10-20T10:00:00.000Z'),
+        outcome: 'failed',
+        failure: 'unauthorized',
+      } as IngestResult);
+      await expect(runIngest(app as never, NOW)).resolves.toBe(1);
+      expect(keyWarnings()).toEqual([
+        expect.stringContaining('La clave de AEMET caducó el 2026-10-20'),
+      ]);
+    });
+
+    it('no avisa si no se conoce la caducidad', async () => {
+      const { app } = setup(withKey(undefined));
+      await runIngest(app as never, NOW);
+      expect(keyWarnings()).toEqual([]);
+    });
   });
 });
