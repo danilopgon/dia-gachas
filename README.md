@@ -5,7 +5,9 @@ Una aplicación que conecta con la API de la AEMET para determinar si el tiempo 
 
 > Si hace frío, viento o llueve... la respuesta está clara: ¡Hoy es día de gachas!
 
-<img width="1920" height="1080" alt="Landing de Día de Gachas" src="https://github.com/user-attachments/assets/9cbe0a6e-560b-462a-b36c-2f2449e4f7a2" />
+<img width="1920" height="1440" alt="Portada de Día de Gachas: el titular ¿Hace día de gachas?, el buscador de pueblos y el paisaje manchego" src="docs/landing.webp" />
+
+En producción: [diadegachas.danilopgon.com](https://diadegachas.danilopgon.com)
 
 
 ---
@@ -151,6 +153,7 @@ pnpm --filter dia-gachas-api ingest   # Ingesta manual (tras `pnpm build`; neces
 - **Railway**: proyecto `dia-gachas`, configurado desde el panel de cada servicio. Los dos servicios usan la imagen `backend/Dockerfile`, construida desde la raíz del repo, y solo se despliegan cuando cambian `backend/**`, `frontend/public/data/municipios.json` o los ficheros del workspace.
   - **`api`**: `node dist/main`, healthcheck `GET /health`.
   - **`ingest`**: cron `10 */3 * * *` (UTC) con `node dist/ingest`. Termina con código 0 si publica o si ya había un snapshot más reciente, y con código 1 en cualquier otro caso.
+    Cada ejecución registra la caducidad de la clave de AEMET (`aemetKeyExpiresAt`, también en `/status`), y a partir de 30 días antes avisa en los logs con un `warn`. La clave actual caduca el 2027-02-03: se renueva en opendata.aemet.es y se cambia en el servicio `api`.
   - **Bucket `snapshots`**: guarda los snapshots durante 7 días.
 - **Variables de la API**:
   - `CORS_ORIGIN`: orígenes separados por comas. Admite `*` dentro de un nombre de host para las previews de Vercel, por ejemplo `https://dia-de-gachas-*-danilopgons-projects.vercel.app`.
@@ -158,6 +161,7 @@ pnpm --filter dia-gachas-api ingest   # Ingesta manual (tras `pnpm build`; neces
   - `PORT` la pone Railway; en local se usa `4000`.
   - La API no arranca si falta alguna obligatoria.
   - `AEMET_API_KEY` sigue definida en el servicio `api` solo porque la ingesta la referencia (`${{api.AEMET_API_KEY}}`).
+- **Coste**: menos de 1 $ al mes en Railway (medido en octubre de 2026), dentro de lo que incluye el plan.
 - **Variables de la ingesta**: `AEMET_API_KEY` y las del bucket (`BUCKET`, `ENDPOINT`, `REGION`, `ACCESS_KEY_ID`, `SECRET_ACCESS_KEY`), como referencias de Railway. `MUNICIPIOS_PATH` es `/app/data/municipios.json` dentro de la imagen.
 
 ---
