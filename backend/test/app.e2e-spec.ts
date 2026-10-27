@@ -20,7 +20,7 @@ const CATALOG_PATH = join(
 );
 // 16:00 del 26 de octubre de 2026 en Madrid.
 const NOW = new Date('2026-10-26T15:00:00Z');
-const ORIGIN = 'https://www.diadegachas.com';
+const ORIGIN = 'https://diadegachas.danilopgon.com';
 
 function snapshot(): Snapshot {
   const entries = Object.values(bulkFixture()).map((raw) =>
@@ -55,7 +55,7 @@ async function createApp(store: object): Promise<INestApplication> {
     .useValue(() => NOW)
     .compile();
   const app = moduleRef.createNestApplication();
-  configureApp(app, [ORIGIN, 'https://diadegachas.danilopgon.com']);
+  configureApp(app, [ORIGIN, 'https://otro.example']);
   await app.init();
   return app;
 }
@@ -116,6 +116,13 @@ describe('API servida desde el snapshot (e2e)', () => {
   it.each(['99999', '36011'])('los errores (%s) llevan CORS', async (code) => {
     const response = await http().get(`/weather/${code}`).set('Origin', ORIGIN);
     expect(response.headers['access-control-allow-origin']).toBe(ORIGIN);
+  });
+
+  it('no da CORS a un origen no permitido', async () => {
+    const response = await http()
+      .get('/weather/16023')
+      .set('Origin', 'https://www.diadegachas.com');
+    expect(response.headers['access-control-allow-origin']).toBeUndefined();
   });
 
   it('POST /weather responde igual que el GET', async () => {
