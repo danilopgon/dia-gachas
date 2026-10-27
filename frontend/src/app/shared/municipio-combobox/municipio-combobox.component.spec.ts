@@ -140,4 +140,14 @@ describe('MunicipioComboboxComponent', () => {
     set([castejonCuenca, castejonNavarra]);
     expect(text()).toContain('2 municipios encontrados');
   });
+
+  it('desplaza la lista para que la opción activa se vea', () => {
+    const scrollIntoView = jest.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    type('castejon');
+    set([castejonCuenca, castejonNavarra]);
+    key('End');
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+    expect(scrollIntoView.mock.contexts.at(-1)).toBe(options()[1]);
+  });
 });

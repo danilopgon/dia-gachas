@@ -1,4 +1,13 @@
-import { Component, computed, effect, input, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { ICity } from '../../core/models/city.interface';
 
 export type ComboboxStatus = 'idle' | 'loading' | 'error' | 'empty' | 'ready';
@@ -29,6 +38,7 @@ export class MunicipioComboboxComponent {
   private open = signal(false);
   activeIndex = signal(-1);
   private chosen: ICity | null = null;
+  private readonly host = inject(ElementRef<HTMLElement>);
 
   expanded = computed(() => this.open() && this.suggestions().length > 0);
   activeId = computed(() =>
@@ -62,6 +72,11 @@ export class MunicipioComboboxComponent {
   }
 
   onKeydown(event: KeyboardEvent): void {
+    this.handleKey(event);
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) this.scrollActiveIntoView();
+  }
+
+  private handleKey(event: KeyboardEvent): void {
     const count = this.suggestions().length;
     switch (event.key) {
       case 'ArrowDown':
@@ -97,6 +112,14 @@ export class MunicipioComboboxComponent {
         this.activeIndex.set(-1);
         break;
     }
+  }
+
+  // El foco sigue en el campo: hay que llevar a la vista la opción activa de una lista larga.
+  private scrollActiveIntoView(): void {
+    const index = this.activeIndex();
+    if (index < 0) return;
+    const option = this.host.nativeElement.querySelector(`#${this.optionId(index)}`);
+    option?.scrollIntoView?.({ block: 'nearest' });
   }
 
   // mousedown en vez de click: se elige antes de que el blur cierre la lista.
