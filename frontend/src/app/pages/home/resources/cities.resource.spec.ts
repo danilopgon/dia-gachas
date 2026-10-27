@@ -116,6 +116,35 @@ describe('CitiesResource', () => {
     expect(searchResource.value()).toEqual([city('16078', 'Cuenca')]);
   });
 
+  it('al borrar una consulta ya resuelta, queda inactivo al momento sin esperar el debounce', async () => {
+    catalog.search.mockResolvedValue([city('02003', 'Albacete')]);
+    const query = signal('');
+    const searchResource = create(query);
+    query.set('alb');
+    await flush();
+    jest.advanceTimersByTime(300);
+    await flush();
+    expect(searchResource.status()).toBe('resolved');
+
+    query.set('');
+    await flush();
+    expect(searchResource.status()).toBe('idle');
+  });
+
+  it('si la consulta pendiente se acorta por debajo de 3 caracteres, no busca', async () => {
+    const query = signal('');
+    create(query);
+    query.set('alb');
+    await flush();
+    jest.advanceTimersByTime(100);
+
+    query.set('al');
+    await flush();
+    jest.advanceTimersByTime(300);
+    await flush();
+    expect(catalog.search).not.toHaveBeenCalled();
+  });
+
   it('expone el error si el catálogo no se puede cargar', async () => {
     catalog.search.mockRejectedValue(new Error('500'));
     const searchResource = create(signal('alb'));
