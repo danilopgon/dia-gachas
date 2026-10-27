@@ -139,8 +139,29 @@ describe('runIngest', () => {
       );
     });
 
-    it('no avisa si quedan más de 30 días', async () => {
-      const { app } = setup(withKey('2026-11-26T15:52:00.000Z'));
+    it('no avisa si quedan 30 días o más', async () => {
+      const { app } = setup(withKey('2026-11-25T15:52:00.000Z'));
+      await runIngest(app as never, NOW);
+      expect(keyWarnings()).toEqual([]);
+    });
+
+    it('avisa justo por debajo de 30 días', async () => {
+      const { app } = setup(withKey('2026-11-25T13:00:00.000Z'));
+      await runIngest(app as never, NOW);
+      expect(keyWarnings()).toEqual([expect.stringContaining('(en 30 días)')]);
+    });
+
+    it('da la fecha en hora de Madrid y en singular el último día', async () => {
+      // 23:30 UTC del 26 de octubre son las 00:30 del 27 en Madrid.
+      const { app } = setup(withKey('2026-10-26T23:30:00.000Z'));
+      await runIngest(app as never, NOW);
+      expect(keyWarnings()).toEqual([
+        expect.stringContaining('caduca el 2026-10-27 (en 1 día)'),
+      ]);
+    });
+
+    it('no avisa si la fecha no es válida', async () => {
+      const { app } = setup(withKey('no-es-fecha'));
       await runIngest(app as never, NOW);
       expect(keyWarnings()).toEqual([]);
     });

@@ -15,6 +15,7 @@ onlyBuiltDependencies:
 # Parches de seguridad que los paquetes padre fijan a versiones vulnerables (retirar cuando suban):
 # - vite: @angular/build 22.2.4 fija 8.3.0 (GHSA de vite y launch-editor, parche en 8.3.3)
 # - multer: @nestjs/platform-express 11.2.8 fija 2.4.0 (DoS con fileFilter, parche en 2.5.0)
+# Por rango: si un padre fija otra versión vulnerable intermedia, también se sustituye.
 overrides:
-  vite@8.3.0: 8.3.3
-  multer@2.4.0: 2.5.0
+  'vite@>=8.3.0 <8.3.3': 8.3.3
+  'multer@>=2.0.0 <2.5.0': 2.5.0

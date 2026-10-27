@@ -55,7 +55,7 @@ async function createApp(store: object): Promise<INestApplication> {
     .useValue(() => NOW)
     .compile();
   const app = moduleRef.createNestApplication();
-  configureApp(app, [ORIGIN]);
+  configureApp(app, [ORIGIN, 'https://otro.example']);
   await app.init();
   return app;
 }
@@ -116,6 +116,13 @@ describe('API servida desde el snapshot (e2e)', () => {
   it.each(['99999', '36011'])('los errores (%s) llevan CORS', async (code) => {
     const response = await http().get(`/weather/${code}`).set('Origin', ORIGIN);
     expect(response.headers['access-control-allow-origin']).toBe(ORIGIN);
+  });
+
+  it('no da CORS a un origen no permitido', async () => {
+    const response = await http()
+      .get('/weather/16023')
+      .set('Origin', 'https://www.diadegachas.com');
+    expect(response.headers['access-control-allow-origin']).toBeUndefined();
   });
 
   it('POST /weather responde igual que el GET', async () => {
