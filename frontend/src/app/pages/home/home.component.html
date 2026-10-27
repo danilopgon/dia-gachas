@@ -1,75 +1,41 @@
-<div
-  class="pointer-events-none fixed inset-0 z-0 hidden lg:block"
-  id="gachas-bg-anim"
-  aria-hidden="true"
->
-  <img
-    src="/assets/images/fondo-cielo.webp"
-    id="fondo-cielo"
-    class="absolute top-0 left-0 h-full w-full object-cover"
-    alt=""
-  />
-  <img
-    src="/assets/images/fondo-colinas.webp"
-    id="fondo-colinas"
-    class="absolute bottom-0 left-0 h-full w-full object-cover"
-    alt=""
-  />
-  <img
-    src="/assets/images/fondo-colinas-frente.webp"
-    id="fondo-colinas-frente"
-    class="absolute bottom-0 left-0 h-full w-full object-cover"
-    alt=""
-  />
-  <img
-    src="/assets/images/fondo-sol.webp"
-    id="fondo-sol"
-    class="absolute left-0 w-[1300px] object-cover"
-    alt=""
-  />
+<div class="backdrop" id="gachas-bg-anim" aria-hidden="true">
+  <img src="/assets/images/fondo-cielo.webp" id="fondo-cielo" alt="" />
+  <img src="/assets/images/fondo-colinas.webp" id="fondo-colinas" alt="" />
+  <img src="/assets/images/fondo-colinas-frente.webp" id="fondo-colinas-frente" alt="" />
+  <img src="/assets/images/fondo-sol.webp" id="fondo-sol" alt="" />
 </div>
 
-<main
-  class="relative z-20 flex h-dvh flex-col items-center gap-6 bg-[url('/assets/images/fondo-main.webp')] bg-cover bg-center p-6 pt-24 text-left lg:bg-none lg:px-16 lg:pt-36"
-  role="main"
->
-  <header class="flex w-full max-w-2xl flex-col gap-6 lg:max-w-none">
-    <h1
-      class="text-surface-50 text-5xl text-balance uppercase animate-fade-up lg:text-7xl lg:text-balance xl:text-9xl [animation-delay:100ms] lg:[animation-delay:300ms]"
-      i18n="@@home.title"
-      id="main-title"
-    >
-      ¿Hace día de gachas?
-    </h1>
-    <h2
-      class="text-surface-50 text-2xl text-pretty animate-fade-up lg:pb-36 lg:text-4xl xl:text-6xl [animation-delay:200ms] lg:[animation-delay:500ms]"
-      i18n="@@home.subtitle"
-    >
-      ¡Busca tu pueblo y descúbrelo!
-    </h2>
-  </header>
+<main class="stage stage--home" role="main">
+  <div class="container stage__inner">
+    <header class="headline">
+      <h1 class="poster-title rise" style="--i: 1" i18n="@@home.title" id="main-title">
+        ¿Hace día de gachas?
+      </h1>
+      <h2 class="poster-lead rise" style="--i: 2" i18n="@@home.subtitle">
+        ¡Busca tu pueblo y descúbrelo!
+      </h2>
+    </header>
 
-  <div class="w-full max-w-2xl">
-    <app-municipio-combobox
-      label="Busca tu pueblo"
-      i18n-label="@@home.search"
-      [suggestions]="cities()"
-      [status]="comboboxStatus()"
-      (query)="search({ query: $event })"
-      (selected)="value.set($event)"
-    />
-  </div>
+    <div class="well rise" style="--i: 3">
+      <app-municipio-combobox
+        label="Busca tu pueblo"
+        i18n-label="@@home.search"
+        [suggestions]="cities()"
+        [status]="comboboxStatus()"
+        (query)="search({ query: $event })"
+        (selected)="value.set($event)"
+      />
 
-  <div class="flex h-16 w-full max-w-2xl justify-center">
-    <button
-      type="button"
-      class="flex h-full w-full max-w-2xl items-center justify-center gap-3 rounded-md bg-[#e98961] px-4 text-lg font-semibold text-white drop-shadow-2xl hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#e98961]"
-      [disabled]="!value()?.id"
-      (click)="goToResult()"
-      aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
-    >
-      <app-icon name="search" />
-      <span i18n="@@home.button">Consulta al oráculo de las gachas</span>
-    </button>
+      <button
+        type="button"
+        class="btn-primary btn-primary--block"
+        [disabled]="!value()?.id"
+        (click)="goToResult()"
+        aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
+      >
+        <app-icon name="search" />
+        <span i18n="@@home.button">Consulta al oráculo<span class="wide-only"> de las gachas</span></span>
+      </button>
+    </div>
   </div>
 </main>

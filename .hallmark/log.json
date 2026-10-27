@@ -1,0 +1,28 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "site",
+  "shape": "kept (two-screen tool)",
+  "theme": "brand",
+  "axes": "mid/display-heavy/warm",
+  "hero": "Poster (/), Poster (/result)",
+  "nav": "none",
+  "footer": "credits disclosure",
+  "imagery": "brand illustrations (sky, hills, sun)",
+  "photos": [],
+  "entry": "rise once",
+  "fingerprint": "sage sky, pine ink, cream well, orange action",
+  "sections": [
+   "hero: title left + centred search well",
+   "verdict poster + figures well"
+  ],
+  "signature": "the verdict as a poster line over the hills",
+  "waived": [
+   "77",
+   "79"
+  ],
+  "prompt": "Día de gachas: search a town in Spain and read whether today calls for gachas",
+  "date": "2026-10-27"
+ }
+]

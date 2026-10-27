@@ -17,14 +17,14 @@ let nextId = 0;
         [attr.aria-expanded]="open()"
         [attr.aria-controls]="panelId"
         (click)="toggle()"
-        class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-600 shadow-2xl hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-400"
+        class="credits-trigger"
       >
         <app-icon name="info" />
       </button>
       <div
         [id]="panelId"
         [hidden]="!open()"
-        class="absolute right-0 bottom-full mb-3 w-[min(42rem,calc(100vw-4rem))] rounded-md bg-white p-4 text-slate-700 shadow-xl"
+        class="credits-panel"
       >
         <ng-content />
       </div>

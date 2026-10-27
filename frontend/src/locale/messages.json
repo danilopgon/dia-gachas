@@ -4,7 +4,7 @@
     "home.title": " ¿Hace día de gachas? ",
     "home.subtitle": " ¡Busca tu pueblo y descúbrelo! ",
     "home.search": "Busca tu pueblo",
-    "home.button": "Consulta al oráculo de las gachas",
+    "home.button": "Consulta al oráculo{$START_TAG_SPAN} de las gachas{$CLOSE_TAG_SPAN}",
     "results.loading": "Cargando datos meteorológicos...",
     "results.consulting": "Consultando si es buen día de gachas.",
     "results.error": "No se pudo obtener la predicción meteorológica.",

@@ -1,128 +1,89 @@
-<div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 hidden lg:block">
-  <img
-    alt=""
-    class="absolute top-0 left-0 h-full w-full object-cover"
-    id="fondo-cielo"
-    src="/assets/images/fondo-tiempo-desktop.webp"
-  />
+<div aria-hidden="true" class="backdrop">
+  <img alt="" id="fondo-cielo" src="/assets/images/fondo-tiempo-desktop.webp" />
 </div>
 
-<main
-  class="relative z-20 flex h-dvh flex-col items-start gap-4 bg-[url('/assets/images/fondo-cielo.webp')] bg-cover bg-center p-6 py-8 text-left lg:gap-8 lg:bg-none lg:px-16 lg:py-12"
-  role="main"
->
-  @if (weatherRef.isLoading()) {
-    <div role="status" aria-live="polite" class="flex flex-col items-start gap-4 text-surface-50">
-      <h1
-        class="text-5xl text-balance uppercase lg:text-7xl xl:text-9xl animate-pulse"
-        i18n="@@results.loading"
-      >
-        Mirando al cielo...
-      </h1>
-      <p class="text-2xl opacity-80" i18n="@@results.consulting">
-        Consultando si es buen día de gachas.
-      </p>
-    </div>
-  } @else if (weatherRef.error()) {
-    <div role="alert" class="flex flex-col items-start gap-6 text-surface-50">
-      <h1 class="text-3xl text-balance uppercase lg:text-5xl xl:text-7xl" i18n="@@results.error">
-        No se pudo obtener la predicción meteorológica.
-      </h1>
-      <p role="status" class="text-xl opacity-80">{{ errorMessage() }}</p>
-      <a
-        routerLink="/"
-        class="flex items-center gap-2 rounded-md bg-[#e98961] px-4 py-2 font-semibold text-white hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
-        aria-label="Volver a buscar otro pueblo"
-      >
-        <app-icon name="search" />
-        <span i18n="@@results.searchAgain">Buscar otro pueblo</span>
-      </a>
-    </div>
-  } @else if (weatherRef.hasValue()) {
-    @if (weather(); as data) {
-      <!-- Pueblo: identifica el lugar, no el protagonista -->
-      <header class="flex flex-col gap-2 text-surface-50 animate-fade-up">
-        <h1
-          class="text-2xl text-balance uppercase tracking-wide opacity-90 lg:text-3xl xl:text-4xl"
-        >
-          {{ data[0].town }} ({{ data[0].province }})
-        </h1>
-        <!-- Mensaje gachas: EL PROTAGONISTA -->
-        <p class="text-4xl text-balance lg:text-6xl xl:text-7xl [font-family:'PPWoodland',serif]">
-          {{ gachasLevel }}
-        </p>
-        @if (staleHours(); as hours) {
-          <p role="status" class="text-base opacity-80">
-            Datos de hace {{ hours }} horas: AEMET aún no ha publicado una previsión más reciente.
-          </p>
-        }
-      </header>
-      <!-- Icono del tiempo: entra con retraso y luego flota -->
-      @if (icon()) {
-        <div class="animate-fade-up [animation-delay:100ms]">
-          <img
-            [src]="'assets/icons/' + icon()"
-            [alt]="data[0].skyStatus"
-            class="w-20 animate-float lg:w-40 [animation-delay:600ms]"
-          />
-        </div>
-      }
-      <!-- Datos meteorológicos -->
-      <section
-        class="flex flex-col gap-3 text-surface-50 animate-fade-up lg:gap-6 [animation-delay:200ms]"
-        aria-label="Datos meteorológicos"
-      >
-        <div class="flex flex-col gap-1">
-          <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.temperature">
-            Temperatura a la hora de comer
-          </span>
-          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">
-            {{ data[0].launchTemperature }} °C
-          </p>
-        </div>
-        <div class="flex flex-col gap-1">
-          <span
-            class="text-sm uppercase tracking-widest opacity-90"
-            i18n="@@results.rainProbability"
-          >
-            Probabilidad de lluvia
-          </span>
-          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">
-            {{ data[0].launchTimeRainProbability }}%
-          </p>
-        </div>
-        <div class="flex flex-col gap-1">
-          <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.skyStatus">
-            Estado del cielo
-          </span>
-          <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">{{ data[0].skyStatus }}</p>
-        </div>
-      </section>
-      <!-- Acciones: primaria + enlace suave -->
-      <div class="flex items-center gap-4 flex-wrap animate-fade-up [animation-delay:320ms]">
-        <button
-          type="button"
-          (click)="shareResults()"
-          class="flex items-center gap-2 rounded-md bg-[#e98961] px-4 py-2 font-semibold text-white hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
-          aria-label="Compartir resultados"
-        >
-          <app-icon name="share" />
-          <span i18n="@@results.share">Compartir</span>
-        </button>
-        <a
-          routerLink="/"
-          class="text-surface-50 underline underline-offset-4 decoration-2 text-lg font-semibold hover:opacity-80 transition-opacity"
-          aria-label="Volver a buscar otro pueblo"
-          i18n="@@results.searchAgain"
-        >
-          Buscar otro pueblo
-        </a>
+<main class="stage stage--result" role="main">
+  <div class="container stage__inner">
+    @if (weatherRef.isLoading()) {
+      <div role="status" aria-live="polite" class="headline">
+        <h1 class="poster-title pulse" i18n="@@results.loading">Mirando al cielo…</h1>
+        <p class="poster-lead" i18n="@@results.consulting">Consultando si es buen día de gachas.</p>
       </div>
-      <p role="status" class="text-surface-50 min-h-6 text-lg">
-        @if (copied()) {
-          Texto copiado al portapapeles
-        }
-      </p>
+    } @else if (weatherRef.error()) {
+      <div role="alert" class="well">
+        <h1 class="town" i18n="@@results.error">No se pudo obtener la predicción meteorológica.</h1>
+        <p role="status" class="note">{{ errorMessage() }}</p>
+        <div class="actions">
+          <a routerLink="/" class="btn-primary" aria-label="Volver a buscar otro pueblo">
+            <app-icon name="search" />
+            <span i18n="@@results.searchAgain">Buscar otro pueblo</span>
+          </a>
+        </div>
+      </div>
+    } @else if (weatherRef.hasValue()) {
+      @if (weather(); as data) {
+        <!-- El veredicto es el cartel; el pueblo lo sitúa. -->
+        <header class="headline rise" style="--i: 1">
+          <h1 class="town">{{ data[0].town }} ({{ data[0].province }})</h1>
+          <div class="verdict-row">
+            <p class="verdict">{{ gachasLevel }}</p>
+            @if (icon()) {
+              <img
+                [src]="'assets/icons/' + icon()"
+                [alt]="data[0].skyStatus"
+                class="weather-icon float"
+              />
+            }
+          </div>
+          @if (staleHours(); as hours) {
+            <p role="status" class="note">
+              Datos de hace {{ hours }} horas: AEMET aún no ha publicado una previsión más reciente.
+            </p>
+          }
+        </header>
+
+        <section class="well well--wide rise" style="--i: 2" aria-label="Datos meteorológicos">
+          <dl class="figures">
+            <div>
+              <dt i18n="@@results.temperature">Temperatura a la hora de comer</dt>
+              <dd>{{ data[0].launchTemperature }}&nbsp;°C</dd>
+            </div>
+            <div>
+              <dt i18n="@@results.rainProbability">Probabilidad de lluvia</dt>
+              <dd>{{ data[0].launchTimeRainProbability }}%</dd>
+            </div>
+            <div>
+              <dt i18n="@@results.skyStatus">Estado del cielo</dt>
+              <dd>{{ data[0].skyStatus }}</dd>
+            </div>
+          </dl>
+
+          <div class="actions">
+            <button
+              type="button"
+              (click)="shareResults()"
+              class="btn-primary"
+              aria-label="Compartir resultados"
+            >
+              <app-icon name="share" />
+              <span i18n="@@results.share">Compartir</span>
+            </button>
+            <a
+              routerLink="/"
+              class="link-quiet"
+              aria-label="Volver a buscar otro pueblo"
+              i18n="@@results.searchAgain"
+            >
+              Buscar otro pueblo
+            </a>
+            <p role="status" class="note">
+              @if (copied()) {
+                Texto copiado al portapapeles
+              }
+            </p>
+          </div>
+        </section>
+      }
     }
-  }
+  </div>
 </main>

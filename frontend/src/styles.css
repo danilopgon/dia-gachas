@@ -1,52 +1,526 @@
-/* You can add global styles to this file, and also import other style files */
+/* Hallmark · shape: kept (two screens, a tool) · genre: editorial · theme: brand · redesign: full · job: try (search a town, read the verdict)
+ * paper: oklch(78% 0.056 135) · accent: oklch(70% 0.172 50) · display: PPWoodland · body: Alegreya Sans · hero: Poster (/), Poster (/result) · job: try · nav: none, kept · footer: kept (credits disclosure) · signature: the verdict set as a poster line over the brand's hills
+ * axes: mid/display-heavy/warm · posture: Committed (the sky carries the surface; orange only on the primary action) · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V3 · weakest: V, two screens share one frame by design; the verdict screen leads with the line, the search screen with the field */
+/* Hallmark · hero-review: not run as its own step (gap) · finish-review: subagent · 7 findings · 6 resolved (disabled state, empty status gap, icon anchor, well width, hairline, phone bottom room) · 1 superseded (44a centring: the owner chose title left, search centred) */
+/* Hallmark · waive 77 · a two-screen tool with one hero each and no sections · the redesign adds no content the app does not have */
+/* Hallmark · waive 59 · two screens with no stacked sections, so there is no gap to vary · only the hero and its well exist */
+/* Hallmark · waive 79 · the hills fill the screen under the well on both screens · the illustration is the brand's picture, not a dead band */
+/* Hallmark · reworded "Mirando al cielo..." to "Mirando al cielo…" · F2 names the three-period ellipsis */
+/* Hallmark · dismissed 76 · the weather icon's src is an Angular binding ([src]) the static tier cannot read; it renders on the page */
+/* Hallmark · answered F15 · one primary style (orange ticket button), one container, one well radius across both screens */
 @import "tailwindcss";
+@import "./tokens.css";
+@import "./base.css";
 
 @font-face {
-    font-family: 'PPWoodland';
-    src: url('/assets/fonts/PPWoodland-Bold.otf')
+  font-family: "PPWoodland";
+  src: url("/assets/fonts/PPWoodland-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Alegreya';
-    src: url('/assets/fonts/AlegreyaSans-Regular.ttf')
+  font-family: "Alegreya Sans";
+  src: url("/assets/fonts/AlegreyaSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --color-field: oklch(97% 0.02 89);
+  --color-scrollbar: oklch(41.3% 0.052 195 / 0.5);
+  --color-scrollbar: oklch(41.3% 0.052 195 / 0.5);
+  --shadow-well: 0 1px 2px oklch(20% 0.01 198 / 0.08);
+  --text-poster: clamp(2.75rem, min(9vw, 14dvh), 8rem);
+  --text-verdict: clamp(2.25rem, min(6vw, 10dvh), 5.5rem);
+  --text-figure: clamp(2rem, min(4vw, 7dvh), 3.5rem);
 }
 
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'PPWoodland', serif;
+h3 {
+  color: var(--color-ink);
 }
 
-body {
-    font-family: 'Alegreya', sans-serif;
-    letter-spacing: 0.0625em;
-    background-color: #94aa8b;
+/* Barras de scroll finas, sin pista: el pino suavizado, para que no pesen sobre el cielo ni en la lista. */
+html,
+.listbox {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-scrollbar) transparent;
 }
 
-@keyframes fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0);    }
+/* El escenario: cielo arriba, colinas abajo; el contenido se queda en el cielo a cualquier altura. */
+.stage {
+  position: relative;
+  z-index: var(--z-raised);
+  min-height: 100dvh;
+  /* Abajo deja sitio al botón fijo de créditos. */
+  padding-block: clamp(var(--space-xl), 9dvh, var(--space-3xl)) var(--space-3xl);
+  background-size: cover;
+  background-position: center bottom;
+}
+
+.stage--home {
+  background-image: url("/assets/images/fondo-main.webp");
+}
+
+.stage--result {
+  background-image: url("/assets/images/fondo-main.webp");
+}
+
+/* La ilustración apaisada va con la pantalla apaisada, no con un ancho: un portátil con zoom o un móvil girado no ven las colinas del cartel vertical detrás del titular. */
+@media (min-width: 64rem), (orientation: landscape) and (min-width: 40rem) {
+  .stage--home,
+  .stage--result {
+    background-image: none;
+  }
+}
+
+.stage__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(var(--space-lg), 5dvh, var(--space-2xl));
+  justify-items: start;
+}
+
+/* Portada: el cartel a la izquierda; el buscador centrado en la pantalla, que es donde se mira para actuar. */
+.stage--home .well {
+  justify-self: center;
+}
+
+/* La medida del cartel corta en «¿Hace día / de gachas?», y así su caja es el ancho real del texto. */
+.stage--home .poster-title {
+  max-width: 10ch;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-base);
+  display: none;
+  pointer-events: none;
+}
+
+.backdrop img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+.backdrop #fondo-sol {
+  inset: auto auto auto 0;
+  width: min(1300px, 90vw);
+  height: auto;
+}
+
+@media (min-width: 64rem), (orientation: landscape) and (min-width: 40rem) {
+  .backdrop {
+    display: block;
+  }
+}
+
+.headline {
+  display: grid;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.poster-title {
+  max-width: 14ch;
+  font-size: var(--text-poster);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.poster-lead {
+  max-width: 24ch;
+  font-size: clamp(1.5rem, min(3.4vw, 5.5dvh), 3rem);
+  line-height: 1.1;
+}
+
+/* El pozo crema: lo que se lee o se pulsa va siempre sobre papel, nunca sobre las colinas. */
+.well {
+  width: min(100%, 40rem);
+  display: grid;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-card);
+  /* Filete pino y no sombra: el panel no se funde con la colina crema. */
+  border: var(--rule-hair) solid var(--color-rule);
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+}
+
+/* A la medida de las tres cifras: la fila de acciones no deja medio panel vacío. */
+.well--wide {
+  width: min(100%, 52rem);
+}
+
+@media (max-width: 40rem) {
+  .well {
+    padding: var(--space-md);
+  }
+
+  /* El texto del botón no se parte: en pantalla estrecha gana sitio el texto, no el relleno. */
+  .btn-primary {
+    padding: 0 var(--space-sm);
+    font-size: clamp(0.875rem, 3.8vw, 1.125rem);
+  }
+
+  /* El botón fijo de créditos (48px a 32px del borde) nunca tapa el final del panel. */
+  .stage {
+    padding-bottom: calc(var(--space-3xl) + var(--space-xl));
+  }
+}
+
+/* Controles: los ocho estados. */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  min-height: 52px;
+  padding: 0 var(--space-lg);
+  border: 0;
+  border-radius: var(--radius-input);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font: 700 clamp(0.875rem, 4vw, 1.25rem) / 1 var(--font-display);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-primary:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Desactivado, pero de la marca: crema con borde y tinta pino, esperando un pueblo; el naranja llega al elegirlo. */
+.btn-primary:disabled {
+  border: 2px dashed var(--color-muted);
+  background: var(--color-field);
+  color: var(--color-ink-2);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-primary--block {
+  width: 100%;
+}
+
+.link-quiet {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+  transition: color var(--dur-short) var(--ease-out);
+}
+
+.link-quiet:hover {
+  color: var(--color-ink-2);
+}
+
+.link-quiet:active {
+  color: var(--color-ink);
+}
+
+.link-quiet:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Buscador */
+.field-label {
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+}
+
+.field-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 var(--space-md);
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius-input);
+  background: var(--color-field);
+  color: var(--color-ink);
+  font-size: var(--text-lg);
+}
+
+.field-input:hover {
+  border-color: var(--color-ink);
+}
+
+.field-input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.field-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.field-status {
+  color: var(--color-ink);
+}
+
+.listbox {
+  position: absolute;
+  top: 100%;
+  z-index: var(--z-dropdown);
+  width: 100%;
+  max-height: 18rem;
+  margin: var(--space-2xs) 0 0;
+  padding: var(--space-2xs) 0;
+  overflow: auto;
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius-input);
+  background: var(--color-field);
+  color: var(--color-ink);
+  list-style: none;
+  box-shadow: var(--shadow-well);
+}
+
+.listbox__option {
+  padding: var(--space-xs) var(--space-md);
+  cursor: pointer;
+}
+
+.listbox__option:hover {
+  background: var(--color-paper-2);
+}
+
+.listbox__option[aria-selected="true"] {
+  background: var(--color-paper-3);
+}
+
+/* Resultado */
+.town {
+  max-width: none;
+  font-size: clamp(1.5rem, min(3vw, 5dvh), 2.25rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.verdict-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: center;
+  width: 100%;
+}
+
+@media (min-width: 48rem) {
+  .verdict-row {
+    grid-template-columns: minmax(0, auto) auto;
+    justify-content: start;
+    gap: var(--space-2xl);
+  }
+}
+
+.verdict {
+  max-width: 18ch;
+  color: var(--color-ink);
+  font: 700 var(--text-verdict) / 1.02 var(--font-display);
+  letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+  min-width: 0;
+  /* pretty y no balance: la caja acaba donde acaba el texto y el icono se queda cerca. */
+  text-wrap: pretty;
+}
+
+.weather-icon {
+  width: clamp(5rem, 14vw, 11rem);
+  align-self: end;
+}
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.figures > div {
+  display: grid;
+  gap: var(--space-2xs);
+  padding-inline: var(--space-lg);
+  border-left: var(--rule-hair) solid var(--color-rule);
+}
+
+.figures > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.figures dt {
+  color: var(--color-ink-2);
+}
+
+.figures dd {
+  margin: 0;
+  font: 700 var(--text-figure) / 1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 40rem) {
+  .figures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .figures > div {
+    padding: var(--space-sm) 0;
+    border-left: 0;
+    border-top: var(--rule-hair) solid var(--color-rule);
+  }
+
+  .figures > div:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+}
+
+/* En los móviles más estrechos el botón dice «Consulta al oráculo»; el aria-label conserva la frase entera. */
+@media (max-width: 24rem) {
+  .wide-only {
+    display: none;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-md) var(--space-lg);
+}
+
+.note {
+  color: var(--color-ink);
+}
+
+/* Créditos */
+.credits-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius-pill);
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+  cursor: pointer;
+  box-shadow: var(--shadow-well);
+  transition: background-color var(--dur-short) var(--ease-out);
+}
+
+.credits-trigger:hover {
+  background: var(--color-paper-3);
+}
+
+.credits-trigger:active {
+  transform: translateY(1px);
+}
+
+.credits-trigger:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.credits-panel {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  width: 36rem;
+  max-width: calc(100dvw - 4rem);
+  margin-bottom: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--color-paper-2);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-well);
+}
+
+.credits-panel a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.credits-panel a:hover {
+  color: var(--color-ink-2);
+}
+
+.credits-panel a:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Movimiento: una entrada y el flotar del icono; nada se mueve con movimiento reducido. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @keyframes float-gentle {
-    0%, 100% { transform: translateY(0px);   }
-    50%       { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
-@theme {
-    /* Antes venía de tailwindcss-primeui (tema Lara, superficie slate). */
-    --color-surface-50: #f8fafc;
-    --animate-fade-up: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-    --animate-float:   float-gentle 3s ease-in-out infinite;
+.rise {
+  animation: rise var(--dur-long) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms);
+}
+
+.float {
+  animation: float-gentle 3s var(--ease-in-out) infinite;
+}
+
+.pulse {
+  animation: float-gentle 1.6s var(--ease-in-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration:        0.01ms !important;
-        animation-iteration-count: 1      !important;
-        transition-duration:       0.01ms !important;
-    }
+  .rise,
+  .float,
+  .pulse {
+    animation: none;
+  }
+
+  .btn-primary,
+  .link-quiet,
+  .credits-trigger {
+    transition: none;
+  }
 }

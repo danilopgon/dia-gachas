@@ -29,6 +29,17 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 ---
 
+## 🎨 Diseño
+
+- **Marca:** las ilustraciones del cielo, las colinas y el sol (`frontend/public/assets/images`), con PPWoodland para los titulares y Alegreya Sans para el texto.
+- **Paleta:** sacada de las propias ilustraciones. Cielo salvia de papel, verde pino como tinta, crema para los paneles y naranja solo para la acción principal.
+- **Tokens:** viven en `frontend/src/tokens.css` y las reglas base en `frontend/src/base.css`. `styles.css` no lleva colores ni fuentes escritos a mano.
+- **Proceso:** rediseño hecho con la skill Hallmark. El sello al principio de `styles.css` resume las decisiones, y `.hallmark/log.json` guarda el registro.
+- **Accesibilidad:** contraste AA en todo el texto y foco visible en todos los controles. Con movimiento reducido no se mueve nada, tampoco el paisaje de GSAP.
+- **Pendiente:** una segunda fase podría rediseñar los assets con herramientas de IA por nodos (ComfyUI, Krea, Weavy…), solo si mejoran la marca.
+
+---
+
 ## 🚀 Cómo levantar el proyecto
 
 1. **Clona el repo**
