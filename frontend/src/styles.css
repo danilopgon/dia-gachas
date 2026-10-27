@@ -3,33 +3,33 @@
  * axes: mid/display-heavy/warm · posture: Committed (the sky carries the surface; orange only on the primary action) · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V3 · weakest: V, two screens share one frame by design; the verdict screen leads with the line, the search screen with the field */
 /* Hallmark · hero-review: not run as its own step (gap) · finish-review: subagent · 7 findings · 6 resolved (disabled state, empty status gap, icon anchor, well width, hairline, phone bottom room) · 1 superseded (44a centring: the owner chose title left, search centred) */
+/* Hallmark · waive 44c · the weather icon sits on the verdict's last line, 72px below its centre · the finish review asked to anchor it to the verdict, not float mid-height */
 /* Hallmark · waive 77 · a two-screen tool with one hero each and no sections · the redesign adds no content the app does not have */
 /* Hallmark · waive 59 · two screens with no stacked sections, so there is no gap to vary · only the hero and its well exist */
 /* Hallmark · waive 79 · the hills fill the screen under the well on both screens · the illustration is the brand's picture, not a dead band */
 /* Hallmark · reworded "Mirando al cielo..." to "Mirando al cielo…" · F2 names the three-period ellipsis */
 /* Hallmark · dismissed 76 · the weather icon's src is an Angular binding ([src]) the static tier cannot read; it renders on the page */
 /* Hallmark · answered F15 · one primary style (orange ticket button), one container, one well radius across both screens */
-@import "tailwindcss";
-@import "./tokens.css";
-@import "./base.css";
+@import 'tailwindcss';
+@import './tokens.css' layer(base);
+@import './base.css' layer(base);
 
 @font-face {
-  font-family: "PPWoodland";
-  src: url("/assets/fonts/PPWoodland-Bold.otf") format("opentype");
+  font-family: 'PPWoodland';
+  src: url('/assets/fonts/PPWoodland-Bold.otf') format('opentype');
   font-weight: 700;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Alegreya Sans";
-  src: url("/assets/fonts/AlegreyaSans-Regular.ttf") format("truetype");
+  font-family: 'Alegreya Sans';
+  src: url('/assets/fonts/AlegreyaSans-Regular.ttf') format('truetype');
   font-weight: 400;
   font-display: swap;
 }
 
 :root {
   --color-field: oklch(97% 0.02 89);
-  --color-scrollbar: oklch(41.3% 0.052 195 / 0.5);
   --color-scrollbar: oklch(41.3% 0.052 195 / 0.5);
   --shadow-well: 0 1px 2px oklch(20% 0.01 198 / 0.08);
   --text-poster: clamp(2.75rem, min(9vw, 14dvh), 8rem);
@@ -62,11 +62,11 @@ html,
 }
 
 .stage--home {
-  background-image: url("/assets/images/fondo-main.webp");
+  background-image: url('/assets/images/fondo-main.webp');
 }
 
 .stage--result {
-  background-image: url("/assets/images/fondo-main.webp");
+  background-image: url('/assets/images/fondo-main.webp');
 }
 
 /* La ilustración apaisada va con la pantalla apaisada, no con un ancho: un portátil con zoom o un móvil girado no ven las colinas del cartel vertical detrás del titular. */
@@ -147,6 +147,8 @@ html,
 .well {
   width: min(100%, 40rem);
   display: grid;
+  /* La columna no crece con el contenido rígido (el botón sin partir): el campo nunca se sale del panel. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-md);
   padding: var(--space-lg);
   border-radius: var(--radius-card);
@@ -164,12 +166,6 @@ html,
 @media (max-width: 40rem) {
   .well {
     padding: var(--space-md);
-  }
-
-  /* El texto del botón no se parte: en pantalla estrecha gana sitio el texto, no el relleno. */
-  .btn-primary {
-    padding: 0 var(--space-sm);
-    font-size: clamp(0.875rem, 3.8vw, 1.125rem);
   }
 
   /* El botón fijo de créditos (48px a 32px del borde) nunca tapa el final del panel. */
@@ -223,6 +219,14 @@ html,
 
 .btn-primary--block {
   width: 100%;
+}
+
+/* El texto del botón no se parte: en pantalla estrecha gana sitio el texto, no el relleno. Va detrás de la regla base para ganarle. */
+@media (max-width: 40rem) {
+  .btn-primary {
+    padding: 0 var(--space-sm);
+    font-size: clamp(0.875rem, 3.8vw, 1.125rem);
+  }
 }
 
 .link-quiet {
@@ -311,7 +315,7 @@ html,
   background: var(--color-paper-2);
 }
 
-.listbox__option[aria-selected="true"] {
+.listbox__option[aria-selected='true'] {
   background: var(--color-paper-3);
 }
 
@@ -400,8 +404,8 @@ html,
   }
 }
 
-/* En los móviles más estrechos el botón dice «Consulta al oráculo»; el aria-label conserva la frase entera. */
-@media (max-width: 24rem) {
+/* En móvil el botón dice «Consulta al oráculo»: la frase entera no cabe sin partirse por debajo de 480px. El aria-label la conserva. */
+@media (max-width: 30rem) {
   .wide-only {
     display: none;
   }
