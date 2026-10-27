@@ -2,7 +2,7 @@
 # Se construye desde la raíz del workspace: docker build -f backend/Dockerfile .
 
 # Etapa de build
-FROM node:22.23.4-bookworm AS builder
+FROM node:24.22.1-bookworm AS builder
 
 RUN corepack enable
 
@@ -21,7 +21,7 @@ COPY backend/ backend/
 RUN pnpm --filter dia-gachas-api build
 
 # Etapa final (runner)
-FROM node:22.23.4-bookworm AS runner
+FROM node:24.22.1-bookworm AS runner
 
 ENV NODE_ENV=production
 

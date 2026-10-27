@@ -40,7 +40,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 2. **Instala las dependencias de todos los paquetes**
 
-   El repo es un workspace de pnpm (versión fijada en `packageManager`). Con Node 22 basta con activar Corepack:
+   El repo es un workspace de pnpm (versión fijada en `packageManager`). Con Node 24 basta con activar Corepack:
 
    ```bash
    corepack enable
