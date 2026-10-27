@@ -39,7 +39,7 @@
       </a>
     </div>
   } @else if (weatherRef.hasValue()) {
-    <ng-container *ngIf="weather() as data">
+    @if (weather(); as data) {
       <!-- Pueblo: identifica el lugar, no el protagonista -->
       <header class="flex flex-col gap-2 text-surface-50 animate-fade-up">
         <h1
@@ -57,16 +57,16 @@
           </p>
         }
       </header>
-
       <!-- Icono del tiempo: entra con retraso y luego flota -->
-      <div *ngIf="icon()" class="animate-fade-up [animation-delay:100ms]">
-        <img
-          [src]="'assets/icons/' + icon()"
-          [alt]="data[0].skyStatus"
-          class="w-20 animate-float lg:w-40 [animation-delay:600ms]"
-        />
-      </div>
-
+      @if (icon()) {
+        <div class="animate-fade-up [animation-delay:100ms]">
+          <img
+            [src]="'assets/icons/' + icon()"
+            [alt]="data[0].skyStatus"
+            class="w-20 animate-float lg:w-40 [animation-delay:600ms]"
+          />
+        </div>
+      }
       <!-- Datos meteorológicos -->
       <section
         class="flex flex-col gap-3 text-surface-50 animate-fade-up lg:gap-6 [animation-delay:200ms]"
@@ -80,7 +80,6 @@
             {{ data[0].launchTemperature }} °C
           </p>
         </div>
-
         <div class="flex flex-col gap-1">
           <span
             class="text-sm uppercase tracking-widest opacity-90"
@@ -92,7 +91,6 @@
             {{ data[0].launchTimeRainProbability }}%
           </p>
         </div>
-
         <div class="flex flex-col gap-1">
           <span class="text-sm uppercase tracking-widest opacity-90" i18n="@@results.skyStatus">
             Estado del cielo
@@ -100,7 +98,6 @@
           <p class="text-4xl font-bold lg:text-5xl xl:text-6xl">{{ data[0].skyStatus }}</p>
         </div>
       </section>
-
       <!-- Acciones: primaria + enlace suave -->
       <div class="flex items-center gap-4 flex-wrap animate-fade-up [animation-delay:320ms]">
         <button
@@ -126,6 +123,6 @@
           Texto copiado al portapapeles
         }
       </p>
-    </ng-container>
+    }
   }
 </main>

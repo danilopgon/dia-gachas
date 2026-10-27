@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomeComponent } from './home.component';
 import { Router } from '@angular/router';
-import { PLATFORM_ID, ResourceStatus, signal } from '@angular/core';
+import { PLATFORM_ID, signal } from '@angular/core';
 import { CitiesResource } from './resources/cities.resource';
 import { ICity } from '../../core/models/city.interface';
 
@@ -20,9 +20,20 @@ const alegria: ICity = {
 };
 
 const mockRouter = { navigate: jest.fn() };
+const storedValue = signal<ICity[] | undefined>(undefined);
+const status = signal('idle');
+// Como en Angular 20: leer value() con el recurso en error lanza una excepción.
+const value = Object.assign(
+  () => {
+    if (status() === 'error') throw new Error('Resource is currently in an error state');
+    return storedValue();
+  },
+  { set: (v: ICity[] | undefined) => storedValue.set(v) },
+);
 const searchResource = {
-  value: signal<ICity[] | undefined>(undefined),
-  status: signal(ResourceStatus.Idle),
+  value,
+  hasValue: () => status() !== 'error' && storedValue() !== undefined,
+  status,
   error: signal<unknown>(undefined),
 };
 const mockCitiesResource = {
@@ -37,7 +48,7 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     searchResource.value.set(undefined);
-    searchResource.status.set(ResourceStatus.Idle);
+    searchResource.status.set('idle');
     searchResource.error.set(undefined);
     TestBed.configureTestingModule({
       imports: [HomeComponent],
@@ -67,16 +78,16 @@ describe('HomeComponent', () => {
 
   it('muestra las sugerencias del recurso y las vacía mientras no hay resultado', () => {
     searchResource.value.set([alegria]);
-    searchResource.status.set(ResourceStatus.Resolved);
+    searchResource.status.set('resolved');
     expect(component.cities()).toEqual([alegria]);
 
     searchResource.value.set(undefined);
-    searchResource.status.set(ResourceStatus.Loading);
+    searchResource.status.set('loading');
     expect(component.cities()).toEqual([]);
   });
 
   it('muestra un mensaje si no se pueden cargar los municipios', () => {
-    searchResource.status.set(ResourceStatus.Error);
+    searchResource.status.set('error');
     searchResource.error.set(new Error('500'));
     fixture.detectChanges();
     expect(text()).toContain(ERROR_MESSAGE);
@@ -84,7 +95,7 @@ describe('HomeComponent', () => {
 
   it('muestra un mensaje si no hay resultados', () => {
     searchResource.value.set([]);
-    searchResource.status.set(ResourceStatus.Resolved);
+    searchResource.status.set('resolved');
     fixture.detectChanges();
     expect(text()).toContain(EMPTY_MESSAGE);
     expect(text()).not.toContain(ERROR_MESSAGE);

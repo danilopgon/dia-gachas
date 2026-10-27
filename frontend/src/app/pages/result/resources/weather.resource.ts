@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, resource, signal, Signal } from '@angular/core';
+import { debounced, inject, Injectable, resource, Signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import {
@@ -7,6 +7,7 @@ import {
   IWeatherResponse,
 } from '../../../core/models/weather-data.interface';
 import { firstValueFrom } from 'rxjs';
+import { waitForQuery } from '../../../core/utils/debounce-query.util';
 
 export type WeatherErrorKind = 'not-found' | 'unavailable' | 'network';
 
@@ -36,33 +37,20 @@ export class WeatherResource {
   private http = inject(HttpClient);
 
   createWeatherResource(code: Signal<string>) {
-    const debounced = signal('');
-
-    let timer: ReturnType<typeof setTimeout>;
-
-    effect(() => {
+    const townCode = debounced(() => {
       const value = code().trim();
-
-      clearTimeout(timer);
-      if (value.length < 5) {
-        debounced.set('');
-        return;
-      }
-
-      timer = setTimeout(() => {
-        debounced.set(value);
-      }, 300);
-    });
+      return value.length < 5 ? '' : value;
+    }, waitForQuery(300));
 
     return resource({
-      request: () => debounced(),
-      loader: async ({ request }): Promise<WeatherResult | null> => {
-        if (!request) return null;
+      params: () => townCode.value(),
+      loader: async ({ params }): Promise<WeatherResult | null> => {
+        if (!params) return null;
 
         let res: IWeatherResponse;
         try {
           res = await firstValueFrom(
-            this.http.get<IWeatherResponse>(`${environment.BACK_URL}/weather/${request}`),
+            this.http.get<IWeatherResponse>(`${environment.BACK_URL}/weather/${params}`),
           );
         } catch (error) {
           throw toWeatherError(error);

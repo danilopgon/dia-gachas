@@ -21,7 +21,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 ## 🛠 Stack técnico
 
-- **Frontend**: Angular 19 (PWA) · Tailwind CSS v4 · PrimeNG · GSAP
+- **Frontend**: Angular 22 (PWA, zoneless, signals y `resource()`) · Tailwind CSS v4 · GSAP · componentes propios accesibles (sin librería de UI)
 - **Backend**: NestJS 11 en Railway
 - **Ingesta**: comando NestJS ejecutado por Railway Cron; snapshots en un Railway Bucket (S3, `@aws-sdk/client-s3`)
 - **Municipios**: catálogo estático en `frontend/public/data/municipios.json`
@@ -40,7 +40,7 @@ El resultado se muestra en una interfaz cuidada, accesible y responsive. Ideal p
 
 2. **Instala las dependencias de todos los paquetes**
 
-   El repo es un workspace de pnpm (versión fijada en `packageManager`). Con Node 22 basta con activar Corepack:
+   El repo es un workspace de pnpm (versión fijada en `packageManager`). Con Node 24 basta con activar Corepack:
 
    ```bash
    corepack enable

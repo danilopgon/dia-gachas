@@ -13,8 +13,11 @@ jest.mock('./resources/weather.resource', () => ({
   WeatherLoadError: jest.requireActual('./resources/weather.resource').WeatherLoadError,
   WeatherResource: jest.fn().mockImplementation(() => ({
     createWeatherResource: () => ({
-      value: () =>
-        mockWeatherValue?.length ? { days: mockWeatherValue, meta: mockMeta } : undefined,
+      // Como en Angular 20: leer value() con el recurso en error lanza una excepción.
+      value: () => {
+        if (mockError) throw new Error('Resource is currently in an error state');
+        return mockWeatherValue?.length ? { days: mockWeatherValue, meta: mockMeta } : undefined;
+      },
       isLoading: () => false,
       hasValue: () => !!mockWeatherValue?.length,
       error: () => mockError,

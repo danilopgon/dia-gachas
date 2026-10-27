@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { InfoPopoverComponent } from './info-popover.component';
 
 @Component({
-  standalone: true,
   imports: [InfoPopoverComponent],
   template: `<app-info-popover label="Información" class="fixed right-8 bottom-8"
       ><p>Créditos</p></app-info-popover

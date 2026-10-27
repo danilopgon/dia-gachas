@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherLoadError, WeatherResource } from './resources/weather.resource';
@@ -13,9 +12,8 @@ const ERROR_MESSAGES = {
 } as const;
 
 @Component({
-  standalone: true,
   selector: 'app-result',
-  imports: [RouterModule, CommonModule, IconComponent],
+  imports: [RouterModule, IconComponent],
   templateUrl: './result.component.html',
 })
 export class ResultComponent {
@@ -27,9 +25,13 @@ export class ResultComponent {
   private randomMessage = signal('');
 
   weatherRef = this.weatherResource.createWeatherResource(this.id);
-  weather = computed(() => this.weatherRef.value()?.days);
+  // En Angular 20 value() lanza si el recurso está en error: se lee solo con valor.
+  private result = computed(() =>
+    this.weatherRef.hasValue() ? this.weatherRef.value() : undefined,
+  );
+  weather = computed(() => this.result()?.days);
   staleHours = computed(() => {
-    const meta = this.weatherRef.value()?.meta;
+    const meta = this.result()?.meta;
     return meta?.stale ? Math.round(meta.ageHours) : null;
   });
   errorMessage = computed(() => {
