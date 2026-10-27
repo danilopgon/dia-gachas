@@ -20,7 +20,7 @@ const CATALOG_PATH = join(
 );
 // 16:00 del 26 de octubre de 2026 en Madrid.
 const NOW = new Date('2026-10-26T15:00:00Z');
-const ORIGIN = 'https://www.diadegachas.com';
+const ORIGIN = 'https://diadegachas.danilopgon.com';
 
 function snapshot(): Snapshot {
   const entries = Object.values(bulkFixture()).map((raw) =>
@@ -55,7 +55,7 @@ async function createApp(store: object): Promise<INestApplication> {
     .useValue(() => NOW)
     .compile();
   const app = moduleRef.createNestApplication();
-  configureApp(app, [ORIGIN, 'https://diadegachas.danilopgon.com']);
+  configureApp(app, [ORIGIN]);
   await app.init();
   return app;
 }

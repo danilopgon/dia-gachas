@@ -9,7 +9,6 @@
     "build:web": "pnpm --filter dia-gachas-web build",
     "build": "pnpm build:api && pnpm build:web",
     "start:api": "pnpm --filter dia-gachas-api start:prod",
-    "start:web": "pnpm --filter dia-gachas-web start",
     "clean": "rimraf backend/dist frontend/dist",
     "lint:api": "pnpm --filter dia-gachas-api lint",
     "lint:web": "pnpm --filter dia-gachas-web lint",
@@ -17,9 +16,6 @@
     "lint:fix": "pnpm --filter dia-gachas-api lint:fix && pnpm --filter dia-gachas-web lint:fix",
     "test:api": "pnpm --filter dia-gachas-api test",
     "test:web": "pnpm --filter dia-gachas-web test",
-    "build:prod": "pnpm build:api && pnpm build:web",
-    "start:all": "concurrently -n BACKEND,FRONTEND -c green,blue \"pnpm start:api\" \"pnpm start:web\"",
-    "serve:coolify": "pnpm build:prod && pnpm start:all",
     "municipios:generar": "node scripts/municipios/generar.mjs",
     "test:scripts": "node --test \"scripts/**/*.test.mjs\""
   },

@@ -36,6 +36,7 @@
     "@angular/cli": "22.2.4",
     "@angular/compiler-cli": "22.2.3",
     "@angular/localize": "22.2.3",
+    "@babel/core": "^7.29.7",
     "@eslint/js": "^10.0.1",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.0.0",
