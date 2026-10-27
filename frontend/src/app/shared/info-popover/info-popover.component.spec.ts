@@ -5,7 +5,9 @@ import { InfoPopoverComponent } from './info-popover.component';
 @Component({
   standalone: true,
   imports: [InfoPopoverComponent],
-  template: `<app-info-popover label="Información"><p>Créditos</p></app-info-popover>
+  template: `<app-info-popover label="Información" class="fixed right-8 bottom-8"
+      ><p>Créditos</p></app-info-popover
+    >
     <button id="fuera">Fuera</button>`,
 })
 class HostComponent {}
@@ -14,7 +16,11 @@ describe('InfoPopoverComponent', () => {
   let fixture: ComponentFixture<HostComponent>;
   const trigger = () =>
     fixture.nativeElement.querySelector('app-info-popover button') as HTMLButtonElement;
-  const panel = () => fixture.nativeElement.querySelector('[role="dialog"]') as HTMLElement;
+  const panel = () =>
+    fixture.nativeElement.querySelector(
+      `#${trigger().getAttribute('aria-controls')}`,
+    ) as HTMLElement;
+  const host = () => fixture.nativeElement.querySelector('app-info-popover') as HTMLElement;
 
   beforeEach(() => {
     TestBed.configureTestingModule({ imports: [HostComponent] });
@@ -54,5 +60,25 @@ describe('InfoPopoverComponent', () => {
     (fixture.nativeElement.querySelector('#fuera') as HTMLElement).click();
     fixture.detectChanges();
     expect(panel().hidden).toBe(true);
+  });
+
+  it('no impone posición al host: respeta el fixed de quien lo usa', () => {
+    expect(host().classList).toContain('fixed');
+    expect(host().classList).not.toContain('relative');
+    expect(host().classList).not.toContain('absolute');
+  });
+
+  it('Escape cierra también con el foco en el botón', () => {
+    trigger().focus();
+    trigger().click();
+    fixture.detectChanges();
+    trigger().dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+    fixture.detectChanges();
+    expect(panel().hidden).toBe(true);
+    expect(trigger().getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('sigue el patrón de disclosure, sin role="dialog"', () => {
+    expect(panel().getAttribute('role')).toBeNull();
   });
 });
