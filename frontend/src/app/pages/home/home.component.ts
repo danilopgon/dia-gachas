@@ -51,6 +51,8 @@ export class HomeComponent implements AfterViewInit {
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (window.innerWidth < 1024) return;
+    // Con movimiento reducido el paisaje se queda quieto.
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     this.configureGsapAnimations();
   }
 

@@ -4,14 +4,16 @@
     "home.title": " ¿Hace día de gachas? ",
     "home.subtitle": " ¡Busca tu pueblo y descúbrelo! ",
     "home.search": "Busca tu pueblo",
-    "home.button": "Consulta al oráculo de las gachas",
-    "results.loading": "Cargando datos meteorológicos...",
+    "home.button": "Consulta al oráculo{$START_TAG_SPAN} de las gachas{$CLOSE_TAG_SPAN}",
+    "results.loading": "Mirando al cielo…",
     "results.consulting": "Consultando si es buen día de gachas.",
     "results.error": "No se pudo obtener la predicción meteorológica.",
-    "results.temperature": "Temperatura a la hora de comer:",
-    "results.rainProbability": "Probabilidad de lluvia:",
-    "results.skyStatus": "Estado del cielo:",
+    "results.searchAgain": "Buscar otro pueblo",
+    "results.temperature": "Temperatura a la hora de comer",
+    "results.rainProbability": "Probabilidad de lluvia",
+    "results.skyStatus": "Estado del cielo",
     "results.share": "Compartir",
-    "results.searchAgain": "Buscar otro pueblo"
+    "home.citiesError": "No se han podido cargar los municipios. Inténtalo de nuevo.",
+    "home.citiesEmpty": "No hay ningún municipio con ese nombre."
   }
 }
