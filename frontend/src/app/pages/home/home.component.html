@@ -49,57 +49,27 @@
     </h2>
   </header>
 
-  <p-floatlabel variant="in" class="w-full max-w-2xl">
-    <p-autocomplete
-      inputId="pueblo-autocomplete"
-      [(ngModel)]="value"
+  <div class="w-full max-w-2xl">
+    <app-municipio-combobox
+      label="Busca tu pueblo"
+      i18n-label="@@home.search"
       [suggestions]="cities()"
-      (completeMethod)="search($event)"
-      [optionLabel]="displayName"
-      styleClass="flex w-full"
-      inputStyleClass="flex w-full"
-      [maxlength]="30"
-      autocomplete="off"
-      ariaLabelledBy="autocomplete-label"
-      aria-required="true"
-    >
-      <!-- Lista de resultados -->
-      <ng-template let-city pTemplate="item">
-        {{ displayName(city) }}
-      </ng-template>
-    </p-autocomplete>
-
-    <label
-      for="pueblo-autocomplete"
-      class="w-full max-w-2xl"
-      id="autocomplete-label"
-      i18n="@@home.search"
-    >
-      Busca tu pueblo
-    </label>
-  </p-floatlabel>
-
-  <p class="text-surface-50 min-h-6 w-full max-w-2xl text-center text-lg" role="status">
-    @if (loadFailed()) {
-      <span i18n="@@home.citiesError"
-        >No se han podido cargar los municipios. Inténtalo de nuevo.</span
-      >
-    } @else if (noResults()) {
-      <span i18n="@@home.citiesEmpty">No hay ningún municipio con ese nombre.</span>
-    }
-  </p>
-
-  <div class="card flex h-16 w-full max-w-2xl justify-center">
-    <p-button
-      class="h-full w-full max-w-2xl drop-shadow-2xl"
-      icon="pi pi-search"
-      styleClass="h-full w-full max-w-2xl"
-      [disabled]="!value()?.id"
-      (onClick)="goToResult()"
-      label="Consulta al oráculo de las gachas"
-      i18n-label="@@home.button"
-      aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
-      [attr.aria-disabled]="!value()?.id ? true : null"
+      [status]="comboboxStatus()"
+      (query)="search({ query: $event })"
+      (selected)="value.set($event)"
     />
+  </div>
+
+  <div class="flex h-16 w-full max-w-2xl justify-center">
+    <button
+      type="button"
+      class="flex h-full w-full max-w-2xl items-center justify-center gap-3 rounded-md bg-[#e98961] px-4 text-lg font-semibold text-white drop-shadow-2xl hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-[#e98961]"
+      [disabled]="!value()?.id"
+      (click)="goToResult()"
+      aria-label="Consulta al oráculo de las gachas. Selecciona un pueblo antes de pulsar"
+    >
+      <app-icon name="search" />
+      <span i18n="@@home.button">Consulta al oráculo de las gachas</span>
+    </button>
   </div>
 </main>

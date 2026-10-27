@@ -3,9 +3,7 @@ import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherLoadError, WeatherResource } from './resources/weather.resource';
 import { getRandomGachasMessage } from '../../core/utils/get-random-gachas-message.util';
-import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { IconComponent } from '../../shared/icon/icon.component';
 import { getWeatherIcon, iconMap } from '../../core/utils/weather-icon.util';
 
 const ERROR_MESSAGES = {
@@ -17,8 +15,7 @@ const ERROR_MESSAGES = {
 @Component({
   standalone: true,
   selector: 'app-result',
-  imports: [RouterModule, CommonModule, ButtonModule, ToastModule],
-  providers: [MessageService],
+  imports: [RouterModule, CommonModule, IconComponent],
   templateUrl: './result.component.html',
 })
 export class ResultComponent {
@@ -50,7 +47,11 @@ export class ResultComponent {
     return this.randomMessage();
   }
 
-  constructor(private readonly messageService: MessageService) {
+  /** Aviso tras copiar el texto para compartir; se oculta solo. */
+  copied = signal(false);
+  private copiedTimer?: ReturnType<typeof setTimeout>;
+
+  constructor() {
     const idFromRoute = this.route.snapshot.paramMap.get('id');
     this.initializeId(idFromRoute);
 
@@ -96,10 +97,8 @@ export class ResultComponent {
       `${message} ${typeof window !== 'undefined' ? window.location.href : ''}`,
     );
 
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Copiado',
-      detail: 'Link copiado al portapapeles',
-    });
+    this.copied.set(true);
+    clearTimeout(this.copiedTimer);
+    this.copiedTimer = setTimeout(() => this.copied.set(false), 3000);
   }
 }

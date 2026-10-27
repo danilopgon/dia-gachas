@@ -12,19 +12,20 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import gsap from 'gsap';
-import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
-import { ButtonModule } from 'primeng/button';
-import { FloatLabelModule } from 'primeng/floatlabel';
 import { ICity } from '../../core/models/city.interface';
+import { IconComponent } from '../../shared/icon/icon.component';
+import {
+  ComboboxStatus,
+  MunicipioComboboxComponent,
+} from '../../shared/municipio-combobox/municipio-combobox.component';
 import { CitiesResource } from './resources/cities.resource';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [ButtonModule, AutoCompleteModule, FloatLabelModule, FormsModule, RouterModule],
+  imports: [MunicipioComboboxComponent, IconComponent, RouterModule],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements AfterViewInit {
@@ -42,6 +43,13 @@ export class HomeComponent implements AfterViewInit {
     () =>
       this.citiesRef.status() === ResourceStatus.Resolved && this.citiesRef.value()?.length === 0,
   );
+
+  comboboxStatus = computed<ComboboxStatus>(() => {
+    if (this.loadFailed()) return 'error';
+    if (this.noResults()) return 'empty';
+    if (this.citiesRef.status() === ResourceStatus.Loading) return 'loading';
+    return this.citiesRef.status() === ResourceStatus.Resolved ? 'ready' : 'idle';
+  });
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
@@ -80,7 +88,7 @@ export class HomeComponent implements AfterViewInit {
     );
   }
 
-  search(event: AutoCompleteCompleteEvent): void {
+  search(event: { query: string }): void {
     this.searchTerm.set(event.query);
   }
 

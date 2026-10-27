@@ -1,4 +1,3 @@
-<p-toast />
 <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 hidden lg:block">
   <img
     alt=""
@@ -30,13 +29,14 @@
         No se pudo obtener la predicción meteorológica.
       </h1>
       <p role="status" class="text-xl opacity-80">{{ errorMessage() }}</p>
-      <p-button
+      <a
         routerLink="/"
-        label="Buscar otro pueblo"
-        i18n-label="@@results.searchAgain"
+        class="flex items-center gap-2 rounded-md bg-[#e98961] px-4 py-2 font-semibold text-white hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
         aria-label="Volver a buscar otro pueblo"
-        icon="pi pi-search"
-      ></p-button>
+      >
+        <app-icon name="search" />
+        <span i18n="@@results.searchAgain">Buscar otro pueblo</span>
+      </a>
     </div>
   } @else if (weatherRef.hasValue()) {
     <ng-container *ngIf="weather() as data">
@@ -103,13 +103,15 @@
 
       <!-- Acciones: primaria + enlace suave -->
       <div class="flex items-center gap-4 flex-wrap animate-fade-up [animation-delay:320ms]">
-        <p-button
-          (onClick)="shareResults()"
-          label="Compartir"
-          i18n-label="@@results.share"
+        <button
+          type="button"
+          (click)="shareResults()"
+          class="flex items-center gap-2 rounded-md bg-[#e98961] px-4 py-2 font-semibold text-white hover:bg-[#e15b2e] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
           aria-label="Compartir resultados"
-          icon="pi pi-share-alt"
-        ></p-button>
+        >
+          <app-icon name="share" />
+          <span i18n="@@results.share">Compartir</span>
+        </button>
         <a
           routerLink="/"
           class="text-surface-50 underline underline-offset-4 decoration-2 text-lg font-semibold hover:opacity-80 transition-opacity"
@@ -119,6 +121,11 @@
           Buscar otro pueblo
         </a>
       </div>
+      <p role="status" class="text-surface-50 min-h-6 text-lg">
+        @if (copied()) {
+          Texto copiado al portapapeles
+        }
+      </p>
     </ng-container>
   }
 </main>
