@@ -449,6 +449,41 @@ html,
   gap: var(--space-md) var(--space-lg);
 }
 
+.actions__quiet {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-lg);
+}
+
+/* Vacía sigue en el DOM para que el lector de pantalla anuncie el aviso, pero fuera del flujo: no añade hueco ni fila. */
+.actions > .note:empty {
+  position: absolute;
+}
+
+/* En móvil no caben los tres en fila: el botón manda y debajo van los dos enlaces, a sus extremos. */
+@media (max-width: 40rem) {
+  .actions--result {
+    row-gap: var(--space-xs);
+  }
+
+  .actions--result .btn-primary,
+  .actions__quiet {
+    flex: 1 1 100%;
+  }
+
+  /* El hueco lo reparte space-between; aquí solo el mínimo, para que sigan juntos en los móviles más estrechos. */
+  .actions__quiet {
+    justify-content: space-between;
+    column-gap: var(--space-xs);
+  }
+
+  /* Con movimiento reducido solo queda un enlace: centrado bajo el botón, no descolgado a un lado. */
+  .actions__quiet > :only-child {
+    margin-inline: auto;
+  }
+}
+
 .note {
   color: var(--color-ink);
 }
