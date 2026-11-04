@@ -14,6 +14,8 @@ import {
 const ENTRANCE_SECONDS = 2.2;
 const TINT_SECONDS = 1.2;
 const SUN_SECONDS = 1.3;
+const SUN_SWAY = 7;
+const SUN_TOP_MARGIN = 8;
 const CLOUD_SECONDS = 1.1;
 const CLOUD_STAGGER = 0.1;
 const CEILING_SECONDS = 1;
@@ -321,7 +323,11 @@ export class WeatherPainter {
     this.grainAlpha = heavySky || scene.fog > 0 ? GRAIN_ALPHA.pale : GRAIN_ALPHA.fair;
 
     if (scene.sun) {
-      this.sun = makeSun(Math.max(40, Math.min(115, Math.min(width, height) * 0.1)), dpr);
+      // En vertical escala con el ancho, sin mínimo: así cabe entero en el hueco sobre el veredicto.
+      const radius = portrait
+        ? Math.min(115, width * 0.1)
+        : Math.max(40, Math.min(115, height * 0.1));
+      this.sun = makeSun(radius, dpr);
     }
 
     const colors = scene.storm
@@ -410,13 +416,13 @@ export class WeatherPainter {
     if (!this.sun) return;
     const { ctx, width, height } = this;
     const size = this.sun.width;
-    // En la esquina, recortado si hace falta: el titular ocupa el resto del cielo.
+    // En la esquina y entero: en vertical deja margen para que el vaivén tampoco lo corte.
     const landscape = width > height;
     const x = width * (landscape ? 0.9 : 0.86) - size / 2;
-    const rest = landscape ? height * 0.13 - size / 2 : -size * 0.42;
+    const rest = landscape ? height * 0.13 - size / 2 : SUN_SWAY + SUN_TOP_MARGIN;
     const entrance = easeOutBack(this.progress(0, SUN_SECONDS));
     const hidden = -size - 10;
-    const y = hidden + (rest - hidden) * entrance + Math.sin(this.elapsed * 0.7) * 7;
+    const y = hidden + (rest - hidden) * entrance + Math.sin(this.elapsed * 0.7) * SUN_SWAY;
     ctx.drawImage(this.sun.image, x, y, size, this.sun.height);
   }
 
