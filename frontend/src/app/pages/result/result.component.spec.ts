@@ -53,6 +53,27 @@ describe('ResultComponent', () => {
     fixture.detectChanges();
   });
 
+  describe('estado del cielo en la ficha', () => {
+    const renderSky = (skyStatus: string) => {
+      mockWeatherValue = [
+        { town: 'Tarancón', province: 'Cuenca', launchTemperature: 10, launchTimeRainProbability: 50, skyStatus },
+      ];
+      const view = TestBed.createComponent(ResultComponent);
+      view.detectChanges();
+      return view.nativeElement.querySelector('.figures') as HTMLElement;
+    };
+
+    it('una descripción corta se queda en su columna', () => {
+      expect(renderSky('Nuboso con lluvia').classList).not.toContain('figures--long');
+    });
+
+    it('una descripción larga ocupa su propia fila', () => {
+      expect(renderSky('Intervalos nubosos con tormenta y lluvia escasa').classList).toContain(
+        'figures--long',
+      );
+    });
+  });
+
   it('debería crear el componente', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
