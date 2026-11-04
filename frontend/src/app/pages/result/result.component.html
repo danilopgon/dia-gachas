@@ -1,5 +1,12 @@
-<div aria-hidden="true" class="backdrop">
-  <img alt="" id="fondo-cielo" src="/assets/images/fondo-tiempo-desktop.webp" />
+<div aria-hidden="true" class="backdrop backdrop--result">
+  <picture>
+    <source
+      media="(min-width: 64rem), (orientation: landscape) and (min-width: 40rem)"
+      srcset="/assets/images/fondo-tiempo-desktop.webp"
+    />
+    <img alt="" id="fondo-cielo" src="/assets/images/fondo-main.webp" />
+  </picture>
+  <app-weather-scene [scene]="scene()" [paused]="skyPaused()" />
 </div>
 
 <main class="stage stage--result" role="main">
@@ -25,16 +32,7 @@
         <!-- El veredicto es el cartel; el pueblo lo sitúa. -->
         <header class="headline rise" style="--i: 1">
           <h1 class="town">{{ data[0].town }} ({{ data[0].province }})</h1>
-          <div class="verdict-row">
-            <p class="verdict">{{ gachasLevel }}</p>
-            @if (icon()) {
-              <img
-                [src]="'assets/icons/' + icon()"
-                [alt]="data[0].skyStatus"
-                class="weather-icon float"
-              />
-            }
-          </div>
+          <p class="verdict">{{ gachasLevel }}</p>
           @if (staleHours(); as hours) {
             <p role="status" class="note">
               Datos de hace {{ hours }} horas: AEMET aún no ha publicado una previsión más reciente.
@@ -43,7 +41,7 @@
         </header>
 
         <section class="well well--wide rise" style="--i: 2" aria-label="Datos meteorológicos">
-          <dl class="figures">
+          <dl class="figures" [class.figures--long]="longSky()">
             <div>
               <dt i18n="@@results.temperature">Temperatura a la hora de comer</dt>
               <dd>{{ data[0].launchTemperature }}&nbsp;°C</dd>
@@ -76,6 +74,11 @@
             >
               Buscar otro pueblo
             </a>
+            @if (!reduced()) {
+              <button type="button" class="link-quiet" (click)="toggleSky()">
+                {{ skyPaused() ? 'Mover el cielo' : 'Parar el cielo' }}
+              </button>
+            }
             <p role="status" class="note">
               @if (copied()) {
                 Texto copiado al portapapeles

@@ -3,7 +3,9 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { WeatherLoadError, WeatherResource } from './resources/weather.resource';
 import { getRandomGachasMessage } from '../../core/utils/get-random-gachas-message.util';
 import { IconComponent } from '../../shared/icon/icon.component';
-import { getWeatherIcon, iconMap } from '../../core/utils/weather-icon.util';
+import { reducedMotion } from '../../core/utils/reduced-motion.util';
+import { describeWeather } from '../../core/utils/weather-scene.util';
+import { WeatherSceneComponent } from '../../shared/weather-scene/weather-scene.component';
 
 const ERROR_MESSAGES = {
   'not-found': 'No encontramos ese municipio.',
@@ -11,9 +13,29 @@ const ERROR_MESSAGES = {
   network: 'No se ha podido conectar. Revisa tu conexión.',
 } as const;
 
+const LONG_SKY_CHARACTERS = 20;
+const SKY_PAUSED_KEY = 'gachas-cielo-parado';
+
+// El almacenamiento puede estar bloqueado: entonces la elección dura lo que dure la visita.
+function readSkyPaused(): boolean {
+  try {
+    return localStorage.getItem(SKY_PAUSED_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function writeSkyPaused(paused: boolean): void {
+  try {
+    localStorage.setItem(SKY_PAUSED_KEY, paused ? '1' : '0');
+  } catch {
+    // Sin persistencia no se pierde nada importante.
+  }
+}
+
 @Component({
   selector: 'app-result',
-  imports: [RouterModule, IconComponent],
+  imports: [RouterModule, IconComponent, WeatherSceneComponent],
   templateUrl: './result.component.html',
 })
 export class ResultComponent {
@@ -39,11 +61,26 @@ export class ResultComponent {
     const kind = error instanceof WeatherLoadError ? error.kind : 'unavailable';
     return ERROR_MESSAGES[kind];
   });
-  icon = computed(() => {
-    const data = this.weather();
-    const description = data?.[0]?.skyStatus ?? '';
-    return iconMap[getWeatherIcon(description)];
+  /** Vacía hasta que llegan los datos: así el tiempo entra en el cielo al «mirar». */
+  scene = computed(() => {
+    const today = this.weather()?.[0];
+    return today
+      ? describeWeather(today.skyStatus, today.launchTimeRainProbability, today.launchTemperature)
+      : null;
   });
+
+  /** Más larga que esto ya no cabe bien en su columna: ocupa una fila entera. */
+  longSky = computed(() => (this.weather()?.[0]?.skyStatus.length ?? 0) > LONG_SKY_CHARACTERS);
+
+  /** Con movimiento reducido el cielo ya está quieto y el control sobra. */
+  reduced = reducedMotion();
+  skyPaused = signal(readSkyPaused());
+
+  toggleSky(): void {
+    const paused = !this.skyPaused();
+    this.skyPaused.set(paused);
+    writeSkyPaused(paused);
+  }
 
   get gachasLevel(): string {
     return this.randomMessage();
